@@ -1,5 +1,7 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { DrillCard } from '../components/DrillCard'
+import { BackLink } from '../components/ui/BackLink'
+import { Button } from '../components/ui/Button'
 import { getDrillById } from '../data/drills'
 import { getSymptom } from '../data/symptoms'
 
@@ -9,15 +11,13 @@ export function DrillDetail() {
 
   if (!drill) {
     return (
-      <section className="page">
-        <Link to="/library" className="back-link">
-          ← Library
-        </Link>
+      <section className="page animate-in">
+        <BackLink to="/library">Library</BackLink>
         <h1>Drill not found</h1>
         <p className="muted">That drill isn’t in the library.</p>
-        <Link to="/library" className="btn btn--primary btn--block">
+        <Button to="/library" variant="primary" block>
           Back to library
-        </Link>
+        </Button>
       </section>
     )
   }
@@ -25,10 +25,8 @@ export function DrillDetail() {
   const symptom = getSymptom(drill.symptomId)
 
   return (
-    <section className="page drill-detail">
-      <Link to="/library" className="back-link">
-        ← Library
-      </Link>
+    <section className="page drill-detail animate-in">
+      <BackLink to="/library">Library</BackLink>
 
       {symptom && (
         <p className="drill-detail__context muted">
@@ -38,9 +36,9 @@ export function DrillDetail() {
 
       <DrillCard drill={drill} />
 
-      <Link to="/check-in" className="btn btn--primary btn--block">
+      <Button to="/check-in" variant="primary" block>
         Check in for a full plan
-      </Link>
+      </Button>
     </section>
   )
 }

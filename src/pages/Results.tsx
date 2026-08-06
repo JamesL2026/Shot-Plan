@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
+import { ShieldCheck } from 'lucide-react'
 import { DrillCard } from '../components/DrillCard'
 import { FlowProgress } from '../components/FlowProgress'
 import { FollowUp } from '../components/FollowUp'
+import { BackLink } from '../components/ui/BackLink'
+import { Button } from '../components/ui/Button'
+import { Card } from '../components/ui/Card'
 import {
   buildPrescription,
   getDrillById,
@@ -52,57 +56,65 @@ export function Results() {
 
   if (symptomIds.length === 0) {
     return (
-      <section className="page results">
-        <Link to="/check-in" className="back-link">
-          ← Check in
-        </Link>
+      <section className="page results animate-in">
+        <BackLink to="/check-in">Check in</BackLink>
         <h1>Today’s Practice</h1>
         <p className="muted">No symptoms selected yet.</p>
-        <Link to="/check-in" className="btn btn--primary btn--block">
+        <Button to="/check-in" variant="primary" block>
           Start check in
-        </Link>
+        </Button>
       </section>
     )
   }
 
   if (sessionId && !session) {
     return (
-      <section className="page results">
-        <Link to="/" className="back-link">
-          ← Home
-        </Link>
+      <section className="page results animate-in">
+        <BackLink to="/">Home</BackLink>
         <h1>Session not found</h1>
         <p className="muted">That practice plan is no longer saved on this device.</p>
-        <Link to="/check-in" className="btn btn--primary btn--block">
+        <Button to="/check-in" variant="primary" block>
           Start a new check in
-        </Link>
+        </Button>
       </section>
     )
   }
 
   return (
-    <section className="page results">
-      <Link to={session ? '/sessions' : '/check-in'} className="back-link">
-        {session ? '← Sessions' : '← Check in'}
-      </Link>
+    <section className="page results animate-in">
+      <BackLink to={session ? '/sessions' : '/check-in'}>
+        {session ? 'Sessions' : 'Check in'}
+      </BackLink>
 
       <FlowProgress step={followUpDone ? 3 : 2} />
 
-      <header className="prescription-header">
-        <p className="prescription-kicker">Practice prescription</p>
-        <h1>Today’s Practice</h1>
-      </header>
+      <Card className="summary-card" tone="default">
+        <p className="summary-card__kicker">Today’s Practice</p>
+        <dl className="summary-card__meta">
+          <div>
+            <dt>Goal</dt>
+            <dd>{prescription.goal}</dd>
+          </div>
+          <div>
+            <dt>Estimated time</dt>
+            <dd>{prescription.estimatedTime}</dd>
+          </div>
+          <div>
+            <dt>Primary focus</dt>
+            <dd>{prescription.primaryFocus}</dd>
+          </div>
+        </dl>
+      </Card>
 
-      <dl className="prescription-meta">
+      <aside className="confidence-banner" aria-label="Recommendation note">
+        <ShieldCheck size={20} strokeWidth={2} aria-hidden="true" />
         <div>
-          <dt>Goal</dt>
-          <dd>{prescription.goal}</dd>
+          <p className="confidence-banner__title">Recommended Practice Plan</p>
+          <p className="confidence-banner__text">
+            Based on the symptoms you selected and established golf instruction.
+          </p>
         </div>
-        <div>
-          <dt>Estimated time</dt>
-          <dd>{prescription.estimatedTime}</dd>
-        </div>
-      </dl>
+      </aside>
 
       <div className="todays-plan">
         <h2 className="todays-plan__title">Today’s Plan</h2>
@@ -118,9 +130,9 @@ export function Results() {
         </div>
       </div>
 
-      <aside className="remember-card" aria-label="One thing to remember">
-        <p className="remember-card__label">One Thing to Remember</p>
-        <p className="remember-card__thought">{prescription.remember}</p>
+      <aside className="swing-thought" aria-label="Today's swing thought">
+        <p className="swing-thought__label">Today’s Swing Thought</p>
+        <p className="swing-thought__cue">{prescription.remember}</p>
       </aside>
 
       {session && (

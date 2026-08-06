@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button } from './ui/Button'
 import {
   deriveSessionResult,
   updateSession,
@@ -52,9 +53,15 @@ export function FollowUp({ session, onUpdate }: FollowUpProps) {
 
   if (step === 'done' && session.result !== null) {
     return (
-      <aside className="follow-up follow-up--done" aria-live="polite">
-        <p className="follow-up__title">Thanks for the check-in</p>
-        <p className="muted follow-up__message">{resultMessage(session)}</p>
+      <aside className="completion-card" aria-live="polite">
+        <p className="completion-card__title">Nice work.</p>
+        <p className="completion-card__text">
+          You now have a clear plan for your next range session.
+        </p>
+        <p className="completion-card__note muted">{resultMessage(session)}</p>
+        <Button to="/" variant="primary" block>
+          Return Home
+        </Button>
       </aside>
     )
   }
@@ -65,20 +72,12 @@ export function FollowUp({ session, onUpdate }: FollowUpProps) {
         <p className="follow-up__title">Did it help?</p>
         <p className="muted">Be honest — it helps shape what you try next.</p>
         <div className="follow-up__actions">
-          <button
-            type="button"
-            className="btn btn--primary btn--block"
-            onClick={() => handleHelped(true)}
-          >
+          <Button variant="primary" block onClick={() => handleHelped(true)}>
             Yes, it helped
-          </button>
-          <button
-            type="button"
-            className="btn btn--secondary btn--block"
-            onClick={() => handleHelped(false)}
-          >
+          </Button>
+          <Button variant="secondary" block onClick={() => handleHelped(false)}>
             Not really
-          </button>
+          </Button>
         </div>
       </aside>
     )
@@ -89,20 +88,12 @@ export function FollowUp({ session, onUpdate }: FollowUpProps) {
       <p className="follow-up__title">Did you try this plan?</p>
       <p className="muted">After your range session, come back and tap below.</p>
       <div className="follow-up__actions">
-        <button
-          type="button"
-          className="btn btn--primary btn--block"
-          onClick={() => handleTried(true)}
-        >
+        <Button variant="primary" block onClick={() => handleTried(true)}>
           Yes, I tried it
-        </button>
-        <button
-          type="button"
-          className="btn btn--secondary btn--block"
-          onClick={() => handleTried(false)}
-        >
+        </Button>
+        <Button variant="secondary" block onClick={() => handleTried(false)}>
           Not yet
-        </button>
+        </Button>
       </div>
     </aside>
   )
@@ -111,12 +102,12 @@ export function FollowUp({ session, onUpdate }: FollowUpProps) {
 function resultMessage(session: Session): string {
   switch (session.result) {
     case 'helped':
-      return 'Glad it helped. Keep that cue next time you practice.'
+      return 'Glad it helped. Keep that swing thought next time you practice.'
     case 'did-not-help':
-      return 'That’s useful to know. Try the other drill next session, or check in again.'
+      return 'Useful feedback. Try the other drill next session, or check in again.'
     case 'not-tried':
-      return 'No rush. Your plan is saved under Recent sessions when you’re ready.'
+      return 'No rush. Your plan is saved under Recent Sessions when you’re ready.'
     default:
-      return 'Your session is saved.'
+      return 'Your session is saved on this device.'
   }
 }

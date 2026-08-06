@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { Check } from 'lucide-react'
 import { FlowProgress } from '../components/FlowProgress'
+import { Button } from '../components/ui/Button'
+import { BackLink } from '../components/ui/BackLink'
 import { getDrillsForSymptoms } from '../data/drills'
 import { symptoms } from '../data/symptoms'
 import { createSession } from '../lib/storage'
@@ -38,27 +41,25 @@ export function CheckIn() {
   }
 
   const hint = useMemo(() => {
-    if (selected.length === 0) return 'Select at least one symptom.'
+    if (selected.length === 0) return 'Select at least one area to continue.'
     if (selected.length === 1) return '1 selected — you can add one more.'
     return '2 selected — ready for your plan.'
   }, [selected.length])
 
   return (
-    <section className="page check-in">
-      <Link to="/" className="back-link">
-        ← Home
-      </Link>
+    <section className="page check-in animate-in">
+      <BackLink to="/">Home</BackLink>
 
       <FlowProgress step={1} />
 
       <div className="page-intro">
-        <h1>What went wrong?</h1>
+        <h1>How did today go?</h1>
         <p className="muted">
-          Pick one or two. We’ll write a short practice prescription for the range.
+          Choose one or two areas that caused you the most trouble today.
         </p>
       </div>
 
-      <div className="symptom-grid" role="group" aria-label="Symptoms">
+      <div className="symptom-grid" role="group" aria-label="Trouble areas">
         {symptoms.map((symptom) => {
           const isSelected = selected.includes(symptom.id)
           const isDisabled = atLimit && !isSelected
@@ -76,8 +77,20 @@ export function CheckIn() {
               disabled={isDisabled}
               onClick={() => toggleSymptom(symptom.id)}
             >
-              <span className="symptom-card__label">{symptom.label}</span>
-              <span className="symptom-card__desc">{symptom.description}</span>
+              <span className="symptom-card__copy">
+                <span className="symptom-card__label">{symptom.label}</span>
+                <span className="symptom-card__desc">{symptom.description}</span>
+              </span>
+              <span
+                className={
+                  isSelected
+                    ? 'symptom-card__check symptom-card__check--on'
+                    : 'symptom-card__check'
+                }
+                aria-hidden="true"
+              >
+                {isSelected && <Check size={16} strokeWidth={2.5} />}
+              </span>
             </button>
           )
         })}
@@ -88,14 +101,14 @@ export function CheckIn() {
       </p>
 
       <div className="sticky-footer">
-        <button
-          type="button"
-          className="btn btn--primary btn--block"
+        <Button
+          variant="primary"
+          block
           disabled={!canContinue}
           onClick={handleContinue}
         >
           Continue to plan
-        </button>
+        </Button>
       </div>
     </section>
   )

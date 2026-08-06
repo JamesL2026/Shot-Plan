@@ -245,6 +245,7 @@ export function getDrillsForSymptoms(symptomIds: SymptomId[]): Drill[] {
 export interface PracticePrescription {
   goal: string
   estimatedTime: string
+  primaryFocus: string
   remember: string
 }
 
@@ -263,11 +264,18 @@ export function buildPrescription(
     goal = `Settle your ${labels[0]} and ${labels[1]} with two clear feels.`
   }
 
+  const primaryFocus =
+    labels.length === 0
+      ? 'Your next range session'
+      : labels.length === 1
+        ? labels[0].charAt(0).toUpperCase() + labels[0].slice(1)
+        : `${labels[0].charAt(0).toUpperCase() + labels[0].slice(1)} · ${labels[1]}`
+
   const estimatedTime =
     recommended.length >= 3 ? 'About 25 minutes' : 'About 20 minutes'
 
   const remember =
     recommended[0]?.cue ?? 'One clear feel beats ten swing thoughts.'
 
-  return { goal, estimatedTime, remember }
+  return { goal, estimatedTime, primaryFocus, remember }
 }

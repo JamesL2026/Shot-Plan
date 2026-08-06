@@ -2,7 +2,7 @@ interface FlowProgressProps {
   step: 1 | 2 | 3
 }
 
-const LABELS = ['What’s wrong', 'Today’s plan', 'Follow up'] as const
+const LABELS = ['How today went', 'Today’s plan', 'Follow up'] as const
 
 export function FlowProgress({ step }: FlowProgressProps) {
   return (

@@ -2,6 +2,7 @@ import { getSymptom } from '../data/symptoms'
 import type { Drill } from '../types'
 import { DrillDiagram } from './DrillDiagram'
 import { EquipmentIcons } from './EquipmentIcons'
+import { Card } from './ui/Card'
 
 interface DrillCardProps {
   drill: Drill
@@ -12,12 +13,14 @@ export function DrillCard({ drill, index }: DrillCardProps) {
   const symptomLabel = getSymptom(drill.symptomId)?.label ?? drill.symptomId
 
   return (
-    <article className="drill-card">
+    <Card className="drill-card" padding="lg">
       <header className="drill-card__header">
-        {typeof index === 'number' && (
-          <span className="drill-card__index">Drill {index}</span>
-        )}
-        <p className="drill-card__symptom">{symptomLabel}</p>
+        <div className="drill-card__topline">
+          {typeof index === 'number' && (
+            <span className="drill-card__index">Drill {index}</span>
+          )}
+          <span className="drill-card__badge">{symptomLabel}</span>
+        </div>
         <h2 className="drill-card__name">{drill.name}</h2>
       </header>
 
@@ -31,8 +34,13 @@ export function DrillCard({ drill, index }: DrillCardProps) {
       <div className="drill-card__section">
         <h3 className="drill-card__label">Steps</h3>
         <ol className="drill-card__steps">
-          {drill.steps.map((step) => (
-            <li key={step}>{step}</li>
+          {drill.steps.map((step, stepIndex) => (
+            <li key={step}>
+              <span className="drill-card__step-num" aria-hidden="true">
+                {stepIndex + 1}
+              </span>
+              <span>{step}</span>
+            </li>
           ))}
         </ol>
       </div>
@@ -42,7 +50,7 @@ export function DrillCard({ drill, index }: DrillCardProps) {
         <p className="drill-card__cue">{drill.cue}</p>
       </div>
 
-      <div className="drill-card__section drill-card__why">
+      <div className="drill-card__section">
         <h3 className="drill-card__label">Why it works</h3>
         <p>{drill.whyItWorks}</p>
       </div>
@@ -51,6 +59,6 @@ export function DrillCard({ drill, index }: DrillCardProps) {
         <h3 className="drill-card__label">Equipment</h3>
         <EquipmentIcons items={drill.equipment} />
       </div>
-    </article>
+    </Card>
   )
 }

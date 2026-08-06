@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useMemo, useState } from 'react'
+import { BackLink } from '../components/ui/BackLink'
 import { getDrillsBySymptom } from '../data/drills'
 import { symptoms } from '../data/symptoms'
 import type { SymptomId } from '../types'
@@ -23,14 +24,15 @@ export function Library() {
   }, [filter])
 
   return (
-    <section className="page library">
-      <Link to="/" className="back-link">
-        ← Home
-      </Link>
+    <section className="page library animate-in">
+      <BackLink to="/">Home</BackLink>
 
       <div className="page-intro">
         <h1>Drill library</h1>
-        <p className="muted">Browse every drill by what you’re fighting.</p>
+        <p className="muted">
+          Drills are grouped by the trouble they help most. Browse when you want
+          ideas, or check in when you need a full practice plan.
+        </p>
       </div>
 
       <div

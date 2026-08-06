@@ -2,8 +2,8 @@ import type { EquipmentId } from '../types'
 
 const LABELS: Record<EquipmentId, string> = {
   towel: 'Towel',
-  'alignment-stick': 'Alignment stick',
-  tee: 'Tee',
+  'alignment-stick': 'Alignment Stick',
+  tee: 'Tees',
   headcover: 'Headcover',
   clubs: 'Clubs',
   ball: 'Ball',

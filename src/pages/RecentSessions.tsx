@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+import { ClipboardList } from 'lucide-react'
+import { BackLink } from '../components/ui/BackLink'
+import { Button } from '../components/ui/Button'
 import { formatSymptomList } from '../data/symptoms'
 import { getSessions } from '../lib/storage'
 import type { Session, SessionResult } from '../types'
@@ -43,10 +46,8 @@ export function RecentSessions() {
   const sessions = getSessions()
 
   return (
-    <section className="page sessions">
-      <Link to="/" className="back-link">
-        ← Home
-      </Link>
+    <section className="page sessions animate-in">
+      <BackLink to="/">Home</BackLink>
 
       <div className="page-intro">
         <h1>Recent sessions</h1>
@@ -55,10 +56,14 @@ export function RecentSessions() {
 
       {sessions.length === 0 ? (
         <div className="empty-state">
-          <p className="muted">No sessions yet. Check in after a tough round or practice.</p>
-          <Link to="/check-in" className="btn btn--primary btn--block">
-            Check in
-          </Link>
+          <ClipboardList size={28} strokeWidth={1.75} aria-hidden="true" />
+          <p className="empty-state__title">No practice sessions yet.</p>
+          <p className="muted">
+            Complete your first check in to start building better practice habits.
+          </p>
+          <Button to="/check-in" variant="primary" block>
+            Check In
+          </Button>
         </div>
       ) : (
         <ul className="session-list">

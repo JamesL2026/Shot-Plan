@@ -15,11 +15,11 @@ export function DrillDiagram({ drillId, className }: DrillDiagramProps) {
         aria-label={diagramLabel(drillId)}
         className="drill-diagram__svg"
       >
-        <rect width="280" height="140" rx="16" fill="#e4efe6" />
+        <rect width="280" height="140" rx="16" fill="#ebe8e1" />
         <text
           x="14"
           y="22"
-          fill="#5a6b5e"
+          fill="#5a655c"
           fontSize="10"
           fontFamily="system-ui, sans-serif"
           fontWeight="600"
@@ -62,7 +62,7 @@ function Stick({
       y1={y1}
       x2={x2}
       y2={y2}
-      stroke="#2f6b45"
+      stroke="#1B4332"
       strokeWidth="4"
       strokeLinecap="round"
     />
@@ -92,7 +92,7 @@ function Headcover({ cx, cy }: { cx: number; cy: number }) {
       cy={cy}
       rx="14"
       ry="10"
-      fill="#2f6b45"
+      fill="#1B4332"
       stroke="#1a2e1f"
       strokeWidth="1.25"
       opacity="0.9"
@@ -121,9 +121,9 @@ function Feet({ cx, cy }: { cx: number; cy: number }) {
 function TargetArrow({ x }: { x: number }) {
   return (
     <>
-      <line x1={x} y1="40" x2={x} y2="118" stroke="#5a6b5e" strokeWidth="1.25" strokeDasharray="4 3" />
-      <polygon points={`${x},34 ${x - 5},44 ${x + 5},44`} fill="#5a6b5e" />
-      <text x={x + 8} y="48" fill="#5a6b5e" fontSize="9" fontFamily="system-ui, sans-serif">
+      <line x1={x} y1="40" x2={x} y2="118" stroke="#5a655c" strokeWidth="1.25" strokeDasharray="4 3" />
+      <polygon points={`${x},34 ${x - 5},44 ${x + 5},44`} fill="#5a655c" />
+      <text x={x + 8} y="48" fill="#5a655c" fontSize="9" fontFamily="system-ui, sans-serif">
         target
       </text>
     </>
@@ -140,10 +140,10 @@ function renderDiagram(id: string) {
           <Stick x1={40} y1={100} x2={160} y2={100} />
           <Feet cx={100} cy={100} />
           <Ball cx={130} cy={70} />
-          <text x="44" y="40" fill="#2f6b45" fontSize="9" fontFamily="system-ui, sans-serif">
+          <text x="44" y="40" fill="#1B4332" fontSize="9" fontFamily="system-ui, sans-serif">
             target line
           </text>
-          <text x="44" y="124" fill="#2f6b45" fontSize="9" fontFamily="system-ui, sans-serif">
+          <text x="44" y="124" fill="#1B4332" fontSize="9" fontFamily="system-ui, sans-serif">
             toe line
           </text>
         </>
@@ -159,11 +159,11 @@ function renderDiagram(id: string) {
           <path
             d="M70 95 Q120 50 150 78"
             fill="none"
-            stroke="#2f6b45"
+            stroke="#1B4332"
             strokeWidth="2"
             strokeDasharray="5 3"
           />
-          <text x="150" y="48" fill="#2f6b45" fontSize="9" fontFamily="system-ui, sans-serif">
+          <text x="150" y="48" fill="#1B4332" fontSize="9" fontFamily="system-ui, sans-serif">
             miss this
           </text>
         </>
@@ -172,14 +172,14 @@ function renderDiagram(id: string) {
     case 'hook-grip-check':
       return (
         <>
-          <rect x="70" y="42" width="140" height="70" rx="12" fill="#f7faf6" stroke="#2f6b45" strokeWidth="2" />
+          <rect x="70" y="42" width="140" height="70" rx="12" fill="#f7faf6" stroke="#1B4332" strokeWidth="2" />
           <text x="96" y="78" fill="#1a2e1f" fontSize="13" fontFamily="system-ui, sans-serif" fontWeight="600">
             2 knuckles
           </text>
-          <circle cx="95" cy="92" r="5" fill="#2f6b45" />
-          <circle cx="110" cy="92" r="5" fill="#2f6b45" />
-          <circle cx="125" cy="92" r="5" fill="#c9d6c8" stroke="#5a6b5e" />
-          <text x="88" y="128" fill="#5a6b5e" fontSize="9" fontFamily="system-ui, sans-serif">
+          <circle cx="95" cy="92" r="5" fill="#1B4332" />
+          <circle cx="110" cy="92" r="5" fill="#1B4332" />
+          <circle cx="125" cy="92" r="5" fill="#c9d6c8" stroke="#5a655c" />
+          <text x="88" y="128" fill="#5a655c" fontSize="9" fontFamily="system-ui, sans-serif">
             lead hand — neutral
           </text>
         </>
@@ -195,11 +195,11 @@ function renderDiagram(id: string) {
           <path
             d="M70 95 Q100 70 138 78"
             fill="none"
-            stroke="#2f6b45"
+            stroke="#1B4332"
             strokeWidth="2"
             strokeDasharray="5 3"
           />
-          <text x="70" y="48" fill="#2f6b45" fontSize="9" fontFamily="system-ui, sans-serif">
+          <text x="70" y="48" fill="#1B4332" fontSize="9" fontFamily="system-ui, sans-serif">
             miss inside
           </text>
         </>
@@ -215,7 +215,7 @@ function renderDiagram(id: string) {
           <text x="98" y="62" fill="#8a7355" fontSize="9" fontFamily="system-ui, sans-serif">
             towel
           </text>
-          <text x="148" y="102" fill="#2f6b45" fontSize="9" fontFamily="system-ui, sans-serif">
+          <text x="148" y="102" fill="#1B4332" fontSize="9" fontFamily="system-ui, sans-serif">
             ball first
           </text>
         </>
@@ -243,11 +243,11 @@ function renderDiagram(id: string) {
           <Ball cx={140} cy={72} />
           <path
             d="M120 90 L160 90"
-            stroke="#2f6b45"
+            stroke="#1B4332"
             strokeWidth="2"
             strokeDasharray="3 2"
           />
-          <text x="118" y="112" fill="#2f6b45" fontSize="9" fontFamily="system-ui, sans-serif">
+          <text x="118" y="112" fill="#1B4332" fontSize="9" fontFamily="system-ui, sans-serif">
             brush ahead
           </text>
         </>
@@ -269,8 +269,8 @@ function renderDiagram(id: string) {
     case 'chip-club-ladder':
       return (
         <>
-          <circle cx={210} cy={70} r="16" fill="none" stroke="#2f6b45" strokeWidth="2" strokeDasharray="3 2" />
-          <text x="196" y="74" fill="#2f6b45" fontSize="9" fontFamily="system-ui, sans-serif">
+          <circle cx={210} cy={70} r="16" fill="none" stroke="#1B4332" strokeWidth="2" strokeDasharray="3 2" />
+          <text x="196" y="74" fill="#1B4332" fontSize="9" fontFamily="system-ui, sans-serif">
             land
           </text>
           <Feet cx={70} cy={100} />
@@ -278,7 +278,7 @@ function renderDiagram(id: string) {
           <text x="40" y="48" fill="#1a2e1f" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="600">
             PW → 9 → 8
           </text>
-          <path d="M110 78 Q160 50 200 70" fill="none" stroke="#2f6b45" strokeWidth="1.5" />
+          <path d="M110 78 Q160 50 200 70" fill="none" stroke="#1B4332" strokeWidth="1.5" />
         </>
       )
 
@@ -288,10 +288,10 @@ function renderDiagram(id: string) {
           <ellipse cx={100} cy={70} rx="22" ry="36" fill="#1a2e1f" opacity="0.2" />
           <Headcover cx={118} cy={58} />
           <Ball cx={150} cy={100} />
-          <text x="150" y="58" fill="#2f6b45" fontSize="9" fontFamily="system-ui, sans-serif">
+          <text x="150" y="58" fill="#1B4332" fontSize="9" fontFamily="system-ui, sans-serif">
             under lead arm
           </text>
-          <text x="40" y="124" fill="#5a6b5e" fontSize="9" fontFamily="system-ui, sans-serif">
+          <text x="40" y="124" fill="#5a655c" fontSize="9" fontFamily="system-ui, sans-serif">
             connected arms
           </text>
         </>
@@ -300,12 +300,12 @@ function renderDiagram(id: string) {
     case 'putt-gate':
       return (
         <>
-          <circle cx={220} cy={70} r="12" fill="#2f6b45" opacity="0.25" stroke="#2f6b45" />
+          <circle cx={220} cy={70} r="12" fill="#1B4332" opacity="0.25" stroke="#1B4332" />
           <Ball cx={80} cy={70} />
           <Tee cx={140} cy={52} />
           <Tee cx={140} cy={88} />
-          <line x1={90} y1={70} x2={200} y2={70} stroke="#2f6b45" strokeWidth="1.5" strokeDasharray="4 3" />
-          <text x="124" y="118" fill="#2f6b45" fontSize="9" fontFamily="system-ui, sans-serif">
+          <line x1={90} y1={70} x2={200} y2={70} stroke="#1B4332" strokeWidth="1.5" strokeDasharray="4 3" />
+          <text x="124" y="118" fill="#1B4332" fontSize="9" fontFamily="system-ui, sans-serif">
             gate
           </text>
         </>
@@ -314,15 +314,15 @@ function renderDiagram(id: string) {
     case 'putt-around-the-world':
       return (
         <>
-          <circle cx={140} cy={72} r="10" fill="#2f6b45" opacity="0.3" stroke="#2f6b45" />
-          <circle cx={140} cy={72} r="38" fill="none" stroke="#2f6b45" strokeWidth="1.5" strokeDasharray="3 3" />
+          <circle cx={140} cy={72} r="10" fill="#1B4332" opacity="0.3" stroke="#1B4332" />
+          <circle cx={140} cy={72} r="38" fill="none" stroke="#1B4332" strokeWidth="1.5" strokeDasharray="3 3" />
           <Ball cx={140} cy={34} />
           <Ball cx={178} cy={72} />
           <Ball cx={140} cy={110} />
           <Ball cx={102} cy={72} />
           <Ball cx={168} cy={48} />
           <Ball cx={112} cy={48} />
-          <text x="108" y="130" fill="#5a6b5e" fontSize="9" fontFamily="system-ui, sans-serif">
+          <text x="108" y="130" fill="#5a655c" fontSize="9" fontFamily="system-ui, sans-serif">
             circle the hole
           </text>
         </>

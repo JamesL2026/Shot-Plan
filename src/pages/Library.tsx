@@ -1,0 +1,98 @@
+import { Link } from 'react-router-dom'
+import { useMemo, useState } from 'react'
+import { getDrillsBySymptom } from '../data/drills'
+import { symptoms } from '../data/symptoms'
+import type { SymptomId } from '../types'
+
+type FilterId = 'all' | SymptomId
+
+export function Library() {
+  const [filter, setFilter] = useState<FilterId>('all')
+
+  const sections = useMemo(() => {
+    if (filter === 'all') {
+      return symptoms.map((symptom) => ({
+        symptom,
+        drills: getDrillsBySymptom(symptom.id),
+      }))
+    }
+
+    const symptom = symptoms.find((item) => item.id === filter)
+    if (!symptom) return []
+    return [{ symptom, drills: getDrillsBySymptom(symptom.id) }]
+  }, [filter])
+
+  return (
+    <section className="page library">
+      <Link to="/" className="back-link">
+        ← Home
+      </Link>
+
+      <div className="page-intro">
+        <h1>Drill library</h1>
+        <p className="muted">Browse every drill by what you’re fighting.</p>
+      </div>
+
+      <div
+        className="filter-row"
+        role="tablist"
+        aria-label="Filter by symptom"
+      >
+        <FilterChip
+          label="All"
+          selected={filter === 'all'}
+          onSelect={() => setFilter('all')}
+        />
+        {symptoms.map((symptom) => (
+          <FilterChip
+            key={symptom.id}
+            label={symptom.label}
+            selected={filter === symptom.id}
+            onSelect={() => setFilter(symptom.id)}
+          />
+        ))}
+      </div>
+
+      <div className="library-sections">
+        {sections.map(({ symptom, drills }) => (
+          <section key={symptom.id} className="library-section">
+            <h2 className="library-section__title">{symptom.label}</h2>
+            <p className="library-section__desc muted">{symptom.description}</p>
+            <ul className="library-list">
+              {drills.map((drill) => (
+                <li key={drill.id}>
+                  <Link to={`/drills/${drill.id}`} className="library-item">
+                    <span className="library-item__name">{drill.name}</span>
+                    <span className="library-item__cue muted">{drill.cue}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function FilterChip({
+  label,
+  selected,
+  onSelect,
+}: {
+  label: string
+  selected: boolean
+  onSelect: () => void
+}) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={selected}
+      className={selected ? 'filter-chip filter-chip--selected' : 'filter-chip'}
+      onClick={onSelect}
+    >
+      {label}
+    </button>
+  )
+}

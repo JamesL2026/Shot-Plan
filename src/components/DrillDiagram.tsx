@@ -7,9 +7,10 @@ const C = {
   avoid: '#C45C4A',
   path: '#3B6EA5',
   target: '#1B4332',
-  label: '#4A5560',
-  ground: '#E8E4DC',
+  label: '#3D4650',
+  ground: '#E9E5DC',
   body: '#1B4332',
+  callout: '#FFFFFF',
 }
 
 interface DrillDiagramProps {
@@ -17,24 +18,27 @@ interface DrillDiagramProps {
   view: DiagramView
 }
 
+/** IKEA-style setup diagrams: where to stand, where things go, which way to swing. */
 export function DrillDiagram({ drillId, view }: DrillDiagramProps) {
   return (
     <div className="drill-diagram">
       <svg
-        viewBox="0 0 320 200"
+        viewBox="0 0 340 220"
         role="img"
-        aria-label={`${view === 'top' ? 'Top' : 'Side'} view setup for this drill`}
+        aria-label={`${view === 'top' ? 'Top' : 'Side'} view: how to set up this drill`}
         className="drill-diagram__svg"
       >
-        <rect width="320" height="200" rx="18" fill={C.ground} />
+        <rect width="340" height="220" rx="18" fill={C.ground} />
+        <rect x="10" y="10" width="88" height="22" rx="6" fill={C.aid} />
         <text
-          x="14"
-          y="22"
-          fill={C.label}
+          x="54"
+          y="25"
+          fill="#F7F6F2"
           fontSize="11"
           fontFamily="system-ui, sans-serif"
           fontWeight="700"
-          letterSpacing="0.06em"
+          textAnchor="middle"
+          letterSpacing="0.04em"
         >
           {view === 'top' ? 'TOP VIEW' : 'SIDE VIEW'}
         </text>
@@ -44,25 +48,27 @@ export function DrillDiagram({ drillId, view }: DrillDiagramProps) {
   )
 }
 
-function Label({
+function L({
   x,
   y,
   children,
   anchor = 'start',
+  weight = 600,
 }: {
   x: number
   y: number
   children: string
   anchor?: 'start' | 'middle' | 'end'
+  weight?: number
 }) {
   return (
     <text
       x={x}
       y={y}
       fill={C.label}
-      fontSize="10"
+      fontSize="11"
       fontFamily="system-ui, sans-serif"
-      fontWeight="600"
+      fontWeight={weight}
       textAnchor={anchor}
     >
       {children}
@@ -70,151 +76,95 @@ function Label({
   )
 }
 
-function Ball({ cx, cy, r = 9 }: { cx: number; cy: number; r?: number }) {
-  return (
-    <>
-      <circle cx={cx} cy={cy} r={r} fill={C.ball} stroke={C.ballStroke} strokeWidth="1.75" />
-      <circle cx={cx - 2.5} cy={cy - 2.5} r="2" fill="#D7D7D7" />
-    </>
-  )
-}
-
-function FeetTop({ cx, cy }: { cx: number; cy: number }) {
-  return (
-    <>
-      <ellipse cx={cx - 16} cy={cy} rx="9" ry="16" fill={C.body} opacity="0.35" />
-      <ellipse cx={cx + 16} cy={cy} rx="9" ry="16" fill={C.body} opacity="0.35" />
-      <Label x={cx} y={cy + 28} anchor="middle">
-        Your feet
-      </Label>
-    </>
-  )
-}
-
-function GolferSide({ x }: { x: number }) {
-  return (
-    <g>
-      <circle cx={x} cy={48} r="10" fill={C.body} opacity="0.85" />
-      <line x1={x} y1={58} x2={x} y2={100} stroke={C.body} strokeWidth="5" strokeLinecap="round" />
-      <line x1={x} y1={70} x2={x + 28} y2={88} stroke={C.body} strokeWidth="4" strokeLinecap="round" />
-      <line x1={x} y1={100} x2={x - 12} y2={138} stroke={C.body} strokeWidth="4" strokeLinecap="round" />
-      <line x1={x} y1={100} x2={x + 10} y2={138} stroke={C.body} strokeWidth="4" strokeLinecap="round" />
-      <Label x={x - 8} y={30}>You</Label>
-    </g>
-  )
-}
-
-function TargetTop({ x = 280 }: { x?: number }) {
-  return (
-    <g>
-      <line
-        x1={x}
-        y1={50}
-        x2={x}
-        y2={150}
-        stroke={C.target}
-        strokeWidth="2"
-        strokeDasharray="5 4"
-      />
-      <polygon
-        points={`${x},40 ${x - 7},52 ${x + 7},52`}
-        fill={C.target}
-      />
-      <Label x={x + 10} y={58}>Target</Label>
-    </g>
-  )
-}
-
-function TargetSide() {
-  return (
-    <g>
-      <line x1={150} y1={150} x2={290} y2={150} stroke={C.target} strokeWidth="2" />
-      <polygon points="300,150 286,144 286,156" fill={C.target} />
-      <Label x={250} y={142}>Target →</Label>
-    </g>
-  )
-}
-
-function PathArc({
-  d,
-  label,
-  lx,
-  ly,
+function Callout({
+  n,
+  x,
+  y,
 }: {
-  d: string
-  label: string
-  lx: number
-  ly: number
+  n: number
+  x: number
+  y: number
 }) {
   return (
+    <g>
+      <circle cx={x} cy={y} r="11" fill={C.aid} />
+      <text
+        x={x}
+        y={y + 4}
+        fill="#F7F6F2"
+        fontSize="12"
+        fontFamily="system-ui, sans-serif"
+        fontWeight="700"
+        textAnchor="middle"
+      >
+        {n}
+      </text>
+    </g>
+  )
+}
+
+function Ball({ cx, cy, r = 10 }: { cx: number; cy: number; r?: number }) {
+  return (
     <>
-      <path
-        d={d}
-        fill="none"
-        stroke={C.path}
-        strokeWidth="2.25"
-        strokeDasharray="6 4"
-        strokeLinecap="round"
-      />
-      <Label x={lx} y={ly}>
-        {label}
-      </Label>
+      <circle cx={cx} cy={cy} r={r} fill={C.ball} stroke={C.ballStroke} strokeWidth="2" />
+      <circle cx={cx - 3} cy={cy - 3} r="2.2" fill="#D0D0D0" />
     </>
   )
 }
 
-function Towel({ x, y, w = 40, h = 24 }: { x: number; y: number; w?: number; h?: number }) {
+function Feet({ cx, cy }: { cx: number; cy: number }) {
   return (
-    <rect
-      x={x}
-      y={y}
-      width={w}
-      height={h}
-      rx="4"
-      fill={C.aid}
-      fillOpacity="0.15"
-      stroke={C.aid}
-      strokeWidth="2"
-      strokeDasharray="4 2"
-    />
+    <>
+      <ellipse cx={cx - 18} cy={cy} rx="10" ry="18" fill={C.body} opacity="0.4" />
+      <ellipse cx={cx + 18} cy={cy} rx="10" ry="18" fill={C.body} opacity="0.4" />
+    </>
   )
 }
 
-function Headcover({ cx, cy, avoid = false }: { cx: number; cy: number; avoid?: boolean }) {
-  const color = avoid ? C.avoid : C.aid
+function PersonSide({ x }: { x: number }) {
   return (
-    <ellipse
-      cx={cx}
-      cy={cy}
-      rx="16"
-      ry="12"
-      fill={color}
-      fillOpacity="0.2"
-      stroke={color}
-      strokeWidth="2"
-    />
+    <g>
+      <circle cx={x} cy={52} r="11" fill={C.body} opacity="0.9" />
+      <line x1={x} y1={63} x2={x} y2={108} stroke={C.body} strokeWidth="6" strokeLinecap="round" />
+      <line x1={x} y1={78} x2={x + 32} y2={98} stroke={C.body} strokeWidth="5" strokeLinecap="round" />
+      <line x1={x} y1={108} x2={x - 14} y2={150} stroke={C.body} strokeWidth="5" strokeLinecap="round" />
+      <line x1={x} y1={108} x2={x + 12} y2={150} stroke={C.body} strokeWidth="5" strokeLinecap="round" />
+    </g>
   )
 }
 
-function Stick({
-  x1,
-  y1,
-  x2,
-  y2,
-}: {
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-}) {
+function TargetArrowTop({ x = 300 }: { x?: number }) {
   return (
-    <line
-      x1={x1}
-      y1={y1}
-      x2={x2}
-      y2={y2}
-      stroke={C.aid}
-      strokeWidth="5"
+    <g>
+      <line x1={x} y1={55} x2={x} y2={165} stroke={C.target} strokeWidth="2.5" />
+      <polygon points={`${x},42 ${x - 9},58 ${x + 9},58`} fill={C.target} />
+      <L x={x - 36} y={38} weight={700}>
+        Target →
+      </L>
+    </g>
+  )
+}
+
+function TargetArrowSide() {
+  return (
+    <g>
+      <line x1={140} y1={168} x2={300} y2={168} stroke={C.target} strokeWidth="2.5" />
+      <polygon points="312,168 296,160 296,176" fill={C.target} />
+      <L x={220} y={158} weight={700}>
+        Target →
+      </L>
+    </g>
+  )
+}
+
+function Path({ d }: { d: string }) {
+  return (
+    <path
+      d={d}
+      fill="none"
+      stroke={C.path}
+      strokeWidth="2.5"
+      strokeDasharray="7 5"
       strokeLinecap="round"
     />
   )
@@ -225,261 +175,316 @@ function renderDiagram(id: string) {
     case 'slice-alignment-stick':
       return (
         <>
-          <TargetTop />
-          <Stick x1={36} y1={70} x2={230} y2={70} />
-          <Stick x1={36} y1={130} x2={200} y2={130} />
-          <FeetTop cx={110} cy={130} />
-          <Ball cx={150} cy={98} />
-          <Label x={40} y={58}>Target-line stick</Label>
-          <Label x={40} y={150}>Toe-line stick</Label>
-          <Label x={162} y={102}>Ball</Label>
-          <PathArc
-            d="M95 115 Q130 95 148 100"
-            label="Swing toward target"
-            lx={70}
-            ly={88}
-          />
+          <TargetArrowTop />
+          <line x1={40} y1={78} x2={250} y2={78} stroke={C.aid} strokeWidth="6" strokeLinecap="round" />
+          <line x1={40} y1={148} x2={220} y2={148} stroke={C.aid} strokeWidth="6" strokeLinecap="round" />
+          <Feet cx={120} cy={148} />
+          <Ball cx={160} cy={110} />
+          <Callout n={1} x={55} y={58} />
+          <L x={72} y={62}>Stick A → target</L>
+          <Callout n={2} x={55} y={175} />
+          <L x={72} y={179}>Stick B → your toes</L>
+          <Callout n={3} x={160} y={95} />
+          <L x={176} y={98}>Ball</L>
+          <Callout n={4} x={120} y={175} />
+          <L x={136} y={198}>Stand here</L>
+          <Path d="M100 130 Q140 112 158 112" />
+          <L x={40} y={210}>Blue dashes = swing toward target</L>
         </>
       )
 
     case 'slice-object-avoidance':
       return (
         <>
-          <TargetTop />
-          <FeetTop cx={95} cy={135} />
-          <Ball cx={155} cy={105} />
-          <Headcover cx={190} cy={78} avoid />
-          <Label x={168} y={62}>Avoid (red)</Label>
-          <Label x={168} y={110}>Ball</Label>
-          <PathArc
-            d="M70 120 Q120 70 152 102"
-            label="Swing path (miss object)"
-            lx={48}
-            ly={72}
+          <TargetArrowTop />
+          <Feet cx={100} cy={155} />
+          <Ball cx={165} cy={118} />
+          <ellipse
+            cx={205}
+            cy={88}
+            rx="18"
+            ry="14"
+            fill={C.avoid}
+            fillOpacity="0.25"
+            stroke={C.avoid}
+            strokeWidth="3"
           />
+          <Callout n={1} x={100} y={188} />
+          <L x={116} y={192}>Your feet</L>
+          <Callout n={2} x={165} y={100} />
+          <L x={178} y={104}>Ball</L>
+          <Callout n={3} x={205} y={68} />
+          <L x={220} y={72}>AVOID</L>
+          <Path d="M75 140 Q130 85 160 115" />
+          <L x={40} y={210}>Swing inside the red object (miss it)</L>
         </>
       )
 
     case 'hook-grip-check':
       return (
         <>
-          <rect
-            x={70}
-            y={55}
-            width={180}
-            height={100}
-            rx="14"
-            fill="#F7F6F2"
-            stroke={C.aid}
-            strokeWidth="2"
-          />
-          <Label x={100} y={80}>Lead hand</Label>
-          <circle cx={115} cy={115} r="7" fill={C.aid} />
-          <circle cx={135} cy={115} r="7" fill={C.aid} />
-          <circle cx={155} cy={115} r="7" fill="#C9D0C8" stroke={C.label} />
-          <Label x={105} y={145}>Two knuckles visible</Label>
-          <Label x={175} y={145}>Quiet</Label>
-          <Label x={14} y={190} anchor="start">
-            Face square to target first
-          </Label>
+          <rect x={60} y={50} width={220} height={130} rx="16" fill="#F7F6F2" stroke={C.aid} strokeWidth="2.5" />
+          <L x={90} y={78} weight={700}>
+            Lead hand (top of grip)
+          </L>
+          <circle cx={120} cy={120} r="9" fill={C.aid} />
+          <circle cx={145} cy={120} r="9" fill={C.aid} />
+          <circle cx={170} cy={120} r="9" fill="#C5CCC4" stroke={C.label} strokeWidth="1.5" />
+          <Callout n={1} x={120} y={100} />
+          <Callout n={2} x={145} y={100} />
+          <L x={100} y={155}>See knuckle 1 and 2</L>
+          <L x={100} y={172}>Hide knuckle 3</L>
+          <L x={40} y={210}>Face the club at the target before setting hands</L>
         </>
       )
 
     case 'hook-mirrored-path':
       return (
         <>
-          <TargetTop />
-          <FeetTop cx={95} cy={135} />
-          <Ball cx={160} cy={105} />
-          <Headcover cx={120} cy={78} avoid />
-          <Label x={78} y={62}>Avoid (inside)</Label>
-          <Label x={172} y={110}>Ball</Label>
-          <PathArc
-            d="M70 125 Q110 95 155 105"
-            label="Swing path (miss inside)"
-            lx={40}
-            ly={90}
+          <TargetArrowTop />
+          <Feet cx={100} cy={155} />
+          <Ball cx={170} cy={118} />
+          <ellipse
+            cx={125}
+            cy={88}
+            rx="18"
+            ry="14"
+            fill={C.avoid}
+            fillOpacity="0.25"
+            stroke={C.avoid}
+            strokeWidth="3"
           />
+          <Callout n={1} x={100} y={188} />
+          <L x={116} y={192}>Your feet</L>
+          <Callout n={2} x={170} y={100} />
+          <L x={184} y={104}>Ball</L>
+          <Callout n={3} x={125} y={68} />
+          <L x={140} y={72}>AVOID (inside)</L>
+          <Path d="M75 145 Q115 100 165 118" />
+          <L x={40} y={210}>Miss the red object on the inside</L>
         </>
       )
 
     case 'fat-towel-behind':
       return (
         <>
-          <TargetSide />
-          <GolferSide x={70} />
-          <line x1={40} y1={150} x2={300} y2={150} stroke={C.label} strokeWidth="1.5" />
-          <Towel x={118} y={128} />
-          <Ball cx={185} cy={142} />
-          <Label x={122} y={120}>Towel (behind)</Label>
-          <Label x={195} y={138}>Ball</Label>
-          <PathArc
-            d="M100 95 Q150 130 200 145"
-            label="Club path"
-            lx={200}
-            ly={120}
+          <TargetArrowSide />
+          <PersonSide x={75} />
+          <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
+          <rect
+            x={125}
+            y={142}
+            width={48}
+            height={26}
+            rx="4"
+            fill={C.aid}
+            fillOpacity="0.18"
+            stroke={C.aid}
+            strokeWidth="2.5"
+            strokeDasharray="5 3"
           />
-          <Label x={14} y={190}>Miss towel · hit ball first</Label>
+          <Ball cx={205} cy={158} />
+          <Callout n={1} x={75} y={40} />
+          <L x={90} y={44}>You</L>
+          <Callout n={2} x={149} y={130} />
+          <L x={70} y={134}>Towel (behind ball)</L>
+          <Callout n={3} x={205} y={140} />
+          <L x={220} y={144}>Ball</L>
+          <Path d="M110 105 Q165 145 215 160" />
+          <L x={40} y={210}>Hit ball · miss towel · brush after ball</L>
         </>
       )
 
     case 'fat-tee-in-front':
       return (
         <>
-          <TargetSide />
-          <GolferSide x={70} />
-          <line x1={40} y1={150} x2={300} y2={150} stroke={C.label} strokeWidth="1.5" />
-          <Ball cx={155} cy={142} />
-          <circle cx={200} cy={148} r="7" fill={C.aid} stroke={C.aid} />
-          <Label x={145} y={128}>Ball</Label>
-          <Label x={188} y={138}>Marker</Label>
-          <Label x={188} y={170}>(tee or coin)</Label>
-          <PathArc
-            d="M100 95 Q160 125 210 148"
-            label="Swing through marker"
-            lx={210}
-            ly={118}
-          />
+          <TargetArrowSide />
+          <PersonSide x={75} />
+          <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
+          <Ball cx={170} cy={158} />
+          <circle cx={220} cy={164} r="9" fill={C.aid} />
+          <Callout n={1} x={75} y={40} />
+          <L x={90} y={44}>You</L>
+          <Callout n={2} x={170} y={140} />
+          <L x={184} y={144}>Ball</L>
+          <Callout n={3} x={220} y={145} />
+          <L x={235} y={149}>Coin / marker</L>
+          <Path d="M110 105 Q175 140 230 164" />
+          <L x={40} y={210}>Swing through so club passes the coin after the ball</L>
         </>
       )
 
     case 'thin-tee-under':
       return (
         <>
-          <TargetSide />
-          <GolferSide x={75} />
-          <line x1={40} y1={150} x2={300} y2={150} stroke={C.label} strokeWidth="1.5" />
-          <line x1={168} y1={140} x2={168} y2={150} stroke={C.aid} strokeWidth="3" strokeLinecap="round" />
-          <Ball cx={168} cy={132} r={8} />
-          <Label x={178} y={128}>Low ball</Label>
-          <PathArc
-            d="M110 100 Q155 135 200 150"
-            label="Stay down · brush after"
-            lx={200}
-            ly={125}
-          />
-          <Label x={14} y={190}>Do not scoop up</Label>
+          <TargetArrowSide />
+          <PersonSide x={80} />
+          <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
+          <Ball cx={185} cy={150} r={9} />
+          <Callout n={1} x={80} y={40} />
+          <L x={95} y={44}>You</L>
+          <Callout n={2} x={185} y={130} />
+          <L x={200} y={134}>Low ball on mat</L>
+          <Path d="M115 110 Q170 145 230 168" />
+          <L x={40} y={195}>Stay down</L>
+          <L x={40} y={210}>Brush mat AFTER the ball — do not scoop up</L>
         </>
       )
 
     case 'thin-towel-low-point':
       return (
         <>
-          <TargetSide />
-          <GolferSide x={70} />
-          <line x1={40} y1={150} x2={300} y2={150} stroke={C.label} strokeWidth="1.5" />
-          <Ball cx={150} cy={142} />
-          <Towel x={180} y={128} />
-          <Label x={140} y={128}>Ball first</Label>
-          <Label x={185} y={120}>Towel ahead</Label>
-          <PathArc
-            d="M100 95 Q145 130 175 145"
-            label="Club path"
-            lx={200}
-            ly={110}
+          <TargetArrowSide />
+          <PersonSide x={75} />
+          <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
+          <Ball cx={165} cy={158} />
+          <rect
+            x={200}
+            y={142}
+            width={48}
+            height={26}
+            rx="4"
+            fill={C.aid}
+            fillOpacity="0.18"
+            stroke={C.aid}
+            strokeWidth="2.5"
+            strokeDasharray="5 3"
           />
+          <Callout n={1} x={165} y={140} />
+          <L x={100} y={144}>Ball first</L>
+          <Callout n={2} x={224} y={130} />
+          <L x={240} y={134}>Towel ahead</L>
+          <Path d="M110 105 Q155 145 175 158" />
+          <L x={40} y={210}>Ball → then towel (or miss towel)</L>
         </>
       )
 
     case 'chip-club-ladder':
       return (
         <>
-          <TargetTop x={270} />
-          <FeetTop cx={80} cy={130} />
-          <Ball cx={115} cy={105} />
+          <TargetArrowTop x={305} />
+          <Feet cx={85} cy={150} />
+          <Ball cx={120} cy={118} />
           <circle
-            cx={230}
-            cy={90}
-            r="22"
+            cx={245}
+            cy={100}
+            r="26"
             fill="none"
             stroke={C.aid}
-            strokeWidth="2.5"
-            strokeDasharray="4 3"
+            strokeWidth="3"
+            strokeDasharray="5 4"
           />
-          <Label x={210} y={70}>Landing spot</Label>
-          <Label x={125} y={108}>Ball</Label>
-          <Label x={40} y={55}>Same swing</Label>
-          <Label x={40} y={70}>PW → 9 → 8</Label>
-          <PathArc
-            d="M125 105 Q175 70 220 88"
-            label="Carry changes with loft"
-            lx={150}
-            ly={55}
-          />
+          <Callout n={1} x={85} y={185} />
+          <L x={100} y={189}>Stand here</L>
+          <Callout n={2} x={120} y={100} />
+          <L x={134} y={104}>Ball</L>
+          <Callout n={3} x={245} y={72} />
+          <L x={210} y={60}>Landing spot</L>
+          <Path d="M130 118 Q185 75 235 98" />
+          <L x={40} y={210}>Same small swing · change club: PW → 9 → 8</L>
         </>
       )
 
     case 'chip-headcover':
       return (
         <>
-          <TargetSide />
-          <GolferSide x={90} />
-          <Headcover cx={108} cy={72} />
-          <Ball cx={175} cy={145} r={8} />
-          <line x1={40} y1={150} x2={300} y2={150} stroke={C.label} strokeWidth="1.5" />
-          <Label x={120} y={58}>Headcover under lead arm</Label>
-          <Label x={185} y={140}>Ball</Label>
-          <PathArc
-            d="M120 95 Q150 130 175 145"
-            label="Small chip motion"
-            lx={190}
-            ly={120}
+          <TargetArrowSide />
+          <PersonSide x={95} />
+          <ellipse
+            cx={115}
+            cy={78}
+            rx="16"
+            ry="12"
+            fill={C.aid}
+            fillOpacity="0.25"
+            stroke={C.aid}
+            strokeWidth="2.5"
           />
+          <Ball cx={195} cy={160} r={9} />
+          <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
+          <Callout n={1} x={95} y={40} />
+          <L x={110} y={44}>You</L>
+          <Callout n={2} x={115} y={60} />
+          <L x={135} y={64}>Headcover under lead arm</L>
+          <Callout n={3} x={195} y={142} />
+          <L x={210} y={146}>Ball</L>
+          <Path d="M130 105 Q165 140 195 160" />
+          <L x={40} y={210}>Chip without dropping the headcover</L>
         </>
       )
 
     case 'putt-gate':
       return (
         <>
-          <circle cx={270} cy={100} r="14" fill={C.aid} fillOpacity="0.2" stroke={C.aid} strokeWidth="2" />
-          <Label x={255} y={80}>Hole</Label>
-          <Ball cx={70} cy={100} />
-          <Label x={55} y={80}>Ball</Label>
-          <line x1={130} y1={78} x2={130} y2={95} stroke={C.aid} strokeWidth="3" strokeLinecap="round" />
-          <line x1={130} y1={105} x2={130} y2={122} stroke={C.aid} strokeWidth="3" strokeLinecap="round" />
-          <Label x={100} y={70}>Gate</Label>
-          <Label x={100} y={140}>(tees or coins)</Label>
-          <PathArc
-            d="M80 100 L250 100"
-            label="Roll straight through"
-            lx={150}
-            ly={60}
+          <circle
+            cx={290}
+            cy={110}
+            r="16"
+            fill={C.aid}
+            fillOpacity="0.2"
+            stroke={C.aid}
+            strokeWidth="2.5"
           />
-          <Label x={14} y={190}>Do not touch either side</Label>
+          <L x={275} y={88} weight={700}>
+            Hole
+          </L>
+          <Ball cx={70} cy={110} />
+          <line x1={140} y1={86} x2={140} y2={102} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
+          <line x1={140} y1={118} x2={140} y2={134} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
+          <Callout n={1} x={70} y={88} />
+          <L x={55} y={75}>Ball</L>
+          <Callout n={2} x={140} y={70} />
+          <L x={155} y={74}>Gate (tees/coins)</L>
+          <Callout n={3} x={290} y={70} />
+          <Path d="M82 110 L270 110" />
+          <L x={40} y={195}>Roll through the gate</L>
+          <L x={40} y={210}>Do not touch either side</L>
         </>
       )
 
     case 'putt-around-the-world':
       return (
         <>
-          <circle cx={160} cy={105} r="12" fill={C.aid} fillOpacity="0.25" stroke={C.aid} strokeWidth="2" />
-          <Label x={148} y={88}>Hole</Label>
           <circle
-            cx={160}
-            cy={105}
-            r="48"
+            cx={170}
+            cy={115}
+            r="14"
+            fill={C.aid}
+            fillOpacity="0.25"
+            stroke={C.aid}
+            strokeWidth="2.5"
+          />
+          <L x={155} y={95} weight={700}>
+            Hole
+          </L>
+          <circle
+            cx={170}
+            cy={115}
+            r="52"
             fill="none"
             stroke={C.path}
-            strokeWidth="2"
-            strokeDasharray="5 4"
+            strokeWidth="2.5"
+            strokeDasharray="6 5"
           />
-          <Ball cx={160} cy={57} r={7} />
-          <Ball cx={208} cy={105} r={7} />
-          <Ball cx={160} cy={153} r={7} />
-          <Ball cx={112} cy={105} r={7} />
-          <Ball cx={194} cy={71} r={7} />
-          <Ball cx={126} cy={71} r={7} />
-          <Label x={200} y={55}>Balls</Label>
-          <Label x={14} y={190}>Work around the circle · 3–5 feet</Label>
+          <Ball cx={170} cy={63} r={8} />
+          <Ball cx={222} cy={115} r={8} />
+          <Ball cx={170} cy={167} r={8} />
+          <Ball cx={118} cy={115} r={8} />
+          <Ball cx={208} cy={78} r={8} />
+          <Ball cx={132} cy={78} r={8} />
+          <Callout n={1} x={170} y={48} />
+          <L x={186} y={52}>Balls in a circle</L>
+          <Callout n={2} x={170} y={115} />
+          <L x={40} y={210}>Putt around · 3–5 feet · redo any miss</L>
         </>
       )
 
     default:
       return (
         <>
-          <TargetTop />
-          <FeetTop cx={110} cy={130} />
-          <Ball cx={160} cy={100} />
+          <TargetArrowTop />
+          <Feet cx={120} cy={150} />
+          <Ball cx={170} cy={110} />
         </>
       )
   }

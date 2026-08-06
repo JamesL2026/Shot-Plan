@@ -78,7 +78,12 @@ export function createSession(input: {
 
 export function updateSession(
   id: string,
-  patch: Partial<Pick<Session, 'tried' | 'helped' | 'result'>>,
+  patch: Partial<
+    Pick<
+      Session,
+      'tried' | 'helped' | 'result' | 'checklist' | 'practiceDone'
+    >
+  >,
 ): Session | undefined {
   const sessions = getSessions()
   const index = sessions.findIndex((session) => session.id === id)

@@ -14,6 +14,7 @@ export type EquipmentId =
   | 'clubs'
   | 'ball'
   | 'coin'
+  | 'two-tees'
 
 export type SurfaceType = 'mats' | 'grass' | 'both'
 
@@ -54,4 +55,6 @@ export interface Session {
   tried: boolean | null
   helped: boolean | null
   result: SessionResult
+  checklist?: Record<string, boolean>
+  practiceDone?: boolean
 }

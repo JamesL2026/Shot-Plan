@@ -739,6 +739,33 @@ button {
   color: var(--color-accent);
 }
 
+.surface-checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.surface-checks li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: var(--color-accent);
+}
+
+.drill-card__setup {
+  margin-bottom: var(--space-3) !important;
+}
+
+.drill-card__diagram-hint {
+  margin: var(--space-2) 0 0 !important;
+  font-size: 0.9rem !important;
+}
+
 .mat-adjustment {
   margin-top: var(--space-3);
   padding: var(--space-4);
@@ -904,6 +931,183 @@ button {
   font-weight: 650;
   line-height: 1.3;
   letter-spacing: -0.02em;
+}
+
+.swing-thought--compact {
+  padding: var(--space-4);
+  box-shadow: 0 6px 16px rgb(27 67 50 / 18%);
+}
+
+.swing-thought--compact .swing-thought__cue {
+  font-size: 1.2rem;
+}
+
+.practice-order__title {
+  margin: 0 0 var(--space-4);
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.practice-order__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.practice-order__list li {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.practice-order__num {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #f7faf6;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+
+.practice-order__step-title {
+  display: block;
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  margin-bottom: 0.2rem;
+}
+
+.practice-order__step-detail {
+  display: block;
+  font-size: 0.9975rem;
+  line-height: 1.4;
+}
+
+.ready-cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  position: sticky;
+  bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+  padding-top: var(--space-2);
+}
+
+.ready-cta__btn {
+  min-height: 3.5rem !important;
+  font-size: 1.125rem !important;
+}
+
+.ready-cta__hint {
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 3.75rem;
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  text-align: left;
+  box-shadow: 0 2px 10px var(--color-shadow);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.checklist-item:active {
+  transform: scale(0.985);
+}
+
+.checklist-item--done {
+  border-color: var(--color-accent);
+  background: var(--color-highlight);
+}
+
+.checklist-item__box {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+  background: var(--color-surface);
+  color: #f7faf6;
+}
+
+.checklist-item__box--on {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.checklist-item__label {
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--color-ink);
+}
+
+.practice-complete {
+  text-align: left;
+}
+
+.practice-complete__title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  color: var(--color-accent);
+}
+
+.practice-complete__text {
+  margin: 0 0 var(--space-2);
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+
+.practice-complete__sub {
+  margin: 0 0 var(--space-5) !important;
+}
+
+.practice-complete__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.practice-mode {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 }
 
 .follow-up-wrap {

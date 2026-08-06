@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react'
 import { getSymptom } from '../data/symptoms'
 import type { Drill, SurfaceType } from '../types'
 import { DrillDiagram } from './DrillDiagram'
@@ -9,15 +10,26 @@ interface DrillCardProps {
   index?: number
 }
 
-function surfaceLabel(worksOn: SurfaceType): string {
-  switch (worksOn) {
-    case 'mats':
-      return 'Practice Mats'
-    case 'grass':
-      return 'Grass'
-    case 'both':
-      return 'Both'
-  }
+function SurfaceChecks({ worksOn }: { worksOn: SurfaceType }) {
+  const mats = worksOn === 'mats' || worksOn === 'both'
+  const grass = worksOn === 'grass' || worksOn === 'both'
+
+  return (
+    <ul className="surface-checks">
+      {mats && (
+        <li>
+          <Check size={16} strokeWidth={2.5} aria-hidden="true" />
+          Practice Mats
+        </li>
+      )}
+      {grass && (
+        <li>
+          <Check size={16} strokeWidth={2.5} aria-hidden="true" />
+          Grass
+        </li>
+      )}
+    </ul>
+  )
 }
 
 export function DrillCard({ drill, index }: DrillCardProps) {
@@ -42,7 +54,7 @@ export function DrillCard({ drill, index }: DrillCardProps) {
 
       <div className="drill-card__section">
         <h3 className="drill-card__label">Works on</h3>
-        <p className="drill-card__surface">{surfaceLabel(drill.worksOn)}</p>
+        <SurfaceChecks worksOn={drill.worksOn} />
         {drill.matAdjustment && (
           <div className="mat-adjustment">
             <p className="mat-adjustment__title">Mat Adjustment</p>
@@ -58,8 +70,11 @@ export function DrillCard({ drill, index }: DrillCardProps) {
 
       <div className="drill-card__section">
         <h3 className="drill-card__label">Setup</h3>
-        <p>{drill.setup}</p>
+        <p className="drill-card__setup">{drill.setup}</p>
         <DrillDiagram drillId={drill.id} view={drill.view} />
+        <p className="drill-card__diagram-hint muted">
+          Numbers show where each piece goes. Glance once, then set it up.
+        </p>
       </div>
 
       <div className="drill-card__section">

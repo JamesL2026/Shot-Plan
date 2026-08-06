@@ -734,6 +734,64 @@ button {
   line-height: 1.45;
 }
 
+.drill-card__surface {
+  font-weight: 650 !important;
+  color: var(--color-accent);
+}
+
+.mat-adjustment {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-sand-soft);
+  border: 1px solid rgb(196 181 154 / 40%);
+}
+
+.mat-adjustment__title {
+  margin: 0 0 var(--space-2) !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted) !important;
+}
+
+.mat-adjustment p:last-child {
+  margin: 0;
+  font-size: 0.9975rem;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.drill-card__mistake {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: #f7efeb;
+  border: 1px solid rgb(196 92 74 / 22%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.drill-card__mistake-bad {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+}
+
+.drill-card__mistake-good {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: var(--color-accent);
+}
+
+.drill-card__mistake-good span {
+  font-weight: 700;
+}
+
 .drill-card__label {
   margin: 0;
   font-family: var(--font-body);

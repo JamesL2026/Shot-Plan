@@ -2,196 +2,287 @@ import { getSymptom } from './symptoms'
 import type { Drill, SymptomId } from '../types'
 
 export const drills: Drill[] = [
-  // —— Slice ——
   {
     id: 'slice-alignment-stick',
     symptomId: 'slice',
     name: 'Alignment stick drill',
-    likelyCause: 'Body aims left while the face points right.',
-    steps: [
-      'Lay one stick on the target line.',
-      'Lay a second stick along your toes.',
-      'Hit half-swings square to both lines, then build speed.',
-    ],
-    cue: 'Feet, hips, shoulders square — face follows the line.',
-    whyItWorks:
-      'The sticks make a crossed setup obvious so you can square up before you swing.',
+    goal: 'Stop the slice by aiming your body and clubface at the same target.',
+    worksOn: 'both',
     equipment: ['alignment-stick', 'ball'],
+    setup:
+      'Lay one stick on the ground pointing at your target. Lay a second stick along your toes, parallel to the first. Place the ball between them. Your feet, hips, and shoulders should match the toe stick.',
+    view: 'top',
+    steps: [
+      'Set both sticks parallel, like train tracks to the target.',
+      'Hit 10 easy half swings keeping your body square to the sticks.',
+      'If the ball starts straighter, build to full swings.',
+    ],
+    commonMistake: {
+      mistake: 'Aiming your feet at the target but leaving the clubface open.',
+      instead: 'Check the face first. Then match your feet to the sticks.',
+    },
+    cue: 'Body and face point the same way.',
+    whyItWorks:
+      'Most slices start with a crossed setup. The sticks make that mismatch obvious before you swing.',
   },
   {
     id: 'slice-object-avoidance',
     symptomId: 'slice',
     name: 'Object avoidance drill',
-    likelyCause: 'The club is cutting across the ball from out to in.',
-    steps: [
-      'Place a headcover just outside and behind the ball.',
-      'Make slow swings that miss the object.',
-      'Build to normal tempo while still missing it.',
-    ],
-    cue: 'Swing from inside — miss the object, then the ball.',
-    whyItWorks:
-      'Missing the outside object trains a shallower path instead of coming over the top.',
+    goal: 'Stop cutting across the ball by swinging more from the inside.',
+    worksOn: 'both',
     equipment: ['headcover', 'ball'],
+    setup:
+      'Place a headcover (or water bottle) just outside the ball and a few inches behind it. If you swing over the top, you will hit the object. Your job is to miss it, then hit the ball.',
+    view: 'top',
+    steps: [
+      'Place the headcover outside and slightly behind the ball.',
+      'Make 8 slow swings that miss the headcover completely.',
+      'Hit 10 normal shots still missing the headcover.',
+    ],
+    commonMistake: {
+      mistake: 'Trying to steer the ball left with your hands.',
+      instead: 'Miss the object first. Let the path fix the curve.',
+    },
+    cue: 'Miss the object. Then the ball.',
+    whyItWorks:
+      'Missing the outside object trains a shallower swing path instead of coming over the top.',
   },
-
-  // —— Hook ——
   {
     id: 'hook-grip-check',
     symptomId: 'hook',
     name: 'Grip check',
-    likelyCause: 'A strong grip is shutting the face too early.',
-    steps: [
-      'Set the face square to the target.',
-      'Place the lead hand so you see about two knuckles.',
-      'Hit 10 easy shots and watch the start line.',
-    ],
-    cue: 'Softer hands, quieter face through the ball.',
-    whyItWorks:
-      'A more neutral grip gives the face a fair chance to stay square at impact.',
+    goal: 'Quiet a hook by setting a more neutral lead-hand grip.',
+    worksOn: 'both',
     equipment: ['ball'],
+    setup:
+      'Hold the club so the face points straight at your target. Place your lead hand so you can see about two knuckles. The “V” between thumb and finger should point near your trail shoulder—not outside it.',
+    view: 'top',
+    steps: [
+      'Set the face square, then place your hands.',
+      'Check for two visible knuckles on the lead hand.',
+      'Hit 10 smooth shots and watch the start line.',
+    ],
+    commonMistake: {
+      mistake: 'Twisting the face closed after you set the grip.',
+      instead: 'Set the face first. Hands second. Leave them alone.',
+    },
+    cue: 'Two knuckles. Quiet face.',
+    whyItWorks:
+      'A grip that is too strong shuts the face early. A neutral grip gives the face a fair chance to stay square.',
   },
   {
     id: 'hook-mirrored-path',
     symptomId: 'hook',
     name: 'Mirrored path drill',
-    likelyCause: 'Path is too far in-to-out with a closed face.',
+    goal: 'Soften a hook by stopping an extreme inside-to-out swing path.',
+    worksOn: 'both',
+    equipment: ['headcover', 'ball'],
+    setup:
+      'Place a headcover just inside the ball and slightly behind it—the opposite side from the slice drill. If your path is too far from the inside, you will hit it. Miss the object, then hit the ball.',
+    view: 'top',
     steps: [
-      'Place a headcover just inside and behind the ball.',
-      'Swing without touching it — the mirror of the slice drill.',
-      'Keep tempo smooth and notice a softer curve.',
+      'Place the headcover inside and slightly behind the ball.',
+      'Make slow swings that miss the inside object.',
+      'Hit 10 shots with the same miss-the-object feel.',
     ],
-    cue: 'Feel the club move more around, not under and out.',
+    commonMistake: {
+      mistake: 'Blocking the face open to “hold off” the hook.',
+      instead: 'Fix the path by missing the inside object. Keep the face quiet.',
+    },
+    cue: 'Swing around—not under and out.',
     whyItWorks:
       'Guarding the inside object softens an extreme in-to-out path that feeds hooks.',
-    equipment: ['headcover', 'ball'],
   },
-
-  // —— Fat ——
   {
     id: 'fat-towel-behind',
     symptomId: 'fat',
     name: 'Towel behind the ball',
-    likelyCause: 'Low point is behind the ball — ground first.',
-    steps: [
-      'Fold a towel a few inches behind the ball.',
-      'Hit shots without touching the towel.',
-      'Brush the turf after the ball, not before.',
-    ],
-    cue: 'Ball first, ground second.',
-    whyItWorks:
-      'Keeping the towel clean forces the club to bottom out forward of the ball.',
+    goal: 'Improve strike by moving your low point in front of the ball.',
+    worksOn: 'both',
     equipment: ['towel', 'ball'],
+    setup:
+      'Fold a small towel and place it about four inches behind the ball. Hit the ball without touching the towel. You want ball first, then a brush of turf (or mat) after the ball.',
+    view: 'side',
+    steps: [
+      'Place the towel four inches behind the ball.',
+      'Hit 10 half swings.',
+      'Miss the towel every time.',
+    ],
+    commonMistake: {
+      mistake: 'Hanging back on your trail foot to “help” the ball up.',
+      instead: 'Move through the shot. Ball first. Ground second.',
+    },
+    cue: 'Ball first. Ground second.',
+    whyItWorks:
+      'Keeping the towel clean forces the club to bottom out ahead of the ball instead of behind it.',
   },
   {
     id: 'fat-tee-in-front',
     symptomId: 'fat',
-    name: 'Tee peg in front',
-    likelyCause: 'You’re hanging back instead of moving through.',
+    name: 'Marker in front',
+    goal: 'Stop fat shots by finishing past the ball toward the target.',
+    worksOn: 'both',
+    matAdjustment:
+      'On mats, do not push a tee into the surface. Place a coin, second golf ball, or the tip of an alignment stick a couple inches in front of your ball on the target side.',
+    equipment: ['tee', 'coin', 'ball'],
+    setup:
+      'Put a marker a couple inches in front of the ball toward the target. On grass, use a tee. On mats, use a coin. Try to brush or pass the marker after you hit the ball.',
+    view: 'side',
     steps: [
-      'Stick a tee a couple inches in front of the ball.',
-      'Swing through and try to clip the tee after contact.',
-      'Feel pressure shift toward the target.',
+      'Place the marker 2–3 inches in front of the ball.',
+      'Hit half swings that pass the marker after contact.',
+      'Build to full swings with the same finish-through feel.',
     ],
-    cue: 'Finish past the ball — clip the tee.',
+    commonMistake: {
+      mistake: 'Stopping the club at the ball.',
+      instead: 'Swing through to the marker. Finish past the ball.',
+    },
+    cue: 'Finish past the ball.',
     whyItWorks:
-      'Reaching the front tee nudges weight and low point forward through impact.',
-    equipment: ['tee', 'ball'],
+      'Reaching a marker in front nudges weight and low point forward so you stop hitting ground first.',
   },
-
-  // —— Thin ——
   {
     id: 'thin-tee-under',
     symptomId: 'thin',
-    name: 'Tee under the ball',
-    likelyCause: 'You’re lifting up through impact.',
-    steps: [
-      'Tee the ball very low, almost on the grass.',
-      'Hit irons with a light brush after the ball.',
-      'Leave a small mark in front of the tee.',
-    ],
-    cue: 'Stay down — brush turf past the ball.',
-    whyItWorks:
-      'A low tee plus a forward brush keeps the club traveling down through contact.',
+    name: 'Low ball drill',
+    goal: 'Stop thin shots by staying down through impact.',
+    worksOn: 'both',
+    matAdjustment:
+      'On mats, rest the ball on the mat as low as possible—or on a rubber tee if the bay has one. Focus on brushing the mat just after the ball, not scooping up.',
     equipment: ['tee', 'ball'],
+    setup:
+      'Place the ball very low. On grass, use a short tee. On mats, rest it nearly on the surface. Your goal is a light brush after the ball—not a scoop.',
+    view: 'side',
+    steps: [
+      'Set the ball as low as you can.',
+      'Hit 10 irons with a quiet lower body.',
+      'Brush after the ball. Do not lift up early.',
+    ],
+    commonMistake: {
+      mistake: 'Trying to lift the ball into the air.',
+      instead: 'Stay down. Let the loft on the club face do the work.',
+    },
+    cue: 'Stay down through the ball.',
+    whyItWorks:
+      'Thin contact comes from catching the middle of the ball. Staying down keeps the club traveling through, not up.',
   },
   {
     id: 'thin-towel-low-point',
     symptomId: 'thin',
     name: 'Towel low-point drill',
-    likelyCause: 'You’re scooping or the low point jumps around.',
-    steps: [
-      'Place a towel a few inches in front of the ball.',
-      'Hit down and through without scooping.',
-      'Miss the towel or barely kiss it after contact.',
-    ],
-    cue: 'Compress, then release — don’t scoop.',
-    whyItWorks:
-      'Controlling where the club bottoms out restores solid, slightly descending contact.',
+    goal: 'Control where the club bottoms out so you stop scooping thin shots.',
+    worksOn: 'both',
     equipment: ['towel', 'ball'],
+    setup:
+      'Place a towel a few inches in front of the ball toward the target. Hit down and through. Miss the towel, or barely kiss it after the ball—never hit it before the ball.',
+    view: 'side',
+    steps: [
+      'Place the towel a few inches in front of the ball.',
+      'Hit 10 smooth swings.',
+      'Contact the ball before the towel every time.',
+    ],
+    commonMistake: {
+      mistake: 'Flipping the wrists to help the ball up.',
+      instead: 'Keep the wrists quiet. Compress, then release.',
+    },
+    cue: 'Compress. Don’t scoop.',
+    whyItWorks:
+      'Controlling the low point stops the scoop that thins the hit.',
   },
-
-  // —— Chipping ——
   {
     id: 'chip-club-ladder',
     symptomId: 'chipping',
     name: 'Club ladder drill',
-    likelyCause: 'Changing your swing every chip instead of the club.',
-    steps: [
-      'Pick one landing spot near the green.',
-      'Hit it with a PW, then 9-iron, then 8-iron.',
-      'Keep the same small motion — let loft change carry.',
-    ],
-    cue: 'One motion, different clubs.',
-    whyItWorks:
-      'One simple motion covers more distances when you change clubs, not technique.',
+    goal: 'Make chips more consistent by using one motion and changing clubs.',
+    worksOn: 'both',
     equipment: ['clubs', 'ball'],
+    setup:
+      'Pick one landing spot a few paces onto the green (or a towel on the range). From the same lie, chip to that spot with a pitching wedge, then a 9-iron, then an 8-iron. Keep the same small swing.',
+    view: 'top',
+    steps: [
+      'Pick one landing spot and stay there.',
+      'Hit 5 chips with PW, then 9-iron, then 8-iron.',
+      'Keep the swing size the same. Let loft change the carry.',
+    ],
+    commonMistake: {
+      mistake: 'Inventing a new swing for every distance.',
+      instead: 'One motion. Different club.',
+    },
+    cue: 'One motion. Different clubs.',
+    whyItWorks:
+      'Changing clubs covers more distances without changing technique every chip.',
   },
   {
     id: 'chip-headcover',
     symptomId: 'chipping',
     name: 'Headcover drill',
-    likelyCause: 'Busy wrists make the low point jump around.',
-    steps: [
-      'Tuck a headcover under your lead arm.',
-      'Chip without dropping it.',
-      'Brush the grass with quiet wrists.',
-    ],
-    cue: 'Quiet wrists — body and arms move together.',
-    whyItWorks:
-      'The headcover keeps the arms connected so contact stays in the same place.',
+    goal: 'Quiet busy wrists so your chipping contact stays predictable.',
+    worksOn: 'both',
     equipment: ['headcover', 'ball'],
+    setup:
+      'Tuck a headcover under your lead arm (the arm closest to the target). Chip without dropping it. Soft arms, quiet wrists, brush the grass or mat.',
+    view: 'side',
+    steps: [
+      'Tuck the headcover under your lead arm.',
+      'Hit 10 small chips without dropping it.',
+      'Brush the surface. Keep the wrists quiet.',
+    ],
+    commonMistake: {
+      mistake: 'Trying to lift chips with the hands.',
+      instead: 'Body and arms move together. Let loft send it up.',
+    },
+    cue: 'Quiet wrists. Connected arms.',
+    whyItWorks:
+      'The headcover keeps your arms connected so the club bottoms out in the same place.',
   },
-
-  // —— Putting ——
   {
     id: 'putt-gate',
     symptomId: 'putting',
     name: 'Gate drill',
-    likelyCause: 'The face isn’t square, so putts start offline.',
+    goal: 'Start putts on line by keeping the face square through a small gate.',
+    worksOn: 'both',
+    matAdjustment:
+      'On mats or carpet, use two coins or tee tips as gate posts if you cannot stick tees in.',
+    equipment: ['tee', 'coin', 'ball'],
+    setup:
+      'Set two tees (or coins) just wider than your putter head, about a foot in front of the ball. Roll putts through the gate without touching either side.',
+    view: 'top',
     steps: [
-      'Set two tees just wider than the putter, a foot ahead.',
-      'Roll putts through the gate.',
-      'Restart if you clip a tee.',
+      'Build a gate slightly wider than your putter.',
+      'Roll 10 putts through the gate.',
+      'If you clip a side, reset and try again slower.',
     ],
-    cue: 'Square face, straight start.',
+    commonMistake: {
+      mistake: 'Steering with the hands after impact.',
+      instead: 'Square face at the ball. Let it roll through the gate.',
+    },
+    cue: 'Square face. Straight start.',
     whyItWorks:
-      'A gate gives instant feedback on face and start line without overthinking the stroke.',
-    equipment: ['tee', 'ball'],
+      'A gate gives instant feedback on face and start line without overthinking stroke style.',
   },
   {
     id: 'putt-around-the-world',
     symptomId: 'putting',
     name: 'Around the world',
-    likelyCause: 'Speed control drifts from hole to hole.',
-    steps: [
-      'Place balls in a circle 3–5 feet from the hole.',
-      'Make your way around the circle.',
-      'Miss one? Restart that spot, then continue.',
-    ],
-    cue: 'Die the ball at the hole — smooth speed.',
-    whyItWorks:
-      'Short-range circle work builds repeatable pace where confidence matters most.',
+    goal: 'Build reliable short-putt speed and confidence from every angle.',
+    worksOn: 'both',
     equipment: ['ball'],
+    setup:
+      'Place 6–8 balls in a circle 3–5 feet from the hole (or a cup/target on a mat). Work your way around. Miss one? Redo that spot before moving on.',
+    view: 'top',
+    steps: [
+      'Set balls in a circle around the hole.',
+      'Make your way around, one ball at a time.',
+      'Miss? Restart that spot, then continue.',
+    ],
+    commonMistake: {
+      mistake: 'Banging putts hard to “eliminate break.”',
+      instead: 'Die the ball at the hole with smooth speed.',
+    },
+    cue: 'Die it at the hole.',
+    whyItWorks:
+      'Short-range circle work builds repeatable pace where most strokes are gained or lost.',
   },
 ]
 

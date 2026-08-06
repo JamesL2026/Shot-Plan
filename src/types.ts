@@ -13,6 +13,11 @@ export type EquipmentId =
   | 'headcover'
   | 'clubs'
   | 'ball'
+  | 'coin'
+
+export type SurfaceType = 'mats' | 'grass' | 'both'
+
+export type DiagramView = 'top' | 'side'
 
 export interface Symptom {
   id: SymptomId
@@ -24,11 +29,19 @@ export interface Drill {
   id: string
   symptomId: SymptomId
   name: string
-  likelyCause: string
+  goal: string
+  worksOn: SurfaceType
+  matAdjustment?: string
+  equipment: EquipmentId[]
+  setup: string
+  view: DiagramView
   steps: [string, string, string]
+  commonMistake: {
+    mistake: string
+    instead: string
+  }
   cue: string
   whyItWorks: string
-  equipment: EquipmentId[]
 }
 
 export type SessionResult = 'helped' | 'did-not-help' | 'not-tried' | null

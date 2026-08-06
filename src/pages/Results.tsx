@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { DrillCard } from '../components/DrillCard'
+import { FlowProgress } from '../components/FlowProgress'
 import { FollowUp } from '../components/FollowUp'
 import {
-  buildPlanSummary,
+  buildPrescription,
   getDrillById,
   getDrillsForSymptoms,
 } from '../data/drills'
-import { formatSymptomList, isSymptomId } from '../data/symptoms'
+import { isSymptomId } from '../data/symptoms'
 import { getSession } from '../lib/storage'
 import type { Drill, Session, SymptomId } from '../types'
 
@@ -46,8 +47,8 @@ export function Results() {
   const recommended = session
     ? drillsForSession(session)
     : getDrillsForSymptoms(symptomIds)
-  const workingOn = formatSymptomList(symptomIds)
-  const summary = buildPlanSummary(symptomIds)
+  const prescription = buildPrescription(symptomIds, recommended)
+  const followUpDone = session?.result !== null && session?.result !== undefined
 
   if (symptomIds.length === 0) {
     return (
@@ -55,7 +56,7 @@ export function Results() {
         <Link to="/check-in" className="back-link">
           ← Check in
         </Link>
-        <h1>Your practice plan</h1>
+        <h1>Today’s Practice</h1>
         <p className="muted">No symptoms selected yet.</p>
         <Link to="/check-in" className="btn btn--primary btn--block">
           Start check in
@@ -85,31 +86,52 @@ export function Results() {
         {session ? '← Sessions' : '← Check in'}
       </Link>
 
-      <div className="page-intro">
-        <h1>Your practice plan</h1>
-        <p className="working-on">Working on: {workingOn}</p>
+      <FlowProgress step={followUpDone ? 3 : 2} />
+
+      <header className="prescription-header">
+        <p className="prescription-kicker">Practice prescription</p>
+        <h1>Today’s Practice</h1>
+      </header>
+
+      <dl className="prescription-meta">
+        <div>
+          <dt>Goal</dt>
+          <dd>{prescription.goal}</dd>
+        </div>
+        <div>
+          <dt>Estimated time</dt>
+          <dd>{prescription.estimatedTime}</dd>
+        </div>
+      </dl>
+
+      <div className="todays-plan">
+        <h2 className="todays-plan__title">Today’s Plan</h2>
+        <p className="todays-plan__count muted">
+          {recommended.length} drill{recommended.length === 1 ? '' : 's'} · quality over
+          quantity
+        </p>
+
+        <div className="drill-list">
+          {recommended.map((drill, index) => (
+            <DrillCard key={drill.id} drill={drill} index={index + 1} />
+          ))}
+        </div>
       </div>
 
-      <aside className="plan-summary" aria-label="Session summary">
-        <p>{summary}</p>
-        <p className="plan-summary__count">
-          {recommended.length} drill{recommended.length === 1 ? '' : 's'} for this
-          session
-        </p>
+      <aside className="remember-card" aria-label="One thing to remember">
+        <p className="remember-card__label">One Thing to Remember</p>
+        <p className="remember-card__thought">{prescription.remember}</p>
       </aside>
 
-      <div className="drill-list">
-        {recommended.map((drill) => (
-          <DrillCard key={drill.id} drill={drill} />
-        ))}
-      </div>
-
       {session && (
-        <FollowUp
-          key={session.id}
-          session={session}
-          onUpdate={setSession}
-        />
+        <div className="follow-up-wrap">
+          {!followUpDone && <FlowProgress step={3} />}
+          <FollowUp
+            key={session.id}
+            session={session}
+            onUpdate={setSession}
+          />
+        </div>
       )}
     </section>
   )

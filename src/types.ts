@@ -6,6 +6,14 @@ export type SymptomId =
   | 'chipping'
   | 'putting'
 
+export type EquipmentId =
+  | 'towel'
+  | 'alignment-stick'
+  | 'tee'
+  | 'headcover'
+  | 'clubs'
+  | 'ball'
+
 export interface Symptom {
   id: SymptomId
   label: string
@@ -17,9 +25,10 @@ export interface Drill {
   symptomId: SymptomId
   name: string
   likelyCause: string
-  howTo: string
+  steps: [string, string, string]
   cue: string
-  whyExplanation: string
+  whyItWorks: string
+  equipment: EquipmentId[]
 }
 
 export type SessionResult = 'helped' | 'did-not-help' | 'not-tried' | null

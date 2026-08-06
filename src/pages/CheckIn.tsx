@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { FlowProgress } from '../components/FlowProgress'
 import { getDrillsForSymptoms } from '../data/drills'
 import { symptoms } from '../data/symptoms'
 import { createSession } from '../lib/storage'
@@ -48,10 +49,12 @@ export function CheckIn() {
         ← Home
       </Link>
 
+      <FlowProgress step={1} />
+
       <div className="page-intro">
         <h1>What went wrong?</h1>
         <p className="muted">
-          Pick one or two. We’ll build a short plan for your next range session.
+          Pick one or two. We’ll write a short practice prescription for the range.
         </p>
       </div>
 

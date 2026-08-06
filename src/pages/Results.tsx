@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ShieldCheck } from 'lucide-react'
-import { DrillCard } from '../components/DrillCard'
+import { ChevronRight, ShieldCheck } from 'lucide-react'
+import { DrillFocus } from '../components/DrillFocus'
 import { FlowProgress } from '../components/FlowProgress'
 import { FollowUp } from '../components/FollowUp'
 import {
@@ -13,7 +13,6 @@ import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import {
   buildChecklist,
-  buildPracticeOrder,
   buildPrescription,
   getDrillById,
   getDrillsForSymptoms,
@@ -22,7 +21,7 @@ import { isSymptomId } from '../data/symptoms'
 import { getSession, updateSession } from '../lib/storage'
 import type { Drill, Session, SymptomId } from '../types'
 
-type Phase = 'plan' | 'practice' | 'done' | 'followup'
+type Phase = 'plan' | 'drill' | 'practice' | 'done' | 'followup'
 
 function parseSymptomIds(raw: string | null): SymptomId[] {
   if (!raw) return []
@@ -55,6 +54,7 @@ export function Results() {
   const [phase, setPhase] = useState<Phase>(() =>
     session?.practiceDone ? 'done' : 'plan',
   )
+  const [drillIndex, setDrillIndex] = useState(0)
 
   const [checked, setChecked] = useState<Record<string, boolean>>(
     () => session?.checklist ?? {},
@@ -65,6 +65,7 @@ export function Results() {
     setSession(next)
     setChecked(next?.checklist ?? {})
     setPhase(next?.practiceDone ? 'done' : 'plan')
+    setDrillIndex(0)
   }, [sessionId])
 
   const symptomIds = session?.symptomIds ?? symptomParamIds
@@ -72,10 +73,6 @@ export function Results() {
     ? drillsForSession(session)
     : getDrillsForSymptoms(symptomIds)
   const prescription = buildPrescription(symptomIds, recommended)
-  const practiceOrder = useMemo(
-    () => buildPracticeOrder(recommended),
-    [recommended],
-  )
   const checklist = useMemo(() => buildChecklist(recommended), [recommended])
   const followUpDone = session?.result !== null && session?.result !== undefined
 
@@ -101,6 +98,11 @@ export function Results() {
     setPhase('done')
   }
 
+  function openDrill(index: number) {
+    setDrillIndex(index)
+    setPhase('drill')
+  }
+
   if (symptomIds.length === 0) {
     return (
       <section className="page results animate-in">
@@ -123,6 +125,20 @@ export function Results() {
         <Button to="/check-in" variant="primary" block>
           Start a new check in
         </Button>
+      </section>
+    )
+  }
+
+  if (phase === 'drill') {
+    return (
+      <section className="page results">
+        <DrillFocus
+          drills={recommended}
+          index={drillIndex}
+          onIndexChange={setDrillIndex}
+          onExit={() => setPhase('plan')}
+          onFinishedAll={() => setPhase('practice')}
+        />
       </section>
     )
   }
@@ -206,53 +222,48 @@ export function Results() {
         </div>
       </aside>
 
-      <Card className="practice-order" padding="lg">
-        <h2 className="practice-order__title">Practice Order</h2>
-        <ol className="practice-order__list">
-          {practiceOrder.map((step) => (
-            <li key={`${step.number}-${step.title}`}>
-              <span className="practice-order__num">{step.number}</span>
-              <span>
-                <span className="practice-order__step-title">{step.title}</span>
-                <span className="practice-order__step-detail muted">
-                  {step.detail}
-                </span>
-              </span>
-            </li>
-          ))}
-        </ol>
-      </Card>
-
-      <div className="todays-plan">
-        <h2 className="todays-plan__title">Your drills</h2>
-        <p className="todays-plan__count muted">
-          Read each card once. Then tap Ready to Practice.
-        </p>
-
-        <div className="drill-list">
-          {recommended.map((drill, index) => (
-            <DrillCard key={drill.id} drill={drill} index={index + 1} />
-          ))}
-        </div>
-      </div>
-
       <aside className="swing-thought" aria-label="Today's swing thought">
         <p className="swing-thought__label">Today’s Swing Thought</p>
         <p className="swing-thought__cue">{prescription.remember}</p>
       </aside>
+
+      <div className="drill-picker">
+        <h2 className="drill-picker__title">Your drills</h2>
+        <p className="muted drill-picker__hint">
+          Open one drill at a time. No long scrolling.
+        </p>
+        <ul className="drill-picker__list">
+          {recommended.map((drill, index) => (
+            <li key={drill.id}>
+              <button
+                type="button"
+                className="drill-picker__item"
+                onClick={() => openDrill(index)}
+              >
+                <span className="drill-picker__num">{index + 1}</span>
+                <span className="drill-picker__copy">
+                  <span className="drill-picker__name">{drill.name}</span>
+                  <span className="drill-picker__cue muted">{drill.cue}</span>
+                </span>
+                <ChevronRight size={20} strokeWidth={2} aria-hidden="true" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="ready-cta">
         <Button
           variant="primary"
           block
           className="ready-cta__btn"
-          onClick={() => setPhase('practice')}
+          onClick={() => openDrill(0)}
         >
-          Ready to Practice
+          Start Drill 1
         </Button>
-        <p className="ready-cta__hint muted">
-          Opens a simple checklist for the range.
-        </p>
+        <Button variant="secondary" block onClick={() => setPhase('practice')}>
+          Skip to practice checklist
+        </Button>
       </div>
     </section>
   )

@@ -10,7 +10,6 @@ const C = {
   label: '#3D4650',
   ground: '#E9E5DC',
   body: '#1B4332',
-  callout: '#FFFFFF',
 }
 
 interface DrillDiagramProps {
@@ -18,7 +17,11 @@ interface DrillDiagramProps {
   view: DiagramView
 }
 
-/** IKEA-style setup diagrams: where to stand, where things go, which way to swing. */
+/**
+ * TOP VIEW convention (right-handed):
+ * Target is to the LEFT. Feet at the bottom. Ball between feet and target line.
+ * SIDE VIEW: Target is ahead (to the RIGHT).
+ */
 export function DrillDiagram({ drillId, view }: DrillDiagramProps) {
   return (
     <div className="drill-diagram">
@@ -29,9 +32,9 @@ export function DrillDiagram({ drillId, view }: DrillDiagramProps) {
         className="drill-diagram__svg"
       >
         <rect width="340" height="220" rx="18" fill={C.ground} />
-        <rect x="10" y="10" width="88" height="22" rx="6" fill={C.aid} />
+        <rect x="10" y="10" width={view === 'top' ? 118 : 88} height="22" rx="6" fill={C.aid} />
         <text
-          x="54"
+          x={view === 'top' ? 69 : 54}
           y="25"
           fill="#F7F6F2"
           fontSize="11"
@@ -40,7 +43,7 @@ export function DrillDiagram({ drillId, view }: DrillDiagramProps) {
           textAnchor="middle"
           letterSpacing="0.04em"
         >
-          {view === 'top' ? 'TOP VIEW' : 'SIDE VIEW'}
+          {view === 'top' ? 'TOP VIEW · RH' : 'SIDE VIEW'}
         </text>
         {renderDiagram(drillId)}
       </svg>
@@ -76,15 +79,7 @@ function L({
   )
 }
 
-function Callout({
-  n,
-  x,
-  y,
-}: {
-  n: number
-  x: number
-  y: number
-}) {
+function Callout({ n, x, y }: { n: number; x: number; y: number }) {
   return (
     <g>
       <circle cx={x} cy={y} r="11" fill={C.aid} />
@@ -112,11 +107,12 @@ function Ball({ cx, cy, r = 10 }: { cx: number; cy: number; r?: number }) {
   )
 }
 
+/** Feet side-by-side along a horizontal toe line (toes face up toward the ball). */
 function Feet({ cx, cy }: { cx: number; cy: number }) {
   return (
     <>
-      <ellipse cx={cx - 18} cy={cy} rx="10" ry="18" fill={C.body} opacity="0.4" />
-      <ellipse cx={cx + 18} cy={cy} rx="10" ry="18" fill={C.body} opacity="0.4" />
+      <ellipse cx={cx - 20} cy={cy} rx="11" ry="17" fill={C.body} opacity="0.4" />
+      <ellipse cx={cx + 20} cy={cy} rx="11" ry="17" fill={C.body} opacity="0.4" />
     </>
   )
 }
@@ -133,13 +129,15 @@ function PersonSide({ x }: { x: number }) {
   )
 }
 
-function TargetArrowTop({ x = 300 }: { x?: number }) {
+/** Target to the LEFT — correct for RH top view. */
+function TargetLeft() {
   return (
     <g>
-      <line x1={x} y1={55} x2={x} y2={165} stroke={C.target} strokeWidth="2.5" />
-      <polygon points={`${x},42 ${x - 9},58 ${x + 9},58`} fill={C.target} />
-      <L x={x - 36} y={38} weight={700}>
-        Target →
+      <line x1={55} y1={100} x2={55} y2={100} />
+      <polygon points="28,100 48,90 48,110" fill={C.target} />
+      <line x1={48} y1={100} x2={120} y2={100} stroke={C.target} strokeWidth="2.5" />
+      <L x={28} y={82} weight={700}>
+        ← Target
       </L>
     </g>
   )
@@ -173,50 +171,55 @@ function Path({ d }: { d: string }) {
 function renderDiagram(id: string) {
   switch (id) {
     case 'slice-alignment-stick':
+      // Target LEFT. Stick A = target line (horizontal). Stick B = toe line. Feet below.
       return (
         <>
-          <TargetArrowTop />
-          <line x1={40} y1={78} x2={250} y2={78} stroke={C.aid} strokeWidth="6" strokeLinecap="round" />
-          <line x1={40} y1={148} x2={220} y2={148} stroke={C.aid} strokeWidth="6" strokeLinecap="round" />
-          <Feet cx={120} cy={148} />
-          <Ball cx={160} cy={110} />
-          <Callout n={1} x={55} y={58} />
-          <L x={72} y={62}>Stick A → target</L>
-          <Callout n={2} x={55} y={175} />
-          <L x={72} y={179}>Stick B → your toes</L>
-          <Callout n={3} x={160} y={95} />
-          <L x={176} y={98}>Ball</L>
-          <Callout n={4} x={120} y={175} />
-          <L x={136} y={198}>Stand here</L>
-          <Path d="M100 130 Q140 112 158 112" />
-          <L x={40} y={210}>Blue dashes = swing toward target</L>
+          <TargetLeft />
+          <line x1={55} y1={100} x2={300} y2={100} stroke={C.aid} strokeWidth="5" strokeLinecap="round" />
+          <line x1={100} y1={165} x2={280} y2={165} stroke={C.aid} strokeWidth="5" strokeLinecap="round" />
+          <Feet cx={190} cy={165} />
+          <Ball cx={190} cy={100} />
+          <Callout n={1} x={70} y={78} />
+          <L x={86} y={82}>Stick A (at target)</L>
+          <Callout n={2} x={115} y={185} />
+          <L x={131} y={189}>Stick B (your toes)</L>
+          <Callout n={3} x={210} y={82} />
+          <L x={226} y={86}>Ball</L>
+          <Callout n={4} x={190} y={200} />
+          <L x={206} y={204} anchor="start">
+            Stand here
+          </L>
+          <Path d="M230 120 Q210 105 160 100" />
+          <L x={40} y={215}>Swing toward ← target (left of your feet)</L>
         </>
       )
 
     case 'slice-object-avoidance':
+      // Outside = away from body = above ball in this view (farther from feet)
       return (
         <>
-          <TargetArrowTop />
-          <Feet cx={100} cy={155} />
-          <Ball cx={165} cy={118} />
+          <TargetLeft />
+          <line x1={55} y1={100} x2={300} y2={100} stroke={C.target} strokeWidth="1.5" strokeDasharray="4 3" />
+          <Feet cx={200} cy={170} />
+          <Ball cx={200} cy={100} />
           <ellipse
-            cx={205}
-            cy={88}
-            rx="18"
+            cx={200}
+            cy={62}
+            rx="20"
             ry="14"
             fill={C.avoid}
             fillOpacity="0.25"
             stroke={C.avoid}
             strokeWidth="3"
           />
-          <Callout n={1} x={100} y={188} />
-          <L x={116} y={192}>Your feet</L>
-          <Callout n={2} x={165} y={100} />
-          <L x={178} y={104}>Ball</L>
-          <Callout n={3} x={205} y={68} />
-          <L x={220} y={72}>AVOID</L>
-          <Path d="M75 140 Q130 85 160 115" />
-          <L x={40} y={210}>Swing inside the red object (miss it)</L>
+          <Callout n={1} x={200} y={195} />
+          <L x={216} y={199}>Your feet</L>
+          <Callout n={2} x={220} y={100} />
+          <L x={236} y={104}>Ball</L>
+          <Callout n={3} x={200} y={42} />
+          <L x={216} y={46}>AVOID (outside)</L>
+          <Path d="M240 145 Q220 115 160 100" />
+          <L x={40} y={215}>Miss red object · swing toward ← target</L>
         </>
       )
 
@@ -239,29 +242,31 @@ function renderDiagram(id: string) {
       )
 
     case 'hook-mirrored-path':
+      // Inside = toward body = between feet and ball
       return (
         <>
-          <TargetArrowTop />
-          <Feet cx={100} cy={155} />
-          <Ball cx={170} cy={118} />
+          <TargetLeft />
+          <line x1={55} y1={100} x2={300} y2={100} stroke={C.target} strokeWidth="1.5" strokeDasharray="4 3" />
+          <Feet cx={200} cy={170} />
+          <Ball cx={200} cy={100} />
           <ellipse
-            cx={125}
-            cy={88}
+            cx={200}
+            cy={132}
             rx="18"
-            ry="14"
+            ry="12"
             fill={C.avoid}
             fillOpacity="0.25"
             stroke={C.avoid}
             strokeWidth="3"
           />
-          <Callout n={1} x={100} y={188} />
-          <L x={116} y={192}>Your feet</L>
-          <Callout n={2} x={170} y={100} />
-          <L x={184} y={104}>Ball</L>
-          <Callout n={3} x={125} y={68} />
-          <L x={140} y={72}>AVOID (inside)</L>
-          <Path d="M75 145 Q115 100 165 118" />
-          <L x={40} y={210}>Miss the red object on the inside</L>
+          <Callout n={1} x={200} y={195} />
+          <L x={216} y={199}>Your feet</L>
+          <Callout n={2} x={220} y={100} />
+          <L x={236} y={104}>Ball</L>
+          <Callout n={3} x={200} y={132} />
+          <L x={222} y={136}>AVOID (inside)</L>
+          <Path d="M240 155 Q220 120 160 100" />
+          <L x={40} y={215}>Miss red object on the inside · toward ← target</L>
         </>
       )
 
@@ -360,28 +365,29 @@ function renderDiagram(id: string) {
       )
 
     case 'chip-club-ladder':
+      // Target LEFT. Landing spot between ball and target.
       return (
         <>
-          <TargetArrowTop x={305} />
-          <Feet cx={85} cy={150} />
-          <Ball cx={120} cy={118} />
+          <TargetLeft />
+          <Feet cx={230} cy={170} />
+          <Ball cx={230} cy={115} />
           <circle
-            cx={245}
+            cx={130}
             cy={100}
-            r="26"
+            r="28"
             fill="none"
             stroke={C.aid}
             strokeWidth="3"
             strokeDasharray="5 4"
           />
-          <Callout n={1} x={85} y={185} />
-          <L x={100} y={189}>Stand here</L>
-          <Callout n={2} x={120} y={100} />
-          <L x={134} y={104}>Ball</L>
-          <Callout n={3} x={245} y={72} />
-          <L x={210} y={60}>Landing spot</L>
-          <Path d="M130 118 Q185 75 235 98" />
-          <L x={40} y={210}>Same small swing · change club: PW → 9 → 8</L>
+          <Callout n={1} x={230} y={195} />
+          <L x={246} y={199}>Stand here</L>
+          <Callout n={2} x={250} y={115} />
+          <L x={266} y={119}>Ball</L>
+          <Callout n={3} x={130} y={72} />
+          <L x={100} y={60}>Landing spot</L>
+          <Path d="M220 115 Q175 95 145 100" />
+          <L x={40} y={215}>Chip toward ← target · PW → 9 → 8</L>
         </>
       )
 
@@ -414,10 +420,11 @@ function renderDiagram(id: string) {
       )
 
     case 'putt-gate':
+      // Target/hole to the LEFT
       return (
         <>
           <circle
-            cx={290}
+            cx={50}
             cy={110}
             r="16"
             fill={C.aid}
@@ -425,19 +432,18 @@ function renderDiagram(id: string) {
             stroke={C.aid}
             strokeWidth="2.5"
           />
-          <L x={275} y={88} weight={700}>
-            Hole
+          <L x={28} y={88} weight={700}>
+            ← Hole
           </L>
-          <Ball cx={70} cy={110} />
-          <line x1={140} y1={86} x2={140} y2={102} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
-          <line x1={140} y1={118} x2={140} y2={134} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
-          <Callout n={1} x={70} y={88} />
-          <L x={55} y={75}>Ball</L>
-          <Callout n={2} x={140} y={70} />
-          <L x={155} y={74}>Gate (tees/coins)</L>
-          <Callout n={3} x={290} y={70} />
-          <Path d="M82 110 L270 110" />
-          <L x={40} y={195}>Roll through the gate</L>
+          <Ball cx={280} cy={110} />
+          <line x1={200} y1={86} x2={200} y2={102} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
+          <line x1={200} y1={118} x2={200} y2={134} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
+          <Callout n={1} x={280} y={88} />
+          <L x={250} y={75}>Ball</L>
+          <Callout n={2} x={200} y={70} />
+          <L x={120} y={74}>Gate (tees/coins)</L>
+          <Path d="M268 110 L70 110" />
+          <L x={40} y={195}>Roll through the gate toward the hole</L>
           <L x={40} y={210}>Do not touch either side</L>
         </>
       )
@@ -474,7 +480,6 @@ function renderDiagram(id: string) {
           <Ball cx={132} cy={78} r={8} />
           <Callout n={1} x={170} y={48} />
           <L x={186} y={52}>Balls in a circle</L>
-          <Callout n={2} x={170} y={115} />
           <L x={40} y={210}>Putt around · 3–5 feet · redo any miss</L>
         </>
       )
@@ -482,9 +487,9 @@ function renderDiagram(id: string) {
     default:
       return (
         <>
-          <TargetArrowTop />
-          <Feet cx={120} cy={150} />
-          <Ball cx={170} cy={110} />
+          <TargetLeft />
+          <Feet cx={200} cy={165} />
+          <Ball cx={200} cy={100} />
         </>
       )
   }

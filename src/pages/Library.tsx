@@ -48,7 +48,7 @@ export function Library() {
         {symptoms.map((symptom) => (
           <FilterChip
             key={symptom.id}
-            label={symptom.label}
+            label={filterLabel(symptom.id, symptom.label)}
             selected={filter === symptom.id}
             onSelect={() => setFilter(symptom.id)}
           />
@@ -75,6 +75,12 @@ export function Library() {
       </div>
     </section>
   )
+}
+
+function filterLabel(id: SymptomId, label: string): string {
+  if (id === 'chipping') return 'Chipping'
+  if (id === 'putting') return 'Putting'
+  return label
 }
 
 function FilterChip({

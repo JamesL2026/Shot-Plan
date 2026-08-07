@@ -59,7 +59,7 @@ export const drills: Drill[] = [
     },
     cue: 'Miss the object. Then the ball.',
     whyItWorks:
-      'Missing the outside object stops the over-the-top cut that creates a slice.',
+      'Missing the outside object stops the over the top cut that creates a slice.',
   },
   {
     id: 'hook-finish-position',
@@ -91,7 +91,7 @@ export const drills: Drill[] = [
   {
     id: 'hook-split-hand',
     symptomId: 'hook',
-    name: 'Split-hand drill',
+    name: 'Split hand drill',
     goal: 'Calm hands and face control so the clubface does not shut too early.',
     bodyFocus: 'Hands / Wrists',
     worksOn: 'both',
@@ -105,7 +105,7 @@ export const drills: Drill[] = [
     steps: [
       'Split your hands on the grip with a clear gap between them.',
       'Hit 8 slow half swings. Keep the face from snapping shut.',
-      'Hit 8 more at a smooth tempo, still split-handed.',
+      'Hit 8 more at a smooth tempo, still split handed.',
     ],
     commonMistake: {
       mistake: 'Trying to roll the hands harder to “save” the shot.',
@@ -161,7 +161,7 @@ export const drills: Drill[] = [
     steps: [
       'Place the coin in front of the ball toward the target.',
       'Hit 10 half swings that pass the coin after the ball.',
-      'Hit 10 fuller swings with the same finish-through feel.',
+      'Hit 10 fuller swings with the same finish through feel.',
     ],
     commonMistake: {
       mistake: 'Stopping the club at the ball.',
@@ -257,7 +257,7 @@ export const drills: Drill[] = [
   {
     id: 'chip-wedge-ladder',
     symptomId: 'chipping',
-    name: 'One-wedge ladder',
+    name: 'One wedge ladder',
     goal: 'Control chip distance with one wedge and three swing lengths.',
     bodyFocus: 'Distance Control',
     worksOn: 'both',
@@ -298,7 +298,7 @@ export const drills: Drill[] = [
     steps: [
       'Set three distances to the same target.',
       'Putt 4 balls from the short spot, then medium, then long.',
-      'Count leaves inside a 3-foot circle around the hole.',
+      'Count leaves inside a 3 foot circle around the hole.',
     ],
     commonMistake: {
       mistake: 'Banging long putts and racing them past.',
@@ -306,7 +306,7 @@ export const drills: Drill[] = [
     },
     cue: 'Die it near the hole.',
     whyItWorks:
-      'Ladder distances train tempo and speed so lag putts finish tap-in close.',
+      'Ladder distances train tempo and speed so lag putts finish tap in close.',
   },
   {
     id: 'putt-start-line-gate',

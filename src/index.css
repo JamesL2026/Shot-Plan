@@ -1311,6 +1311,15 @@ button.back-link {
   font-size: 0.9rem !important;
 }
 
+.drill-card__photo-notes {
+  margin-top: var(--space-2);
+}
+
+.drill-card__photo-notes li {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
 .mat-adjustment {
   margin-top: var(--space-3);
   padding: var(--space-4);

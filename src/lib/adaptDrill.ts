@@ -117,12 +117,12 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     irons: {
       diagramVariant: 'irons',
       setup: [
-        'Use a mid-iron.',
+        'Use a mid iron.',
         'Fold a towel and place it about four inches behind the ball.',
-        'Neutral stance. Ball near mid-stance.',
+        'Neutral stance. Ball near mid stance.',
         'Hit the ball without touching the towel.',
       ],
-      cue: 'Mid-iron: ball first. Ground second.',
+      cue: 'Mid iron: ball first. Ground second.',
     },
     wedges: {
       diagramVariant: 'wedges',
@@ -139,12 +139,12 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     irons: {
       diagramVariant: 'irons',
       setup: [
-        'Use a mid-iron.',
+        'Use a mid iron.',
         'Place a coin 2-3 inches in front of the ball toward the target.',
         'Neutral stance. Ball near mid stance.',
         'Swing through so the club passes the coin after the ball.',
       ],
-      cue: 'Mid-iron: finish past the ball.',
+      cue: 'Mid iron: finish past the ball.',
       matAdjustment:
         'On mats, do not push a tee in. Place a coin 2-3 inches in front of the ball toward the target.',
     },
@@ -165,7 +165,7 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     irons: {
       diagramVariant: 'irons',
       setup: [
-        'Use a mid-iron.',
+        'Use a mid iron.',
         'Place a coin (or towel edge) 1-2 inches in front of the ball.',
         'Neutral stance. Ball near mid stance.',
         'Hit the ball, then brush the line.',
@@ -191,12 +191,12 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     irons: {
       diagramVariant: 'irons',
       setup: [
-        'Use a mid-iron.',
+        'Use a mid iron.',
         'Place a towel a few inches in front of the ball toward the target.',
         'Neutral stance. Ball near mid stance.',
         'Hit the ball first. Miss the towel, or barely touch it after.',
       ],
-      cue: 'Mid-iron: compress. Do not scoop.',
+      cue: 'Mid iron: compress. Do not scoop.',
     },
     wedges: {
       diagramVariant: 'wedges',

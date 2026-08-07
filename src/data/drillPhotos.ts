@@ -39,20 +39,20 @@ const catalog: Record<string, DrillPhotoMeta | null> = {
       'Balanced finish with chest to the target. Match your chosen club from the diagram.',
     setupAccurate: true,
   },
-  // No split-hand photo yet — diagram only
+  // No split hand photo yet; diagram only
   'hook-split-hand': null,
   'fat-towel-behind': {
     src: '/drills/fat-towel-behind.jpg',
     photoClub: 'wedge',
     caption:
-      'Towel behind the ball. Photo shows a short iron/wedge. If you chose irons, keep the same towel gap.',
+      'Towel behind the ball. Photo shows a short iron or wedge. If you chose irons, keep the same towel gap.',
     setupAccurate: true,
   },
   'fat-tee-in-front': {
     src: '/drills/fat-tee-in-front.jpg',
     photoClub: 'iron',
     caption:
-      'Coin/marker in front of the ball. Photo shows an iron. If you chose wedges, use a wedge with the same marker gap.',
+      'Coin or marker in front of the ball. Photo shows an iron. If you chose wedges, use a wedge with the same marker gap.',
     setupAccurate: true,
   },
   'thin-brush-line': {

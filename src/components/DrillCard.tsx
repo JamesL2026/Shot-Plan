@@ -56,9 +56,13 @@ export function DrillCard({
   const successCondition = isAdapted(drill) ? drill.successCondition : undefined
   const reflection = isAdapted(drill) ? drill.reflection : undefined
 
-  const photoCaption = (() => {
+  const photoCaptionLines = (() => {
     if (!photo) return null
-    if (!clubLabel) return photo.caption
+    const lines = photo.caption
+      .split(/(?<=\.)\s+/)
+      .map((line) => line.trim())
+      .filter(Boolean)
+    if (!clubLabel) return lines
     const chosen = clubLabel.toLowerCase()
     const shown = photo.photoClub
     const mismatch =
@@ -66,9 +70,13 @@ export function DrillCard({
       (chosen.includes('driver') && (shown === 'iron' || shown === 'wedge')) ||
       (chosen.includes('wedge') && shown === 'driver')
     if (mismatch) {
-      return `${photo.caption} Your session is set for ${clubLabel} — trust the diagram for stance and ball position.`
+      return [
+        ...lines,
+        `Your session is set for ${clubLabel}.`,
+        'Trust the diagram for stance and ball position.',
+      ]
     }
-    return photo.caption
+    return lines
   })()
 
   return (
@@ -175,12 +183,12 @@ export function DrillCard({
             </p>
             {guided && drill.view === 'top' && (
               <p className="drill-card__orient muted">
-                Top view: for a right-handed golfer, the target is to your left.
+                Top view: for a right handed golfer, the target is to your left.
               </p>
             )}
             {!photo && (
               <p className="drill-card__orient muted">
-                Use the diagram for this drill. A matching real-setup photo is not available yet.
+                Use the diagram for this drill. A matching real setup photo is not available yet.
               </p>
             )}
           </>
@@ -189,14 +197,20 @@ export function DrillCard({
             <figure className="drill-photo">
               <img
                 src={photo.src}
-                alt={`Real-life setup for ${drill.name}`}
+                alt={`Real life setup for ${drill.name}`}
                 className="drill-photo__img"
                 loading="lazy"
                 width={1200}
                 height={800}
               />
             </figure>
-            <p className="drill-card__diagram-hint muted">{photoCaption}</p>
+            {photoCaptionLines && photoCaptionLines.length > 0 && (
+              <ol className="drill-card__setup-list drill-card__photo-notes">
+                {photoCaptionLines.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ol>
+            )}
           </>
         )}
       </div>

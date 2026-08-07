@@ -143,18 +143,12 @@ export function PracticeComplete({
     <div className="practice-complete-stack animate-in">
       <Card className="round-ready" padding="lg">
         <p className="round-ready__kicker">Round Ready</p>
-        <h2 className="round-ready__title">Today&apos;s Practice Summary</h2>
+        <h2 className="round-ready__title">Coach&apos;s Wrap-Up</h2>
 
         <dl className="round-ready__meta">
           <div>
             <dt>Today&apos;s Focus</dt>
-            <dd>
-              {todayGoal ?? 'Your practice focus'}
-              <span className="round-ready__check" aria-label="Completed">
-                {' '}
-                Completed ✓
-              </span>
-            </dd>
+            <dd>{todayGoal ?? 'Your practice focus'}</dd>
           </div>
           <div>
             <dt>Challenges Completed</dt>
@@ -164,7 +158,7 @@ export function PracticeComplete({
           </div>
           {biggestWin && (
             <div>
-              <dt>What you worked on</dt>
+              <dt>Today&apos;s Biggest Win</dt>
               <dd>{biggestWin}</dd>
             </div>
           )}
@@ -207,6 +201,10 @@ export function PracticeComplete({
         <p className="round-ready__close">
           Take this feeling into your next round.
         </p>
+        <p className="muted round-ready__sub">
+          Don&apos;t think about mechanics on the course.
+        </p>
+        <p className="muted round-ready__sub">Trust what you built today.</p>
         <p className="muted round-ready__sub">See you after your next round.</p>
 
         <div className="practice-complete__actions">

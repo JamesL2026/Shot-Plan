@@ -13,6 +13,7 @@ import {
   coachEncouragement,
   coachFocusLine,
   coachPrePracticeLines,
+  coachPriority,
   coachTransition,
 } from '../data/coachVoice'
 import {
@@ -98,6 +99,7 @@ export function Results() {
   )
   const focusLine = coachFocusLine(prescription.primaryFocus, clubSummary)
   const encouragement = coachEncouragement(symptomIds, sessionSeed)
+  const priority = coachPriority(symptomIds)
   const biggestWin = coachBiggestWin(recommended, prescription.remember)
   const currentDrill = recommended[challengeIndex]
   const nextDrill = recommended[challengeIndex + 1]
@@ -185,6 +187,7 @@ export function Results() {
           estimatedTime={prescription.estimatedTime}
           swingThought={prescription.remember}
           encouragement={encouragement}
+          priorityLines={priority?.lines}
           onStart={handleStartPractice}
           onBack={() => navigate(session ? '/sessions' : '/check-in')}
           backLabel={session ? 'Practice Journal' : 'Check in'}

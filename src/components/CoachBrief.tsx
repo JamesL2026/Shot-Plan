@@ -5,6 +5,7 @@ interface CoachBriefProps {
   estimatedTime: string
   swingThought: string
   encouragement: string
+  priorityLines?: string[] | null
   onStart: () => void
   onBack: () => void
   backLabel: string
@@ -15,6 +16,7 @@ export function CoachBrief({
   estimatedTime,
   swingThought,
   encouragement,
+  priorityLines,
   onStart,
   onBack,
   backLabel,
@@ -32,6 +34,17 @@ export function CoachBrief({
         <p className="coach-brief__label">Today&apos;s Focus</p>
         <p className="coach-brief__focus">{focusLine}</p>
       </div>
+
+      {priorityLines && priorityLines.length > 0 && (
+        <aside className="coach-priority" aria-label="Today's priority">
+          <p className="coach-priority__label">Today&apos;s Priority</p>
+          {priorityLines.map((line) => (
+            <p key={line} className="coach-priority__line">
+              {line}
+            </p>
+          ))}
+        </aside>
+      )}
 
       <div className="coach-brief__block coach-brief__block--quiet">
         <p className="coach-brief__label">Estimated Time</p>
@@ -52,7 +65,7 @@ export function CoachBrief({
           className="ready-cta__btn"
           onClick={onStart}
         >
-          Start Practice
+          Let&apos;s start
         </Button>
       </div>
     </section>

@@ -75,7 +75,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Pick a second target and hit four more with the same setup.',
       ],
       successCondition: 'Seven of eight balls start toward the target.',
-      reflection: 'Did the ball start closer to your target?',
+      reflection: 'What changed compared to your first few swings?',
     },
     {
       id: 'slice-align-pressure',
@@ -90,7 +90,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Miss one? Restart the streak from zero.',
       ],
       successCondition: 'Three starts in a row toward the target.',
-      reflection: 'Did this feel more intentional than guessing at aim?',
+      reflection: 'Would you trust this aim setup on the first tee?',
     },
     {
       id: 'slice-align-tempo',
@@ -105,7 +105,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Before each swing, aim the clubface at Stick A.',
       ],
       successCondition: '10 easy swings with feet on Stick B and the clubface aimed at Stick A.',
-      reflection: 'Was it easier to stay lined up at a smoother tempo?',
+      reflection: 'Did one cue make lining up feel simpler?',
     },
   ],
 
@@ -123,7 +123,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Only count swings that clear the object.',
       ],
       successCondition: '8 swings that miss the headcover.',
-      reflection: 'Did the start line look quieter?',
+      reflection: 'Which swing felt easiest to repeat without thinking?',
     },
     {
       id: 'slice-avoid-pressure',
@@ -138,7 +138,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Keep your hands quiet. Path first.',
       ],
       successCondition: 'Five swings in a row without touching the headcover.',
-      reflection: 'Did you trust the path more as the streak grew?',
+      reflection: 'Did you stop steering and let the path do the work?',
     },
     {
       id: 'slice-avoid-flight',
@@ -153,7 +153,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Note how many start near your line.',
       ],
       successCondition: 'Start 6 of 8 shots near your target line while missing the object.',
-      reflection: 'Did a better path help the ball start straighter?',
+      reflection: 'Would you keep this feeling if you played nine holes right now?',
     },
   ],
 
@@ -171,7 +171,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Only count finishes you can hold for a full second.',
       ],
       successCondition: 'Finish in balance for 8 of your next 10 swings.',
-      reflection: 'Did a taller finish calm the left miss?',
+      reflection: 'Did finishing tall calm the left miss?',
     },
     {
       id: 'hook-finish-pressure',
@@ -186,7 +186,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Finish tall. Chest to the target.',
       ],
       successCondition: 'Three consecutive balanced finishes.',
-      reflection: 'Did pressure make you want to steer instead of rotate?',
+      reflection: 'When pressure showed up, did you still finish balanced?',
     },
     {
       id: 'hook-finish-tempo',
@@ -219,7 +219,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'If the face flips hard, restart the streak.',
       ],
       successCondition: 'Five half swings in a row with a split grip and no snap shut.',
-      reflection: 'Did quieter hands calm the left miss?',
+      reflection: 'Did quieter hands make the start line feel safer?',
     },
     {
       id: 'hook-split-consistency',
@@ -234,7 +234,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Stay patient. No steering.',
       ],
       successCondition: 'Eight half swings with a split grip and no snap shut.',
-      reflection: 'Did the split grip make hand action easier to feel?',
+      reflection: 'What would you keep from this quieter hand feel?',
     },
     {
       id: 'hook-split-flight',
@@ -249,7 +249,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Count how many start closer to the line.',
       ],
       successCondition: 'Start 6 of 8 near your line with quieter hands.',
-      reflection: 'Did softer hands help the start line?',
+      reflection: 'Did soft hands make everything simpler?',
     },
   ],
 
@@ -267,7 +267,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'If you catch the towel, reset and slow down.',
       ],
       successCondition: 'Eight clean strikes that miss the towel.',
-      reflection: 'Did contact feel more ball first?',
+      reflection: 'Did contact feel more ball first than when you started?',
     },
     {
       id: 'fat-towel-pressure',
@@ -282,7 +282,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Stay through the shot. Do not hang back.',
       ],
       successCondition: '3 strikes in a row that miss the towel.',
-      reflection: 'Did pressure make you want to help the ball up?',
+      reflection: 'Under a little pressure, did you still refuse to help it up?',
     },
     {
       id: 'fat-towel-tempo',
@@ -297,7 +297,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'If you hit the towel, slow down on the next swing.',
       ],
       successCondition: '10 swings that miss the towel.',
-      reflection: 'Was cleaner contact easier at a smoother tempo?',
+      reflection: 'Was cleaner contact easier when you slowed down?',
     },
   ],
 
@@ -315,7 +315,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'If you stop at the ball, make the next one longer through.',
       ],
       successCondition: 'Eight swings that pass the marker after the ball.',
-      reflection: 'Did finishing past the ball improve the strike?',
+      reflection: 'Did finishing past the ball change the strike?',
     },
     {
       id: 'fat-marker-consistency',
@@ -345,7 +345,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Stay aggressive through the ball.',
       ],
       successCondition: 'Three consecutive swings past the marker.',
-      reflection: 'Did the streak force a more committed finish?',
+      reflection: 'Did the streak force a more committed move through?',
     },
   ],
 
@@ -378,7 +378,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'If you miss high, stay down longer on the next one.',
       ],
       successCondition: '10 swings that brush the line after the ball.',
-      reflection: 'Did slower tempo help you stay down?',
+      reflection: 'Did slower tempo help you stay down longer?',
     },
     {
       id: 'thin-brush-consistency',
@@ -393,7 +393,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'No lifting early.',
       ],
       successCondition: 'Eight successful repetitions with brush after the ball.',
-      reflection: 'Did contact feel more repeatable?',
+      reflection: 'Which swing felt most repeatable?',
     },
   ],
 
@@ -411,7 +411,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'If you scoop, quiet the wrists and try again.',
       ],
       successCondition: 'Eight ball first strikes.',
-      reflection: 'Did the towel prove where your low point was?',
+      reflection: 'Did the towel show you where your low point really was?',
     },
     {
       id: 'thin-ahead-pressure',
@@ -441,7 +441,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Keep the cue short: compress.',
       ],
       successCondition: 'Eight successful ball first repetitions.',
-      reflection: 'Did scooping start to fade?',
+      reflection: 'Did scooping start to fade as you stayed patient?',
     },
   ],
 
@@ -537,7 +537,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Only count landings near the spot with the cover still in place.',
       ],
       successCondition: 'Land 6 chips near the spot without dropping the cover.',
-      reflection: 'Did connected arms help distance feel simpler?',
+      reflection: 'Did connected arms make distance feel simpler?',
     },
   ],
 
@@ -555,7 +555,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Count leaves inside a 3 foot circle.',
       ],
       successCondition: 'Leave 8 of 12 putts inside a 3 foot circle.',
-      reflection: 'Did smoother tempo leave you closer?',
+      reflection: 'Did smoother tempo leave you closer more often?',
     },
     {
       id: 'putt-lag-tempo',
@@ -570,7 +570,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Repeat that ladder one more time.',
       ],
       successCondition: 'Complete the short medium long ladder twice. Leave each putt near the hole.',
-      reflection: 'Did one tempo cover all three distances?',
+      reflection: 'Did one tempo cover short, medium, and long?',
     },
     {
       id: 'putt-lag-pressure',
@@ -603,7 +603,7 @@ export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
         'Square face. Clean start.',
       ],
       successCondition: '5 putts in a row through the gate without touching a side.',
-      reflection: 'Did the ahead gate make start line feel obvious?',
+      reflection: 'Did the gate make start line feel obvious?',
     },
     {
       id: 'putt-start-pressure',

@@ -65,7 +65,10 @@ export interface Drill {
     instead: string
   }
   cue: string
-  whyItWorks: string
+  /** Short “why we’re starting here” before the challenge. */
+  coachIntro: string
+  /** One or two lines to remember over the ball. */
+  coachSays: string
 }
 
 /** Same drill content with optional club-specific copy, diagram flavor, and coaching challenge. */

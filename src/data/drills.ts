@@ -31,8 +31,10 @@ export const drills: Drill[] = [
       instead: 'Square the face to Stick A first. Then set your feet on Stick B.',
     },
     cue: 'Body and face point the same way.',
-    whyItWorks:
-      'Your feet and the clubface should feel aimed at the same target.',
+    coachIntro:
+      'Before we chase a draw or distance, let\'s get your aim honest.',
+    coachSays:
+      'Square the face to Stick A. Then set your feet. That\'s the whole start.',
   },
   {
     id: 'slice-object-avoidance',
@@ -58,8 +60,10 @@ export const drills: Drill[] = [
       instead: 'Miss the red object first. Path first. Hands quiet.',
     },
     cue: 'Miss the object. Then the ball.',
-    whyItWorks:
-      'You should feel the club swing more from the inside, not cutting across the ball.',
+    coachIntro:
+      'We\'re starting with path because a cut across the ball feeds the slice.',
+    coachSays:
+      'Miss the red object first. Hands stay quiet. Path does the work.',
   },
   {
     id: 'hook-finish-position',
@@ -85,8 +89,10 @@ export const drills: Drill[] = [
       instead: 'Rotate through. Hold a tall, balanced finish.',
     },
     cue: 'Finish tall. Chest to the target.',
-    whyItWorks:
-      'You should feel tall and balanced, with your chest facing the target.',
+    coachIntro:
+      'Today we\'re not forcing the release. We\'re finishing in balance.',
+    coachSays:
+      'Swing through. Hold a tall finish. Chest to the target.',
   },
   {
     id: 'hook-split-hand',
@@ -112,8 +118,10 @@ export const drills: Drill[] = [
       instead: 'Quiet hands. Let the split grip slow the release.',
     },
     cue: 'Quiet hands. Soft face.',
-    whyItWorks:
-      'You should feel quieter hands. The clubface should not snap shut early.',
+    coachIntro:
+      'Before we add speed, let\'s calm the hands that snap the face shut.',
+    coachSays:
+      'Leave a gap between your hands. Easy half swings. Soft through the ball.',
   },
   {
     id: 'fat-towel-behind',
@@ -139,8 +147,10 @@ export const drills: Drill[] = [
       instead: 'Move through the shot. Ball first. Ground second.',
     },
     cue: 'Ball first. Ground second.',
-    whyItWorks:
-      'You should feel the club hit the ball before it touches the ground.',
+    coachIntro:
+      'We\'re starting with strike because nothing else matters until contact improves.',
+    coachSays:
+      'Ball first. Miss the towel. Don\'t help it up.',
   },
   {
     id: 'fat-tee-in-front',
@@ -168,8 +178,10 @@ export const drills: Drill[] = [
       instead: 'Swing through to the coin. Finish past the ball.',
     },
     cue: 'Finish past the ball.',
-    whyItWorks:
-      'You should feel the club keep moving past the ball, not stop at impact.',
+    coachIntro:
+      'If you\'re hanging back, let\'s train finishing past the ball.',
+    coachSays:
+      'Hit it, then pass the coin. Keep moving through.',
   },
   {
     id: 'thin-brush-line',
@@ -197,8 +209,10 @@ export const drills: Drill[] = [
       instead: 'Stay down. Brush the line after the ball. Let loft send it up.',
     },
     cue: 'Ball, then brush the line.',
-    whyItWorks:
-      'You should feel the club brush the ground right after the ball.',
+    coachIntro:
+      'Thin shots lift early. We\'re staying down long enough to brush after the ball.',
+    coachSays:
+      'Ball first. Then brush the line. Let loft send it up.',
   },
   {
     id: 'thin-towel-low-point',
@@ -224,8 +238,10 @@ export const drills: Drill[] = [
       instead: 'Quiet wrists. Hit down and through.',
     },
     cue: 'Compress. Don’t scoop.',
-    whyItWorks:
-      'You should feel quiet wrists and the ball first, with no scoop.',
+    coachIntro:
+      'Scooping thins the shot. Quiet wrists. Compress, don\'t flip.',
+    coachSays:
+      'Ball first. Towel second. Stay patient through impact.',
   },
   {
     id: 'chip-headcover',
@@ -251,8 +267,10 @@ export const drills: Drill[] = [
       instead: 'Arms and body move together. Loft sends it up.',
     },
     cue: 'Quiet wrists. Connected arms.',
-    whyItWorks:
-      'You should feel your arms move together, not flipping with the hands.',
+    coachIntro:
+      'Busy hands make chips unpredictable. We\'re connecting the arms first.',
+    coachSays:
+      'Soft chips. Keep the headcover tucked. Same motion every time.',
   },
   {
     id: 'chip-wedge-ladder',
@@ -278,8 +296,10 @@ export const drills: Drill[] = [
       instead: 'One wedge. Three swing lengths. Same landing feel.',
     },
     cue: 'One wedge. Three distances.',
-    whyItWorks:
-      'You should feel distance change only from a longer or shorter swing.',
+    coachIntro:
+      'Today\'s goal isn\'t perfect chips. It\'s one wedge and clear distances.',
+    coachSays:
+      'Same club. Change only swing length. Short, medium, then long.',
   },
   {
     id: 'putt-lag-ladder',
@@ -305,8 +325,10 @@ export const drills: Drill[] = [
       instead: 'Smooth tempo. Die the ball near the hole.',
     },
     cue: 'Die it near the hole.',
-    whyItWorks:
-      'You should feel soft speed that dies near the hole.',
+    coachIntro:
+      'Don\'t try to make everything. We\'re training speed that dies near the hole.',
+    coachSays:
+      'Smooth tempo. Soft finish. Leave it close.',
   },
   {
     id: 'putt-start-line-gate',
@@ -334,8 +356,10 @@ export const drills: Drill[] = [
       instead: 'Put the gate 2-3 feet ahead so you train where the ball starts.',
     },
     cue: 'Square face. Clean start.',
-    whyItWorks:
-      'You should feel a square face and a clean roll straight through the gate.',
+    coachIntro:
+      'Before we worry about breaking putts, let\'s start them on line.',
+    coachSays:
+      'Square face. Roll it clean through the gate. That\'s the whole job.',
   },
 ]
 
@@ -478,7 +502,7 @@ export function buildPracticeOrder(recommended: Drill[]): PracticeOrderStep[] {
       number: n++,
       title: 'Complete the challenge',
       detail: adapted.successCondition
-        ? `Success: ${adapted.successCondition}`
+        ? `You're ready when: ${adapted.successCondition}`
         : 'Finish the challenge, then move on.',
     })
   })

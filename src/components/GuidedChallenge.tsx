@@ -17,12 +17,10 @@ export function GuidedChallenge({
   return (
     <section className="guided-challenge animate-in">
       <p className="guided-challenge__count">Challenge {challengeNumber}</p>
-      <p className="guided-challenge__coach">
-        Match the diagram setup, then follow the numbered challenge steps.
-      </p>
-      <aside className="guided-challenge__cue" aria-label="Remember">
-        <p className="guided-challenge__cue-label">Remember this</p>
-        <p className="guided-challenge__cue-text">{drill.cue}</p>
+      <p className="guided-challenge__coach">{drill.coachIntro}</p>
+      <aside className="guided-challenge__cue" aria-label="Coach says">
+        <p className="guided-challenge__cue-label">Coach Says</p>
+        <p className="guided-challenge__cue-text">{drill.coachSays}</p>
       </aside>
       <DrillCard drill={drill} index={challengeNumber} mode="guided" />
       <div className="drill-focus__actions">
@@ -32,7 +30,7 @@ export function GuidedChallenge({
           className="ready-cta__btn"
           onClick={onComplete}
         >
-          Challenge Complete
+          I&apos;m ready
         </Button>
       </div>
     </section>

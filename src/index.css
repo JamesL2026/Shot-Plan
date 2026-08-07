@@ -934,6 +934,34 @@ button {
   color: var(--color-ink);
 }
 
+.coach-priority {
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-highlight);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 18%, var(--color-border));
+}
+
+.coach-priority__label {
+  margin: 0 0 var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.coach-priority__line {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  font-weight: 550;
+}
+
+.coach-priority__line + .coach-priority__line {
+  margin-top: var(--space-1);
+}
+
 .results--brief {
   padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
 }

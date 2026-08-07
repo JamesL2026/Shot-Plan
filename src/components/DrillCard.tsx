@@ -99,6 +99,13 @@ export function DrillCard({
         )}
       </header>
 
+      {!guided && (
+        <div className="drill-card__section">
+          <h3 className="drill-card__label">Let&apos;s start here</h3>
+          <p>{drill.coachIntro}</p>
+        </div>
+      )}
+
       <div className="drill-card__section">
         <h3 className="drill-card__label">
           {guided ? 'This challenge' : "Today's Focus"}
@@ -240,9 +247,7 @@ export function DrillCard({
 
       {successCondition && (
         <div className="drill-card__success">
-          <h3 className="drill-card__label">
-            {guided ? "How You'll Know It Worked" : 'Success Condition'}
-          </h3>
+          <h3 className="drill-card__label">You&apos;re Ready When&hellip;</h3>
           <p>{successCondition}</p>
         </div>
       )}
@@ -264,14 +269,17 @@ export function DrillCard({
         </>
       )}
 
-      <div className="drill-card__section">
-        <h3 className="drill-card__label">What you should feel</h3>
-        <p>{drill.whyItWorks}</p>
-      </div>
+      {/* Guided mode keeps Coach Says sticky above the card. */}
+      {!guided && (
+        <div className="drill-card__section">
+          <h3 className="drill-card__label">Coach Says</h3>
+          <p>{drill.coachSays}</p>
+        </div>
+      )}
 
       {reflection && (
         <div className="drill-card__section">
-          <h3 className="drill-card__label">Reflection</h3>
+          <h3 className="drill-card__label">Before you move on</h3>
           <p>{reflection}</p>
         </div>
       )}

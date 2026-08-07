@@ -214,11 +214,11 @@ export function DrillCard({
               />
             </figure>
             {photoCaptionLines && photoCaptionLines.length > 0 && (
-              <ol className="drill-card__setup-list drill-card__photo-notes">
+              <ul className="drill-card__photo-notes">
                 {photoCaptionLines.map((line) => (
                   <li key={line}>{line}</li>
                 ))}
-              </ol>
+              </ul>
             )}
           </>
         )}

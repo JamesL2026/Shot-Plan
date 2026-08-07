@@ -1362,12 +1362,27 @@ button.back-link {
 }
 
 .drill-card__photo-notes {
-  margin-top: var(--space-2);
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-left: 3px solid var(--color-accent-soft);
+  background: var(--color-sand-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 .drill-card__photo-notes li {
+  position: relative;
+  padding-left: 0;
   font-size: 0.95rem;
-  color: var(--color-muted);
+  line-height: 1.45;
+  color: var(--color-ink-muted);
+}
+
+.drill-card__photo-notes li::before {
+  content: none;
 }
 
 .mat-adjustment {

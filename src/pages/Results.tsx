@@ -21,6 +21,7 @@ import {
 } from '../data/drills'
 import { isSymptomId } from '../data/symptoms'
 import { adaptDrills } from '../lib/adaptDrill'
+import { applySessionChallenges } from '../lib/sessionPractice'
 import { getSession, updateSession } from '../lib/storage'
 import type { Drill, Session, SymptomId } from '../types'
 
@@ -84,12 +85,14 @@ export function Results() {
   }, [sessionId])
 
   const symptomIds = session?.symptomIds ?? symptomParamIds
+  const sessionSeed = session?.id ?? (symptomIds.join('-') || 'shotplan')
   const recommended = useMemo(() => {
     const base = session
       ? drillsForSession(session)
       : getDrillsForSymptoms(symptomIds)
-    return adaptDrills(base, session?.clubFocus)
-  }, [session, symptomIds])
+    const adapted = adaptDrills(base, session?.clubFocus)
+    return applySessionChallenges(adapted, sessionSeed)
+  }, [session, symptomIds, sessionSeed])
   const prescription = buildPrescription(symptomIds, recommended)
   const practiceOrder = useMemo(
     () => buildPracticeOrder(recommended),
@@ -98,6 +101,15 @@ export function Results() {
   const checklist = useMemo(() => buildChecklist(recommended), [recommended])
   const followUpDone = session?.result !== null && session?.result !== undefined
   const clubSummary = clubFocusSummary(session)
+  const challengeCount = recommended.length
+  const accomplishment = recommended[0]?.templateLabel
+    ? `You worked on ${recommended
+        .map((d) => d.templateLabel)
+        .filter(Boolean)
+        .filter((v, i, arr) => arr.indexOf(v) === i)
+        .slice(0, 2)
+        .join(' and ')}.`
+    : 'You finished your practice plan.'
 
   function persistChecklist(next: Record<string, boolean>) {
     setChecked(next)
@@ -198,6 +210,8 @@ export function Results() {
           showFollowUp={Boolean(session) && !followUpDone}
           onHome={() => navigate('/')}
           onFollowUp={() => setPhase('followup')}
+          challengeCount={challengeCount}
+          accomplishment={accomplishment}
         />
       </section>
     )
@@ -249,11 +263,11 @@ export function Results() {
       <aside className="confidence-banner" aria-label="Recommendation note">
         <ShieldCheck size={20} strokeWidth={2} aria-hidden="true" />
         <div>
-          <p className="confidence-banner__title">Your plan is ready</p>
+          <p className="confidence-banner__title">Your coaching session is ready</p>
           <p className="confidence-banner__text">
             {clubSummary
-              ? `Built for your ${clubSummary.toLowerCase()} focus. Follow the order below.`
-              : 'Follow the order below. One clear feel beats ten swing thoughts.'}
+              ? `Built for your ${clubSummary.toLowerCase()} focus. Complete each challenge, then move on.`
+              : 'Complete each challenge. Clear goals beat endless reps.'}
           </p>
         </div>
       </aside>
@@ -285,7 +299,7 @@ export function Results() {
       <div className="drill-picker">
         <h2 className="drill-picker__title">Drill setups</h2>
         <p className="muted drill-picker__hint">
-          Tap a drill anytime to see the diagram and steps.
+          Tap a challenge anytime to see the setup, objective, and success condition.
         </p>
         <ul className="drill-picker__list">
           {recommended.map((drill, index) => (
@@ -298,7 +312,9 @@ export function Results() {
                 <span className="drill-picker__num">{index + 1}</span>
                 <span className="drill-picker__copy">
                   <span className="drill-picker__name">{drill.name}</span>
-                  <span className="drill-picker__cue muted">{drill.cue}</span>
+                  <span className="drill-picker__cue muted">
+                    {drill.successCondition ?? drill.cue}
+                  </span>
                 </span>
                 <ChevronRight size={20} strokeWidth={2} aria-hidden="true" />
               </button>

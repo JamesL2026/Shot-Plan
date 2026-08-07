@@ -93,6 +93,8 @@ interface PracticeCompleteProps {
   onHome: () => void
   onFollowUp?: () => void
   showFollowUp: boolean
+  challengeCount?: number
+  accomplishment?: string
 }
 
 type SessionPulse = 'helpful' | 'okay' | 'needs-improvement'
@@ -107,6 +109,8 @@ export function PracticeComplete({
   onHome,
   onFollowUp,
   showFollowUp,
+  challengeCount = 0,
+  accomplishment,
 }: PracticeCompleteProps) {
   const { openFeedback } = useFeedback()
   const [pulse, setPulse] = useState<SessionPulse | null>(null)
@@ -129,8 +133,17 @@ export function PracticeComplete({
       <Card className="practice-complete" padding="lg">
         <p className="practice-complete__title">Nice work.</p>
         <p className="practice-complete__text">
-          You completed today’s practice session.
+          You completed today&apos;s practice.
         </p>
+        {challengeCount > 0 && (
+          <p className="practice-complete__highlight">
+            You completed {challengeCount} coaching challenge
+            {challengeCount === 1 ? '' : 's'}.
+          </p>
+        )}
+        {accomplishment && (
+          <p className="muted practice-complete__sub">{accomplishment}</p>
+        )}
         <p className="muted practice-complete__sub">
           See you after your next round.
         </p>

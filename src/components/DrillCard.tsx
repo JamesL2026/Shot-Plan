@@ -45,17 +45,25 @@ export function DrillCard({ drill, index }: DrillCardProps) {
   const photoSrc = `/drills/${drill.id}.jpg`
   const clubLabel = isAdapted(drill) ? drill.clubLabel : null
   const diagramVariant = isAdapted(drill) ? drill.diagramVariant : 'default'
+  const templateLabel = isAdapted(drill) ? drill.templateLabel : undefined
+  const objective = isAdapted(drill) ? drill.objective : undefined
+  const successCondition = isAdapted(drill) ? drill.successCondition : undefined
+  const reflection = isAdapted(drill) ? drill.reflection : undefined
+  const estimatedMinutes = isAdapted(drill) ? drill.estimatedMinutes : undefined
 
   return (
     <Card className="drill-card" padding="lg">
       <header className="drill-card__header">
         <div className="drill-card__topline">
           {typeof index === 'number' && (
-            <span className="drill-card__index">Drill {index}</span>
+            <span className="drill-card__index">Challenge {index}</span>
           )}
           <span className="drill-card__badge">{symptomLabel}</span>
         </div>
         <h2 className="drill-card__name">{drill.name}</h2>
+        {templateLabel && (
+          <p className="drill-card__template">{templateLabel}</p>
+        )}
         {clubLabel && (
           <p className="drill-card__club-note">Setup for {clubLabel}</p>
         )}
@@ -65,6 +73,20 @@ export function DrillCard({ drill, index }: DrillCardProps) {
         <h3 className="drill-card__label">Goal</h3>
         <p>{drill.goal}</p>
       </div>
+
+      {estimatedMinutes && (
+        <div className="drill-card__section">
+          <h3 className="drill-card__label">Estimated Time</h3>
+          <p>About {estimatedMinutes} minutes</p>
+        </div>
+      )}
+
+      {objective && (
+        <div className="drill-card__section">
+          <h3 className="drill-card__label">Objective</h3>
+          <p>{objective}</p>
+        </div>
+      )}
 
       <div className="drill-card__section">
         <h3 className="drill-card__label">Works On</h3>
@@ -151,7 +173,7 @@ export function DrillCard({ drill, index }: DrillCardProps) {
         <h3 className="drill-card__label">Practice</h3>
         <ol className="drill-card__steps">
           {drill.steps.map((step, stepIndex) => (
-            <li key={step}>
+            <li key={`${stepIndex}-${step}`}>
               <span className="drill-card__step-num" aria-hidden="true">
                 {stepIndex + 1}
               </span>
@@ -160,6 +182,13 @@ export function DrillCard({ drill, index }: DrillCardProps) {
           ))}
         </ol>
       </div>
+
+      {successCondition && (
+        <div className="drill-card__success">
+          <h3 className="drill-card__label">Success Condition</h3>
+          <p>{successCondition}</p>
+        </div>
+      )}
 
       <div className="drill-card__mistake">
         <h3 className="drill-card__label">Common Mistake</h3>
@@ -178,6 +207,13 @@ export function DrillCard({ drill, index }: DrillCardProps) {
         <h3 className="drill-card__label">Why It Works</h3>
         <p>{drill.whyItWorks}</p>
       </div>
+
+      {reflection && (
+        <div className="drill-card__section">
+          <h3 className="drill-card__label">Reflection</h3>
+          <p>{reflection}</p>
+        </div>
+      )}
     </Card>
   )
 }

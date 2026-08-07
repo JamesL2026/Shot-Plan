@@ -1,13 +1,19 @@
+import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { DrillCard } from '../components/DrillCard'
 import { BackLink } from '../components/ui/BackLink'
 import { Button } from '../components/ui/Button'
 import { getDrillById } from '../data/drills'
 import { getSymptom } from '../data/symptoms'
+import { applyChallenge, pickChallenge } from '../lib/sessionPractice'
 
 export function DrillDetail() {
   const { drillId } = useParams()
-  const drill = drillId ? getDrillById(drillId) : undefined
+  const base = drillId ? getDrillById(drillId) : undefined
+  const drill = useMemo(() => {
+    if (!base) return undefined
+    return applyChallenge(base, pickChallenge(base.id, 'library', 0))
+  }, [base])
 
   if (!drill) {
     return (

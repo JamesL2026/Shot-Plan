@@ -363,11 +363,11 @@ export function buildPrescription(
     .map((id) => getSymptom(id)?.label.toLowerCase())
     .filter((label): label is string => Boolean(label))
 
-  let goal = 'Build clearer, more repeatable contact.'
+  let goal = 'Leave the range with one clearer feel.'
   if (labels.length === 1) {
-    goal = `Improve your ${labels[0]} with focused, quality reps.`
+    goal = `Improve your ${labels[0]} with a focused coaching session.`
   } else if (labels.length >= 2) {
-    goal = `Improve your ${labels[0]} and ${labels[1]} with two clear feels.`
+    goal = `Improve your ${labels[0]} and ${labels[1]} with clear challenges.`
   }
 
   const primaryFocus =
@@ -377,8 +377,12 @@ export function buildPrescription(
         ? labels[0].charAt(0).toUpperCase() + labels[0].slice(1)
         : `${labels[0].charAt(0).toUpperCase() + labels[0].slice(1)} · ${labels[1]}`
 
-  const estimatedTime =
-    recommended.length >= 3 ? '20-25 minutes' : '15-20 minutes'
+  const minutes = recommended.reduce((sum, drill) => {
+    const adapted = drill as Drill & { estimatedMinutes?: number }
+    return sum + (adapted.estimatedMinutes ?? 5)
+  }, 0)
+  const total = Math.max(minutes, recommended.length * 4)
+  const estimatedTime = `${Math.max(10, total - 3)}-${total + 3} minutes`
 
   const remember =
     recommended[0]?.cue ?? 'One clear feel beats ten swing thoughts.'
@@ -391,29 +395,40 @@ export function buildPracticeOrder(recommended: Drill[]): PracticeOrderStep[] {
   let n = 1
 
   recommended.forEach((drill, index) => {
-    const label = `Drill ${index + 1}`
+    const adapted = drill as Drill & {
+      objective?: string
+      successCondition?: string
+      templateLabel?: string
+    }
+    const challengeLabel = adapted.templateLabel ?? `Challenge ${index + 1}`
+
     steps.push({
       number: n++,
-      title: `Set up ${label}`,
-      detail: `${drill.name}. ${drill.steps[0]}`,
+      title: drill.name,
+      detail: adapted.objective
+        ? `${challengeLabel}. ${adapted.objective}`
+        : `Set up and complete ${drill.name}.`,
     })
+
     steps.push({
       number: n++,
-      title: `Complete ${label}`,
-      detail: `${drill.steps[1]} Then: ${drill.steps[2]}`,
+      title: 'Complete the challenge',
+      detail: adapted.successCondition
+        ? `Success: ${adapted.successCondition}`
+        : drill.steps.slice(1).join(' '),
     })
   })
 
-  steps.push({
-    number: n++,
-    title: 'Hit 10 shots to a target',
-    detail: 'Use today’s swing thought. No new ideas.',
-  })
+  const last = recommended[recommended.length - 1] as
+    | (Drill & { reflection?: string })
+    | undefined
 
   steps.push({
     number: n++,
-    title: 'Reflect',
-    detail: 'Did contact improve? Note one thing that worked.',
+    title: 'Final reflection',
+    detail:
+      last?.reflection ??
+      'Did contact improve? Note one thing that worked.',
   })
 
   return steps
@@ -422,6 +437,6 @@ export function buildPracticeOrder(recommended: Drill[]): PracticeOrderStep[] {
 export function buildChecklist(recommended: Drill[]): ChecklistItem[] {
   return recommended.map((drill, index) => ({
     id: `drill-${drill.id}`,
-    label: `Complete Drill ${index + 1}: ${drill.name}`,
+    label: `Challenge ${index + 1}: ${drill.name}`,
   }))
 }

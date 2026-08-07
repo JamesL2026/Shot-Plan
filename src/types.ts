@@ -44,7 +44,7 @@ export interface Drill {
   equipment: EquipmentId[]
   setup: string
   view: DiagramView
-  steps: [string, string, string]
+  steps: string[]
   commonMistake: {
     mistake: string
     instead: string
@@ -53,10 +53,16 @@ export interface Drill {
   whyItWorks: string
 }
 
-/** Same drill content with optional club-specific copy and diagram flavor. */
+/** Same drill content with optional club-specific copy, diagram flavor, and coaching challenge. */
 export interface AdaptedDrill extends Drill {
   diagramVariant: DiagramVariant
   clubLabel: string | null
+  estimatedMinutes?: number
+  objective?: string
+  successCondition?: string
+  reflection?: string
+  templateLabel?: string
+  challengeId?: string
 }
 
 export type SessionResult = 'helped' | 'did-not-help' | 'not-tried' | null

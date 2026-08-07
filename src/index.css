@@ -1184,6 +1184,15 @@ button.back-link {
   margin: 0;
 }
 
+.drill-diagram__view-label {
+  margin: 0 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
 .drill-diagram__svg {
   display: block;
   width: 100%;

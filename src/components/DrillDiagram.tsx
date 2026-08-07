@@ -31,6 +31,9 @@ export function DrillDiagram({
 }: DrillDiagramProps) {
   return (
     <div className="drill-diagram">
+      <p className="drill-diagram__view-label">
+        {view === 'top' ? 'Top view (right handed)' : 'Side view'}
+      </p>
       <svg
         viewBox="0 0 340 220"
         role="img"
@@ -38,19 +41,6 @@ export function DrillDiagram({
         className="drill-diagram__svg"
       >
         <rect width="340" height="220" rx="18" fill={C.ground} />
-        <rect x="10" y="10" width={view === 'top' ? 118 : 88} height="22" rx="6" fill={C.aid} />
-        <text
-          x={view === 'top' ? 69 : 54}
-          y="25"
-          fill="#F7F6F2"
-          fontSize="11"
-          fontFamily="system-ui, sans-serif"
-          fontWeight="700"
-          textAnchor="middle"
-          letterSpacing="0.04em"
-        >
-          {view === 'top' ? 'TOP VIEW RH' : 'SIDE VIEW'}
-        </text>
         {renderDiagram(drillId, variant)}
       </svg>
     </div>
@@ -942,13 +932,12 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <Ball cx={195} cy={160} r={9} />
           <LabeledCallout
             n={1}
-            x={112}
-            y={48}
+            x={148}
+            y={58}
             label="Headcover under lead arm"
-            side="above"
           />
           <LabeledCallout n={2} x={220} y={148} label="Ball" />
-          <LabeledCallout n={3} x={100} y={130} label="Keep it tucked" side="left" />
+          <LabeledCallout n={3} x={70} y={48} label="Both arms on club" />
           <ClubLabel>Wedge</ClubLabel>
           <FootNote>Chip soft. Do not drop the headcover.</FootNote>
         </>

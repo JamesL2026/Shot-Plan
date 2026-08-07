@@ -104,6 +104,31 @@ function Callout({ n, x, y }: { n: number; x: number; y: number }) {
   )
 }
 
+/** Number badge with label kept clear of the circle (no overlap). */
+function LabeledCallout({
+  n,
+  x,
+  y,
+  label,
+  labelX,
+}: {
+  n: number
+  x: number
+  y: number
+  label: string
+  /** Optional override; defaults to x + 18 */
+  labelX?: number
+}) {
+  return (
+    <g>
+      <Callout n={n} x={x} y={y} />
+      <L x={labelX ?? x + 18} y={y + 4}>
+        {label}
+      </L>
+    </g>
+  )
+}
+
 function Ball({ cx, cy, r = 10 }: { cx: number; cy: number; r?: number }) {
   return (
     <>
@@ -465,6 +490,11 @@ function renderDiagram(id: string, variant: DiagramVariant) {
     case 'slice-alignment-stick': {
       const ballX = 190 + ballShiftX
       const ballY = isDriver ? 96 : 100
+      const ballLabel = isDriver
+        ? 'Ball · lead heel'
+        : kind === 'wedge'
+          ? 'Ball · back a touch'
+          : 'Ball · mid-stance'
       return (
         <>
           <TargetLeft />
@@ -474,21 +504,15 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           {isDriver && <Tee cx={ballX} cy={100} />}
           <ClubTop ballX={ballX} ballY={ballY} kind={kind} />
           <Ball cx={ballX} cy={ballY} />
-          <Callout n={1} x={70} y={78} />
-          <L x={86} y={82}>{'Stick A → target'}</L>
-          <Callout n={2} x={115} y={185} />
-          <L x={131} y={189}>
-            {isDriver ? 'Stick B - wider stance' : 'Stick B - stand here'}
-          </L>
-          <Callout n={3} x={ballX + 20} y={78} />
-          <L x={ballX + 36} y={82}>
-            {isDriver
-              ? 'Ball - lead heel'
-              : kind === 'wedge'
-                ? 'Ball - back a touch'
-                : 'Ball - mid-stance'}
-          </L>
-          <ClubLabel x={250} y={48}>{tag}</ClubLabel>
+          <LabeledCallout n={1} x={52} y={58} label="Stick A → target" />
+          <LabeledCallout
+            n={2}
+            x={108}
+            y={198}
+            label={isDriver ? 'Stick B · wider stance' : 'Stick B · stand here'}
+          />
+          <LabeledCallout n={3} x={Math.min(ballX + 24, 250)} y={58} label={ballLabel} />
+          <ClubLabel x={268} y={48}>{tag}</ClubLabel>
           <Path d={`M${ballX + 40} 120 Q${ballX + 20} 105 ${ballX - 30} 100`} />
           <L x={40} y={215}>{`Use your ${tag.toLowerCase()} · swing toward ← target`}</L>
         </>
@@ -524,13 +548,20 @@ function renderDiagram(id: string, variant: DiagramVariant) {
             stroke={C.avoid}
             strokeWidth="3"
           />
-          <Callout n={1} x={200} y={195} />
-          <L x={216} y={199}>{isDriver ? 'Wider stance' : 'Your feet'}</L>
-          <Callout n={2} x={ballX + 20} y={100} />
-          <L x={ballX + 36} y={104}>{isDriver ? 'Ball - teed' : 'Ball'}</L>
-          <Callout n={3} x={ballX} y={42} />
-          <L x={ballX + 16} y={46}>AVOID (outside)</L>
-          <ClubLabel x={250} y={48}>{tag}</ClubLabel>
+          <LabeledCallout
+            n={1}
+            x={108}
+            y={198}
+            label={isDriver ? 'Wider stance' : 'Your feet'}
+          />
+          <LabeledCallout
+            n={2}
+            x={ballX + 28}
+            y={118}
+            label={isDriver ? 'Ball · teed' : 'Ball'}
+          />
+          <LabeledCallout n={3} x={ballX - 36} y={42} label="AVOID (outside)" />
+          <ClubLabel x={268} y={48}>{tag}</ClubLabel>
           <Path d={`M${ballX + 40} 145 Q${ballX + 20} 115 ${ballX - 40} 100`} />
           <L x={40} y={215}>{`Miss red with your ${tag.toLowerCase()} · toward ← target`}</L>
         </>

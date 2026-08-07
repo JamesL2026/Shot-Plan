@@ -116,7 +116,11 @@ export function DrillCard({
 
       <div className="drill-card__section">
         <h3 className="drill-card__label">Setup</h3>
-        <p className="drill-card__setup">{drill.setup}</p>
+        <ol className="drill-card__setup-list">
+          {drill.setup.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ol>
         {guided && drill.matAdjustment && (
           <div className="mat-adjustment">
             <p className="mat-adjustment__title">On mats</p>

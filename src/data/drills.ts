@@ -14,8 +14,12 @@ export const drills: Drill[] = [
     bodyFocus: 'Setup / Alignment',
     worksOn: 'both',
     equipment: ['alignment-stick', 'ball'],
-    setup:
-      'Lay Stick A on the ground pointing at your target. Lay Stick B along your toes, parallel to Stick A. Stand with both feet on Stick B. Place the ball between the sticks.',
+    setup: [
+      'Lay Stick A on the ground pointing at your target.',
+      'Lay Stick B along your toes, parallel to Stick A.',
+      'Stand with both feet on Stick B.',
+      'Place the ball between the sticks.',
+    ],
     view: 'top',
     steps: [
       'Set Stick A at the target. Set Stick B parallel along your toes.',
@@ -38,8 +42,11 @@ export const drills: Drill[] = [
     bodyFocus: 'Path',
     worksOn: 'both',
     equipment: ['headcover', 'ball'],
-    setup:
-      'Place a headcover just outside the ball and a little behind it (farther from your body). If you chop across the ball, you hit the headcover. Your job: miss the headcover, then hit the ball.',
+    setup: [
+      'Place a headcover just outside the ball and a little behind it (farther from your body).',
+      'If you chop across the ball, you hit the headcover.',
+      'Your job: miss the headcover, then hit the ball.',
+    ],
     view: 'top',
     steps: [
       'Put the headcover outside and slightly behind the ball.',
@@ -62,8 +69,11 @@ export const drills: Drill[] = [
     bodyFocus: 'Rotation / Balance',
     worksOn: 'both',
     equipment: ['ball'],
-    setup:
-      'Normal practice setup. No special equipment. Plan to finish every swing tall, chest facing the target, trail foot up, club wrapping around your body.',
+    setup: [
+      'Normal practice setup. No special equipment.',
+      'Plan to finish every swing tall, chest facing the target.',
+      'Trail foot up. Club wrapping around your body.',
+    ],
     view: 'side',
     steps: [
       'Hit controlled half swings.',
@@ -86,8 +96,11 @@ export const drills: Drill[] = [
     bodyFocus: 'Hands / Wrists',
     worksOn: 'both',
     equipment: ['ball'],
-    setup:
-      'Take your normal grip, then slide your trail hand down the handle so there is a clear gap between your hands (about 2-3 inches). Hit easy half swings. Feel the face stay quieter through the ball.',
+    setup: [
+      'Take your normal grip.',
+      'Slide your trail hand down so there is a clear 2-3 inch gap between your hands.',
+      'Hit easy half swings with a quieter face through the ball.',
+    ],
     view: 'side',
     steps: [
       'Split your hands on the grip with a clear gap between them.',
@@ -110,8 +123,11 @@ export const drills: Drill[] = [
     bodyFocus: 'Low Point',
     worksOn: 'both',
     equipment: ['towel', 'ball'],
-    setup:
-      'Fold a towel. Place it about four inches behind the ball. Hit the ball without touching the towel.',
+    setup: [
+      'Fold a towel.',
+      'Place it about four inches behind the ball.',
+      'Hit the ball without touching the towel.',
+    ],
     view: 'side',
     steps: [
       'Place the towel four inches behind the ball.',
@@ -136,8 +152,11 @@ export const drills: Drill[] = [
     matAdjustment:
       'On mats, do not push a tee in. Place a coin 2-3 inches in front of the ball toward the target.',
     equipment: ['coin', 'ball'],
-    setup:
-      'Place a coin (or tee on grass) 2-3 inches in front of the ball toward the target. After you hit the ball, your club should pass over that marker.',
+    setup: [
+      'Place a coin (or tee on grass) 2-3 inches in front of the ball toward the target.',
+      'Hit the ball, then let the club pass over that marker.',
+      'Finish through the ball. Do not stop at impact.',
+    ],
     view: 'side',
     steps: [
       'Place the coin in front of the ball toward the target.',
@@ -162,8 +181,11 @@ export const drills: Drill[] = [
     matAdjustment:
       'On mats, lay a coin or the edge of a towel as your brush line. Do not dig. Just brush past it after the ball.',
     equipment: ['coin', 'ball'],
-    setup:
-      'Place a coin (or the edge of a folded towel) about 1-2 inches in front of the ball toward the target. That is your brush line. Hit the ball, then brush the line. Works on mats and grass.',
+    setup: [
+      'Place a coin (or towel edge) 1-2 inches in front of the ball toward the target.',
+      'That marker is your brush line.',
+      'Hit the ball first, then brush the line. Works on mats and grass.',
+    ],
     view: 'side',
     steps: [
       'Set the brush line 1-2 inches in front of the ball.',
@@ -186,8 +208,11 @@ export const drills: Drill[] = [
     bodyFocus: 'Hands / Wrists',
     worksOn: 'both',
     equipment: ['towel', 'ball'],
-    setup:
-      'Place a towel a few inches in front of the ball toward the target. Hit the ball first with quiet wrists. Miss the towel, or barely touch it after the ball.',
+    setup: [
+      'Place a towel a few inches in front of the ball toward the target.',
+      'Hit the ball first with quiet wrists.',
+      'Miss the towel, or barely touch it after the ball.',
+    ],
     view: 'side',
     steps: [
       'Place the towel a few inches in front of the ball.',
@@ -210,8 +235,11 @@ export const drills: Drill[] = [
     bodyFocus: 'Connection',
     worksOn: 'both',
     equipment: ['headcover', 'ball'],
-    setup:
-      'Tuck a headcover under your lead arm (the arm closer to the target). Chip without dropping it. Soft arms. Quiet hands.',
+    setup: [
+      'Tuck a headcover under your lead arm (closer to the target).',
+      'Chip without dropping it.',
+      'Soft arms. Quiet hands.',
+    ],
     view: 'side',
     steps: [
       'Tuck the headcover under your lead arm.',
@@ -234,8 +262,11 @@ export const drills: Drill[] = [
     bodyFocus: 'Distance Control',
     worksOn: 'both',
     equipment: ['clubs', 'ball'],
-    setup:
-      'Use your most common wedge (usually 54, 56, or 58). Stay in one spot. Pick three landing distances: short, medium, and long. Same club every shot. Change only how long the swing is.',
+    setup: [
+      'Use your most common wedge (usually 54, 56, or 58).',
+      'Stay in one spot. Pick three landing distances: short, medium, and long.',
+      'Same club every shot. Change only how long the swing is.',
+    ],
     view: 'top',
     steps: [
       'Pick your everyday wedge and stay put.',
@@ -258,8 +289,11 @@ export const drills: Drill[] = [
     bodyFocus: 'Speed',
     worksOn: 'both',
     equipment: ['ball'],
-    setup:
-      'Pick a hole or a coin target. Mark three distances (about 15, 25, and 35 feet, or three clear spots on the practice green). Putt from short to long. Focus on dying the ball near the hole, not holing every putt.',
+    setup: [
+      'Pick a hole or a coin target.',
+      'Mark three distances (about 15, 25, and 35 feet, or three clear spots).',
+      'Putt short to long. Die the ball near the hole. Holing is a bonus.',
+    ],
     view: 'top',
     steps: [
       'Set three distances to the same target.',
@@ -284,8 +318,11 @@ export const drills: Drill[] = [
     matAdjustment:
       'On mats, use two coins as the gate if you cannot stick tees in.',
     equipment: ['two-tees', 'coin', 'ball'],
-    setup:
-      'Place two tees (or coins) as a narrow gate about 2-3 feet in front of the ball, on your start line. The gate is ahead of the ball, not around the putter. Roll the ball through the gate toward the hole.',
+    setup: [
+      'Place two tees (or coins) as a narrow gate about 2-3 feet in front of the ball.',
+      'Put the gate on your start line, ahead of the ball, not around the putter.',
+      'Roll the ball through the gate toward the hole.',
+    ],
     view: 'top',
     steps: [
       'Build a gate 2-3 feet in front of the ball on your start line.',

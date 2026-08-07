@@ -57,7 +57,7 @@ export interface Drill {
   worksOn: SurfaceType
   matAdjustment?: string
   equipment: EquipmentId[]
-  setup: string
+  setup: string[]
   view: DiagramView
   steps: string[]
   commonMistake: {

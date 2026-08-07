@@ -1279,6 +1279,33 @@ button.back-link {
   margin-bottom: var(--space-3) !important;
 }
 
+.drill-card__setup-list {
+  list-style: none;
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.drill-card__setup-list li {
+  position: relative;
+  padding-left: 1.35rem;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.drill-card__setup-list li::before {
+  content: '';
+  position: absolute;
+  left: 0.15rem;
+  top: 0.55rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+}
+
 .drill-card__diagram-hint {
   margin: var(--space-2) 0 0 !important;
   font-size: 0.9rem !important;

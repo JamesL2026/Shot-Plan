@@ -20,6 +20,19 @@ export type SurfaceType = 'mats' | 'grass' | 'both'
 
 export type DiagramView = 'top' | 'side'
 
+/** Main coaching focus so drills feel distinct from each other. */
+export type BodyFocus =
+  | 'Setup / Alignment'
+  | 'Path'
+  | 'Rotation / Balance'
+  | 'Hands / Wrists'
+  | 'Low Point'
+  | 'Extension'
+  | 'Distance Control'
+  | 'Start Line'
+  | 'Speed'
+  | 'Connection'
+
 /** Club follow-up answers. Path shots use driver/irons; strike shots use irons/wedges. */
 export type ClubFocus = 'driver' | 'irons' | 'wedges' | 'both'
 
@@ -39,6 +52,8 @@ export interface Drill {
   symptomId: SymptomId
   name: string
   goal: string
+  /** What part of the motion this drill coaches. */
+  bodyFocus: BodyFocus
   worksOn: SurfaceType
   matAdjustment?: string
   equipment: EquipmentId[]

@@ -778,6 +778,20 @@ button {
   color: var(--color-accent);
 }
 
+.drill-card__focus-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  margin: var(--space-2) 0 0;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: var(--color-sand-soft);
+  border: 1px solid rgb(27 67 50 / 12%);
+  color: var(--color-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .drill-card__template {
   margin: 0;
   font-size: 0.8rem;
@@ -2073,6 +2087,15 @@ button.back-link {
   font-size: 1.15rem;
   font-weight: 650;
   line-height: 1.25;
+}
+
+.library-item__focus {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-accent);
 }
 
 .library-item__cue {

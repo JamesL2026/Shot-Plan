@@ -2,8 +2,8 @@ import { getSymptom } from './symptoms'
 import type { Drill, SymptomId } from '../types'
 
 /**
- * Mainstream range drills, written for a 15-handicap alone on mats.
- * Purpose preserved; wording optimized for instant setup clarity.
+ * Curated range drills. Each one coaches a different part of the motion.
+ * Written for a mid-handicap alone on mats or grass.
  */
 export const drills: Drill[] = [
   {
@@ -11,6 +11,7 @@ export const drills: Drill[] = [
     symptomId: 'slice',
     name: 'Alignment stick drill',
     goal: 'Aim your body and clubface at the same target to reduce slices.',
+    bodyFocus: 'Setup / Alignment',
     worksOn: 'both',
     equipment: ['alignment-stick', 'ball'],
     setup:
@@ -34,6 +35,7 @@ export const drills: Drill[] = [
     symptomId: 'slice',
     name: 'Object avoidance drill',
     goal: 'Train a better swing path to reduce slices.',
+    bodyFocus: 'Path',
     worksOn: 'both',
     equipment: ['headcover', 'ball'],
     setup:
@@ -56,16 +58,17 @@ export const drills: Drill[] = [
     id: 'hook-finish-position',
     symptomId: 'hook',
     name: 'Finish position drill',
-    goal: 'Reduce hooks by improving body rotation and club release.',
+    goal: 'Reduce hooks by rotating through and holding a balanced finish.',
+    bodyFocus: 'Rotation / Balance',
     worksOn: 'both',
     equipment: ['ball'],
     setup:
-      'Normal practice setup. No special equipment required. Take your usual address and plan to finish every swing in balance.',
+      'Normal practice setup. No special equipment. Plan to finish every swing tall, chest facing the target, trail foot up, club wrapping around your body.',
     view: 'side',
     steps: [
       'Hit controlled half swings.',
       'Finish every swing balanced with your chest facing the target.',
-      'Let the club finish around your body instead of getting stuck behind you.',
+      'Hold the finish for one full second before you reset.',
     ],
     commonMistake: {
       mistake: 'Spinning out early or quitting on the finish.',
@@ -73,36 +76,38 @@ export const drills: Drill[] = [
     },
     cue: 'Finish tall. Chest to the target.',
     whyItWorks:
-      'A balanced finish encourages a more neutral path and reduces excessive clubface closure.',
+      'A balanced finish encourages full rotation and a quieter face through impact.',
   },
   {
-    id: 'hook-mirrored-path',
+    id: 'hook-split-hand',
     symptomId: 'hook',
-    name: 'Inside object drill',
-    goal: 'Soften a path that is too far from the inside, which feeds hooks.',
+    name: 'Split-hand drill',
+    goal: 'Calm hands and face control so the clubface does not shut too early.',
+    bodyFocus: 'Hands / Wrists',
     worksOn: 'both',
-    equipment: ['headcover', 'ball'],
+    equipment: ['ball'],
     setup:
-      'Place a headcover just inside the ball and a little behind it (closer to your body). If the club attacks too far from the inside, you hit it. Miss the headcover, then hit the ball.',
-    view: 'top',
+      'Take your normal grip, then slide your trail hand down the handle so there is a clear gap between your hands (about 2-3 inches). Hit easy half swings. Feel the face stay quieter through the ball.',
+    view: 'side',
     steps: [
-      'Put the headcover inside and slightly behind the ball.',
-      'Make 8 slow swings that miss it.',
-      'Hit 10 normal shots with the same miss-it feel.',
+      'Split your hands on the grip with a clear gap between them.',
+      'Hit 8 slow half swings. Keep the face from snapping shut.',
+      'Hit 8 more at a smooth tempo, still split-handed.',
     ],
     commonMistake: {
-      mistake: 'Holding the face open to “save” a hook.',
-      instead: 'Miss the inside object. Keep the face quiet.',
+      mistake: 'Trying to roll the hands harder to “save” the shot.',
+      instead: 'Quiet hands. Let the split grip slow the release.',
     },
-    cue: 'Swing around, not under and out.',
+    cue: 'Quiet hands. Soft face.',
     whyItWorks:
-      'Guarding the inside object softens an extreme path that closes the face through impact.',
+      'A split grip reduces hand dominance so the face stays more stable through impact.',
   },
   {
     id: 'fat-towel-behind',
     symptomId: 'fat',
     name: 'Towel behind the ball',
     goal: 'Improve strike by moving your low point in front of the ball.',
+    bodyFocus: 'Low Point',
     worksOn: 'both',
     equipment: ['towel', 'ball'],
     setup:
@@ -126,6 +131,7 @@ export const drills: Drill[] = [
     symptomId: 'fat',
     name: 'Marker in front',
     goal: 'Stop fat shots by swinging through to a marker past the ball.',
+    bodyFocus: 'Extension',
     worksOn: 'both',
     matAdjustment:
       'On mats, do not push a tee in. Place a coin 2-3 inches in front of the ball toward the target.',
@@ -147,43 +153,45 @@ export const drills: Drill[] = [
       'Reaching a marker in front moves pressure and contact forward, so you stop hitting ground first.',
   },
   {
-    id: 'thin-tee-under',
+    id: 'thin-brush-line',
     symptomId: 'thin',
-    name: 'Low ball drill',
-    goal: 'Stop thin shots by staying down through the hit.',
+    name: 'Brush the line',
+    goal: 'Stop thin shots by brushing a line on the ground just after the ball.',
+    bodyFocus: 'Low Point',
     worksOn: 'both',
     matAdjustment:
-      'On mats, rest the ball as low as possible on the mat. Focus on brushing the mat just after the ball.',
-    equipment: ['ball'],
+      'On mats, lay a coin or the edge of a towel as your brush line. Do not dig. Just brush past it after the ball.',
+    equipment: ['coin', 'ball'],
     setup:
-      'Place the ball very low on the mat (or on a short tee in grass). Do not try to lift it. Brush the surface after the ball.',
+      'Place a coin (or the edge of a folded towel) about 1-2 inches in front of the ball toward the target. That is your brush line. Hit the ball, then brush the line. Works on mats and grass.',
     view: 'side',
     steps: [
-      'Set the ball as low as you can.',
-      'Hit 10 irons with a smooth tempo.',
-      'Brush after the ball. Do not lift up early.',
+      'Set the brush line 1-2 inches in front of the ball.',
+      'Hit 10 smooth half swings. Ball first, then brush the line.',
+      'If you miss the line high, stay down longer on the next swing.',
     ],
     commonMistake: {
       mistake: 'Trying to lift the ball into the air.',
-      instead: 'Stay down. Let the loft on the club send it up.',
+      instead: 'Stay down. Brush the line after the ball. Let loft send it up.',
     },
-    cue: 'Stay down through the ball.',
+    cue: 'Ball, then brush the line.',
     whyItWorks:
-      'Lifting early catches the middle of the ball. Staying down keeps the club moving through.',
+      'Brushing a clear line after the ball proves your low point is in front, not early.',
   },
   {
     id: 'thin-towel-low-point',
     symptomId: 'thin',
     name: 'Towel ahead drill',
-    goal: 'Stop scooping by controlling where the club bottoms out.',
+    goal: 'Stop scooping by keeping the wrists quiet through contact.',
+    bodyFocus: 'Hands / Wrists',
     worksOn: 'both',
     equipment: ['towel', 'ball'],
     setup:
-      'Place a towel a few inches in front of the ball toward the target. Hit the ball first. Miss the towel, or barely touch it after the ball.',
+      'Place a towel a few inches in front of the ball toward the target. Hit the ball first with quiet wrists. Miss the towel, or barely touch it after the ball.',
     view: 'side',
     steps: [
       'Place the towel a few inches in front of the ball.',
-      'Hit 10 smooth swings.',
+      'Hit 10 smooth swings with quiet wrists.',
       'Ball first. Towel second, or not at all.',
     ],
     commonMistake: {
@@ -192,36 +200,14 @@ export const drills: Drill[] = [
     },
     cue: 'Compress. Don’t scoop.',
     whyItWorks:
-      'When the ball comes before the towel, you are no longer scooping thin.',
-  },
-  {
-    id: 'chip-club-ladder',
-    symptomId: 'chipping',
-    name: 'Club ladder drill',
-    goal: 'Make chips more consistent with one motion and different clubs.',
-    worksOn: 'both',
-    equipment: ['clubs', 'ball'],
-    setup:
-      'Pick one landing spot. From the same place, chip to that spot with a pitching wedge, then a 9-iron, then an 8-iron. Keep the same small swing size.',
-    view: 'top',
-    steps: [
-      'Pick one landing spot and stay put.',
-      'Hit 5 chips with PW, then 9-iron, then 8-iron.',
-      'Same swing size each time. Change only the club.',
-    ],
-    commonMistake: {
-      mistake: 'A new swing for every distance.',
-      instead: 'One motion. Different club.',
-    },
-    cue: 'One motion. Different clubs.',
-    whyItWorks:
-      'Changing clubs covers more distances without inventing a new technique each time.',
+      'When the ball comes before the towel with quiet hands, you stop scooping thin.',
   },
   {
     id: 'chip-headcover',
     symptomId: 'chipping',
     name: 'Headcover under arm',
     goal: 'Quiet busy wrists so chip contact stays predictable.',
+    bodyFocus: 'Connection',
     worksOn: 'both',
     equipment: ['headcover', 'ball'],
     setup:
@@ -241,52 +227,78 @@ export const drills: Drill[] = [
       'The headcover keeps your arms connected so the club bottoms out in the same place.',
   },
   {
-    id: 'putt-gate',
+    id: 'chip-wedge-ladder',
+    symptomId: 'chipping',
+    name: 'One-wedge ladder',
+    goal: 'Control chip distance with one wedge and three swing lengths.',
+    bodyFocus: 'Distance Control',
+    worksOn: 'both',
+    equipment: ['clubs', 'ball'],
+    setup:
+      'Use your most common wedge (usually 54, 56, or 58). Stay in one spot. Pick three landing distances: short, medium, and long. Same club every shot. Change only how long the swing is.',
+    view: 'top',
+    steps: [
+      'Pick your everyday wedge and stay put.',
+      'Hit 5 short chips to a near landing spot.',
+      'Hit 5 medium, then 5 longer, still with the same wedge.',
+    ],
+    commonMistake: {
+      mistake: 'Changing clubs or inventing a new motion for every distance.',
+      instead: 'One wedge. Three swing lengths. Same landing feel.',
+    },
+    cue: 'One wedge. Three distances.',
+    whyItWorks:
+      'Distance comes from swing length, not from swapping clubs every chip.',
+  },
+  {
+    id: 'putt-lag-ladder',
     symptomId: 'putting',
-    name: 'Gate drill',
-    goal: 'Start putts on line with a square face through a small gate.',
+    name: 'Lag putting ladder',
+    goal: 'Train speed and distance control on longer putts.',
+    bodyFocus: 'Speed',
+    worksOn: 'both',
+    equipment: ['ball'],
+    setup:
+      'Pick a hole or a coin target. Mark three distances (about 15, 25, and 35 feet, or three clear spots on the practice green). Putt from short to long. Focus on dying the ball near the hole, not holing every putt.',
+    view: 'top',
+    steps: [
+      'Set three distances to the same target.',
+      'Putt 4 balls from the short spot, then medium, then long.',
+      'Count leaves inside a 3-foot circle around the hole.',
+    ],
+    commonMistake: {
+      mistake: 'Banging long putts and racing them past.',
+      instead: 'Smooth tempo. Die the ball near the hole.',
+    },
+    cue: 'Die it near the hole.',
+    whyItWorks:
+      'Ladder distances train tempo and speed so lag putts finish tap-in close.',
+  },
+  {
+    id: 'putt-start-line-gate',
+    symptomId: 'putting',
+    name: 'Start line gate',
+    goal: 'Start putts on line with a square face through a gate ahead of the ball.',
+    bodyFocus: 'Start Line',
     worksOn: 'both',
     matAdjustment:
       'On mats, use two coins as the gate if you cannot stick tees in.',
     equipment: ['two-tees', 'coin', 'ball'],
     setup:
-      'Place two tees (or coins) just wider than your putter, about one foot in front of the ball. Roll the ball through the gate without touching either side.',
+      'Place two tees (or coins) as a narrow gate about 2-3 feet in front of the ball, on your start line. The gate is ahead of the ball, not around the putter. Roll the ball through the gate toward the hole.',
     view: 'top',
     steps: [
-      'Build a gate slightly wider than your putter.',
-      'Roll 10 putts through the gate.',
-      'Clip a side? Slow down and try again.',
+      'Build a gate 2-3 feet in front of the ball on your start line.',
+      'Roll 10 putts through the gate without touching either side.',
+      'Clip a side? Slow down and square the face again.',
     ],
     commonMistake: {
-      mistake: 'Steering with the hands after the hit.',
-      instead: 'Square face at the ball. Let it roll through.',
+      mistake: 'Building the gate around the putter head.',
+      instead: 'Put the gate 2-3 feet ahead so you train where the ball starts.',
     },
-    cue: 'Square face. Straight start.',
+    cue: 'Square face. Clean start.',
     whyItWorks:
-      'The gate gives instant feedback on face and start line. No guesswork.',
-  },
-  {
-    id: 'putt-around-the-world',
-    symptomId: 'putting',
-    name: 'Around the world',
-    goal: 'Build short-putt speed and confidence from every angle.',
-    worksOn: 'both',
-    equipment: ['ball'],
-    setup:
-      'Place 6-8 balls in a circle 3-5 feet from a hole or cup target. Go around the circle. Miss one? Redo that spot before moving on.',
-    view: 'top',
-    steps: [
-      'Set balls in a circle around the hole.',
-      'Putt one ball at a time around the circle.',
-      'Miss? Redo that spot, then continue.',
-    ],
-    commonMistake: {
-      mistake: 'Banging putts hard to remove break.',
-      instead: 'Die the ball at the hole with smooth speed.',
-    },
-    cue: 'Die it at the hole.',
-    whyItWorks:
-      'Short circle work builds the pace that saves the most strokes.',
+      'A gate ahead of the ball gives honest feedback on start line and face, not just stroke path.',
   },
 ]
 
@@ -294,16 +306,29 @@ const MAX_RECOMMENDATIONS = 3
 
 const drillsBySymptomId: Record<SymptomId, string[]> = {
   slice: ['slice-alignment-stick', 'slice-object-avoidance'],
-  hook: ['hook-finish-position', 'hook-mirrored-path'],
+  hook: ['hook-finish-position', 'hook-split-hand'],
   fat: ['fat-towel-behind', 'fat-tee-in-front'],
-  thin: ['thin-tee-under', 'thin-towel-low-point'],
-  chipping: ['chip-club-ladder', 'chip-headcover'],
-  putting: ['putt-gate', 'putt-around-the-world'],
+  thin: ['thin-brush-line', 'thin-towel-low-point'],
+  chipping: ['chip-headcover', 'chip-wedge-ladder'],
+  putting: ['putt-lag-ladder', 'putt-start-line-gate'],
+}
+
+/** Old session / library IDs → current drills. */
+const retiredDrillIds: Record<string, string> = {
+  'hook-grip-check': 'hook-finish-position',
+  'hook-mirrored-path': 'hook-split-hand',
+  'thin-tee-under': 'thin-brush-line',
+  'chip-club-ladder': 'chip-wedge-ladder',
+  'putt-gate': 'putt-start-line-gate',
+  'putt-around-the-world': 'putt-lag-ladder',
+}
+
+export function resolveDrillId(id: string): string {
+  return retiredDrillIds[id] ?? id
 }
 
 export function getDrillById(id: string): Drill | undefined {
-  // Old sessions may still reference the retired grip-check primary drill.
-  const resolved = id === 'hook-grip-check' ? 'hook-finish-position' : id
+  const resolved = resolveDrillId(id)
   return drills.find((drill) => drill.id === resolved)
 }
 
@@ -417,28 +442,16 @@ export function buildPracticeOrder(recommended: Drill[]): PracticeOrderStep[] {
       title: 'Complete the challenge',
       detail: adapted.successCondition
         ? `Success: ${adapted.successCondition}`
-        : drill.steps.slice(1).join(' '),
+        : 'Finish the challenge, then move on.',
     })
-  })
-
-  const last = recommended[recommended.length - 1] as
-    | (Drill & { reflection?: string })
-    | undefined
-
-  steps.push({
-    number: n++,
-    title: 'Final reflection',
-    detail:
-      last?.reflection ??
-      'Did contact improve? Note one thing that worked.',
   })
 
   return steps
 }
 
 export function buildChecklist(recommended: Drill[]): ChecklistItem[] {
-  return recommended.map((drill, index) => ({
+  return recommended.map((drill) => ({
     id: `drill-${drill.id}`,
-    label: `Challenge ${index + 1}: ${drill.name}`,
+    label: drill.name,
   }))
 }

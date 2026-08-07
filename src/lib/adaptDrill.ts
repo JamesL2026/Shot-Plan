@@ -57,30 +57,30 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     driver: {
       diagramVariant: 'driver',
       setup:
-        'Tee the ball (or use a mat tee insert). Normal driver setup. No special equipment. Plan to finish every swing in balance with your chest facing the target.',
+        'Tee the ball (or use a mat tee insert). Normal driver setup. No special equipment. Plan to finish every swing tall, chest facing the target, trail foot up, club wrapping around your body.',
       cue: 'Finish tall. Chest to the target.',
       matAdjustment: driverTeeMatNote(),
     },
     irons: {
       diagramVariant: 'irons',
       setup:
-        'Ball on the mat or turf. Normal iron setup. No special equipment. Plan to finish every swing in balance with your chest facing the target.',
+        'Ball on the mat or turf. Normal iron setup. No special equipment. Plan to finish every swing tall, chest facing the target, trail foot up, club wrapping around your body.',
       cue: 'Finish tall. Chest to the target.',
     },
   },
-  'hook-mirrored-path': {
+  'hook-split-hand': {
     driver: {
       diagramVariant: 'driver',
       setup:
-        'Tee the ball. Place a headcover just inside the ball and a little behind it (closer to your body). Wider stance. Ball near the lead heel. Miss the headcover, then hit the driver.',
-      cue: 'Driver: swing around, not under and out.',
+        'Tee the ball (or use a mat tee insert). Take your normal grip, then slide your trail hand down so there is a 2-3 inch gap between your hands. Wider stance. Half swings only. Quiet face.',
+      cue: 'Quiet hands. Soft face.',
       matAdjustment: driverTeeMatNote(),
     },
     irons: {
       diagramVariant: 'irons',
       setup:
-        'Ball on the mat or turf. Place a headcover just inside the ball and a little behind it. Neutral iron stance. Ball near mid stance. Miss the headcover, then hit the iron.',
-      cue: 'Iron: swing around, not under and out.',
+        'Ball on the mat or turf. Take your normal grip, then slide your trail hand down so there is a 2-3 inch gap between your hands. Neutral stance. Half swings. Quiet face.',
+      cue: 'Quiet hands. Soft face.',
     },
   },
   'fat-towel-behind': {
@@ -115,22 +115,22 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
         'On mats, do not push a tee in. Place a coin 2-3 inches in front of the ball toward the target.',
     },
   },
-  'thin-tee-under': {
+  'thin-brush-line': {
     irons: {
       diagramVariant: 'irons',
       setup:
-        'Use a mid-iron. Place the ball very low on the mat (or on a short tee in grass). Neutral stance. Ball near mid stance. Do not try to lift it. Brush the surface after the ball.',
-      cue: 'Mid-iron: stay down through the ball.',
+        'Use a mid-iron. Place a coin (or towel edge) 1-2 inches in front of the ball toward the target. Neutral stance. Ball near mid stance. Hit the ball, then brush the line.',
+      cue: 'Ball, then brush the line.',
       matAdjustment:
-        'On mats, rest the ball as low as possible on the mat. Focus on brushing the mat just after the ball.',
+        'On mats, lay a coin or the edge of a towel as your brush line. Do not dig. Just brush past it after the ball.',
     },
     wedges: {
       diagramVariant: 'wedges',
       setup:
-        'Use a wedge. Place the ball very low on the mat (or on a short tee in grass). Slightly narrower stance. Ball a touch back of center. Do not try to lift it. Brush the surface after the ball.',
-      cue: 'Wedge: stay down through the ball.',
+        'Use a wedge. Place a coin (or towel edge) 1-2 inches in front of the ball toward the target. Slightly narrower stance. Ball a touch back of center. Hit the ball, then brush the line.',
+      cue: 'Ball, then brush the line.',
       matAdjustment:
-        'On mats, rest the ball as low as possible on the mat. Focus on brushing the mat just after the ball.',
+        'On mats, lay a coin or the edge of a towel as your brush line. Do not dig. Just brush past it after the ball.',
     },
   },
   'thin-towel-low-point': {

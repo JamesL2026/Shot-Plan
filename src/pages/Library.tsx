@@ -65,6 +65,7 @@ export function Library() {
                 <li key={drill.id}>
                   <Link to={`/drills/${drill.id}`} className="library-item">
                     <span className="library-item__name">{drill.name}</span>
+                    <span className="library-item__focus">{drill.bodyFocus}</span>
                     <span className="library-item__cue muted">{drill.cue}</span>
                   </Link>
                 </li>

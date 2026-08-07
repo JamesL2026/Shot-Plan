@@ -67,6 +67,7 @@ export function DrillCard({
           </div>
         )}
         <h2 className="drill-card__name">{drill.name}</h2>
+        <p className="drill-card__focus-tag">{drill.bodyFocus}</p>
         {clubLabel && (
           <p className="drill-card__club-note">Setup for {clubLabel}</p>
         )}

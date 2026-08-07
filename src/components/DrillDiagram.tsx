@@ -160,6 +160,74 @@ function PersonSide({ x }: { x: number }) {
   )
 }
 
+/** Clear finish pose: chest to target, trail foot up, club wrapping. */
+function PersonFinish({ x }: { x: number }) {
+  return (
+    <g>
+      <circle cx={x + 8} cy={48} r="12" fill={C.body} opacity="0.95" />
+      {/* torso angled toward target */}
+      <line
+        x1={x + 8}
+        y1={60}
+        x2={x + 42}
+        y2={100}
+        stroke={C.body}
+        strokeWidth="7"
+        strokeLinecap="round"
+      />
+      {/* lead leg planted */}
+      <line
+        x1={x + 42}
+        y1={100}
+        x2={x + 48}
+        y2={158}
+        stroke={C.body}
+        strokeWidth="6"
+        strokeLinecap="round"
+      />
+      {/* trail leg up on toe */}
+      <line
+        x1={x + 42}
+        y1={100}
+        x2={x + 18}
+        y2={148}
+        stroke={C.body}
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <ellipse cx={x + 14} cy={152} rx="10" ry="5" fill={C.body} opacity="0.45" />
+      {/* arms wrapping club around body toward target */}
+      <path
+        d={`M${x + 28} 78 Q${x + 70} 58 ${x + 95} 78`}
+        fill="none"
+        stroke={C.path}
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <path
+        d={`M${x + 95} 78 Q${x + 110} 95 ${x + 88} 112`}
+        fill="none"
+        stroke={C.path}
+        strokeWidth="4"
+        strokeLinecap="round"
+      />
+    </g>
+  )
+}
+
+/** Faded address silhouette for before/after. */
+function PersonAddressFaded({ x }: { x: number }) {
+  return (
+    <g opacity="0.28">
+      <circle cx={x} cy={58} r="9" fill={C.body} />
+      <line x1={x} y1={67} x2={x} y2={105} stroke={C.body} strokeWidth="5" strokeLinecap="round" />
+      <line x1={x} y1={80} x2={x + 28} y2={100} stroke={C.body} strokeWidth="4" strokeLinecap="round" />
+      <line x1={x} y1={105} x2={x - 12} y2={150} stroke={C.body} strokeWidth="4" strokeLinecap="round" />
+      <line x1={x} y1={105} x2={x + 10} y2={150} stroke={C.body} strokeWidth="4" strokeLinecap="round" />
+    </g>
+  )
+}
+
 /** Target to the LEFT — correct for RH top view. */
 function TargetLeft() {
   return (
@@ -206,7 +274,6 @@ function renderDiagram(id: string, variant: DiagramVariant) {
   const footSpread = isDriver ? 28 : isWedge ? 16 : 20
   // Driver ball toward lead heel (left / target side). Wedge slightly back (right).
   const ballShiftX = isDriver ? -28 : isWedge ? 10 : 0
-  const sideBallY = isDriver ? 142 : 158
   const clubTag = isDriver ? 'Driver' : isWedge ? 'Wedge' : variant === 'irons' ? 'Iron' : null
 
   switch (id) {
@@ -273,72 +340,54 @@ function renderDiagram(id: string, variant: DiagramVariant) {
       return (
         <>
           <TargetArrowSide />
-          <PersonSide x={95} />
-          {/* Finish pose suggestion: arms through toward target */}
-          <line
-            x1={95}
-            y1={78}
-            x2={175}
-            y2={70}
-            stroke={C.path}
-            strokeWidth="5"
-            strokeLinecap="round"
-          />
-          <line
-            x1={175}
-            y1={70}
-            x2={210}
-            y2={95}
-            stroke={C.path}
-            strokeWidth="5"
-            strokeLinecap="round"
-          />
-          <Ball cx={195} cy={158} r={9} />
           <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
-          <Callout n={1} x={95} y={40} />
-          <L x={110} y={44}>You</L>
-          <Callout n={2} x={175} y={55} />
-          <L x={190} y={59}>Chest to target</L>
-          <Callout n={3} x={210} y={110} />
-          <L x={225} y={114}>Balanced finish</L>
-          {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
-          <Path d="M115 110 Q160 90 200 100" />
-          <L x={40} y={195}>Half swing · hold the finish</L>
-          <L x={40} y={210}>Club around the body · stay tall</L>
+          {/* Before: faded address */}
+          <PersonAddressFaded x={70} />
+          <L x={52} y={190}>Start</L>
+          {/* After: clear finish */}
+          <PersonFinish x={150} />
+          <Callout n={1} x={198} y={42} />
+          <L x={214} y={46}>Chest → target</L>
+          <Callout n={2} x={250} y={88} />
+          <L x={265} y={92}>Club wraps</L>
+          <Callout n={3} x={162} y={148} />
+          <L x={70} y={152}>Trail foot up</L>
+          <L x={200} y={190}>Finish · hold it</L>
+          {clubTag && <ClubLabel x={268} y={48}>{clubTag}</ClubLabel>}
+          <L x={40} y={212}>Hold a tall, balanced finish for one second</L>
         </>
       )
 
-    case 'hook-mirrored-path': {
-      const ballX = 200 + ballShiftX
+    case 'hook-split-hand':
       return (
         <>
-          <TargetLeft />
-          <line x1={55} y1={100} x2={300} y2={100} stroke={C.target} strokeWidth="1.5" strokeDasharray="4 3" />
-          <Feet cx={200} cy={170} spread={footSpread} />
-          {isDriver && <Tee cx={ballX} cy={100} />}
-          <Ball cx={ballX} cy={isDriver ? 96 : 100} />
-          <ellipse
-            cx={ballX}
-            cy={132}
-            rx="18"
-            ry="12"
-            fill={C.avoid}
-            fillOpacity="0.25"
-            stroke={C.avoid}
-            strokeWidth="3"
+          <TargetArrowSide />
+          <PersonSide x={90} />
+          <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
+          {/* Grip shaft with two hand marks */}
+          <line
+            x1={122}
+            y1={88}
+            x2={188}
+            y2={150}
+            stroke={C.aid}
+            strokeWidth="4"
+            strokeLinecap="round"
           />
-          <Callout n={1} x={200} y={195} />
-          <L x={216} y={199}>{isDriver ? 'Wider stance' : 'Your feet'}</L>
-          <Callout n={2} x={ballX + 20} y={100} />
-          <L x={ballX + 36} y={104}>{isDriver ? 'Ball · teed' : 'Ball'}</L>
-          <Callout n={3} x={ballX} y={132} />
-          <L x={ballX + 22} y={136}>AVOID (inside)</L>
+          <circle cx={138} cy={102} r="9" fill={C.body} />
+          <circle cx={162} cy={124} r="9" fill={C.path} />
+          <Ball cx={198} cy={158} r={9} />
+          <Callout n={1} x={138} y={82} />
+          <L x={154} y={86}>Lead hand</L>
+          <Callout n={2} x={162} y={140} />
+          <L x={178} y={144}>Trail hand (lower)</L>
+          <Callout n={3} x={198} y={140} />
+          <L x={214} y={144}>Ball</L>
           {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
-          <Path d={`M${ballX + 40} 155 Q${ballX + 20} 120 ${ballX - 40} 100`} />
-          <L x={40} y={215}>Miss red object on the inside · toward ← target</L>
+          <L x={40} y={195}>Gap between hands · about 2-3 inches</L>
+          <L x={40} y={210}>Half swings · quiet face through the ball</L>
         </>
       )
-    }
 
     case 'fat-towel-behind':
       return (
@@ -391,21 +440,32 @@ function renderDiagram(id: string, variant: DiagramVariant) {
         </>
       )
 
-    case 'thin-tee-under':
+    case 'thin-brush-line':
       return (
         <>
           <TargetArrowSide />
-          <PersonSide x={80} />
+          <PersonSide x={75} />
           <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
-          <Ball cx={185 + (isWedge ? -8 : 0)} cy={sideBallY > 150 ? 150 : sideBallY} r={9} />
-          <Callout n={1} x={80} y={40} />
-          <L x={95} y={44}>You</L>
-          <Callout n={2} x={185} y={130} />
-          <L x={200} y={134}>{isWedge ? 'Low ball · back a touch' : 'Low ball on mat'}</L>
+          <Ball cx={168 + (isWedge ? -8 : 0)} cy={158} />
+          {/* Brush line */}
+          <line
+            x1={198}
+            y1={156}
+            x2={198}
+            y2={178}
+            stroke={C.aid}
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          <circle cx={198} cy={168} r="8" fill={C.aid} />
+          <Callout n={1} x={168} y={140} />
+          <L x={100} y={144}>{isWedge ? 'Ball · back a touch' : 'Ball'}</L>
+          <Callout n={2} x={198} y={140} />
+          <L x={214} y={144}>Brush line</L>
           {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
-          <Path d="M115 110 Q170 145 230 168" />
-          <L x={40} y={195}>Stay down</L>
-          <L x={40} y={210}>Brush mat AFTER the ball. Do not scoop up</L>
+          <Path d="M110 105 Q160 145 205 168" />
+          <L x={40} y={195}>Ball first</L>
+          <L x={40} y={210}>Then brush the coin / line · mats or grass</L>
         </>
       )
 
@@ -434,34 +494,52 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <L x={240} y={134}>Towel ahead</L>
           {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
           <Path d="M110 105 Q155 145 175 158" />
-          <L x={40} y={210}>Ball → then towel (or miss towel)</L>
+          <L x={40} y={210}>Quiet wrists · ball → then towel</L>
         </>
       )
 
-    case 'chip-club-ladder':
-      // Target LEFT. Landing spot between ball and target.
+    case 'chip-wedge-ladder':
       return (
         <>
           <TargetLeft />
-          <Feet cx={230} cy={170} />
-          <Ball cx={230} cy={115} />
+          <Feet cx={250} cy={170} />
+          <Ball cx={250} cy={120} />
+          <circle
+            cx={190}
+            cy={105}
+            r="18"
+            fill="none"
+            stroke={C.aid}
+            strokeWidth="2.5"
+            strokeDasharray="4 3"
+          />
           <circle
             cx={130}
             cy={100}
-            r="28"
+            r="22"
             fill="none"
-            stroke={C.aid}
-            strokeWidth="3"
-            strokeDasharray="5 4"
+            stroke={C.path}
+            strokeWidth="2.5"
+            strokeDasharray="4 3"
           />
-          <Callout n={1} x={230} y={195} />
-          <L x={246} y={199}>Stand here</L>
-          <Callout n={2} x={250} y={115} />
-          <L x={266} y={119}>Ball</L>
+          <circle
+            cx={70}
+            cy={95}
+            r="26"
+            fill="none"
+            stroke={C.target}
+            strokeWidth="2.5"
+            strokeDasharray="4 3"
+          />
+          <Callout n={1} x={250} y={195} />
+          <L x={200} y={199}>Same wedge</L>
+          <Callout n={2} x={190} y={80} />
+          <L x={170} y={68}>Short</L>
           <Callout n={3} x={130} y={72} />
-          <L x={100} y={60}>Landing spot</L>
-          <Path d="M220 115 Q175 95 145 100" />
-          <L x={40} y={215}>Chip toward ← target · PW → 9 → 8</L>
+          <L x={108} y={58}>Medium</L>
+          <L x={48} y={58}>Long</L>
+          <Path d="M240 118 Q200 100 185 105" />
+          <L x={40} y={215}>One wedge · three swing lengths · toward ← target</L>
         </>
       )
 
@@ -493,67 +571,83 @@ function renderDiagram(id: string, variant: DiagramVariant) {
         </>
       )
 
-    case 'putt-gate':
-      // 1 Ball · 2 Gate · 3 Hole — hole to the LEFT
+    case 'putt-lag-ladder':
       return (
         <>
           <circle
-            cx={50}
+            cx={48}
             cy={110}
-            r="16"
-            fill={C.aid}
-            fillOpacity="0.2"
-            stroke={C.aid}
-            strokeWidth="2.5"
-          />
-          <Ball cx={280} cy={110} />
-          <line x1={200} y1={86} x2={200} y2={102} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
-          <line x1={200} y1={118} x2={200} y2={134} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
-          <Callout n={1} x={280} y={88} />
-          <L x={250} y={75}>Ball</L>
-          <Callout n={2} x={200} y={70} />
-          <L x={120} y={74}>Gate</L>
-          <Callout n={3} x={50} y={70} />
-          <L x={28} y={58}>Hole</L>
-          <Path d="M268 110 L70 110" />
-          <L x={40} y={195}>Roll through the gate toward the hole</L>
-          <L x={40} y={210}>Do not touch either side</L>
-        </>
-      )
-
-    case 'putt-around-the-world':
-      // 1 Hole · 2 Balls in a circle
-      return (
-        <>
-          <circle
-            cx={170}
-            cy={115}
             r="14"
             fill={C.aid}
             fillOpacity="0.25"
             stroke={C.aid}
             strokeWidth="2.5"
           />
+          <L x={28} y={78} weight={700}>
+            Hole
+          </L>
+          <Ball cx={140} cy={110} r={8} />
+          <Ball cx={210} cy={110} r={8} />
+          <Ball cx={290} cy={110} r={8} />
+          <line x1={140} y1={128} x2={140} y2={140} stroke={C.label} strokeWidth="2" />
+          <line x1={210} y1={128} x2={210} y2={140} stroke={C.label} strokeWidth="2" />
+          <line x1={290} y1={128} x2={290} y2={140} stroke={C.label} strokeWidth="2" />
+          <Callout n={1} x={140} y={155} />
+          <L x={118} y={175}>Short</L>
+          <Callout n={2} x={210} y={155} />
+          <L x={186} y={175}>Medium</L>
+          <Callout n={3} x={290} y={155} />
+          <L x={272} y={175}>Long</L>
+          <Path d="M280 110 L70 110" />
+          <L x={40} y={200}>Same target · three distances</L>
+          <L x={40} y={214}>Die the ball near the hole · speed first</L>
+        </>
+      )
+
+    case 'putt-start-line-gate':
+      return (
+        <>
           <circle
-            cx={170}
-            cy={115}
-            r="52"
-            fill="none"
-            stroke={C.path}
+            cx={42}
+            cy={110}
+            r="14"
+            fill={C.aid}
+            fillOpacity="0.2"
+            stroke={C.aid}
             strokeWidth="2.5"
-            strokeDasharray="6 5"
           />
-          <Ball cx={170} cy={63} r={8} />
-          <Ball cx={222} cy={115} r={8} />
-          <Ball cx={170} cy={167} r={8} />
-          <Ball cx={118} cy={115} r={8} />
-          <Ball cx={208} cy={78} r={8} />
-          <Ball cx={132} cy={78} r={8} />
-          <Callout n={1} x={170} y={115} />
-          <L x={186} y={118}>Hole</L>
-          <Callout n={2} x={170} y={48} />
-          <L x={186} y={52}>Balls (3-5 ft)</L>
-          <L x={40} y={210}>Putt around · redo any miss</L>
+          <L x={24} y={78} weight={700}>
+            Hole
+          </L>
+          <Ball cx={290} cy={110} />
+          {/* Gate 2-3 ft ahead of ball (toward hole = left) */}
+          <line
+            x1={180}
+            y1={86}
+            x2={180}
+            y2={100}
+            stroke={C.aid}
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          <line
+            x1={180}
+            y1={120}
+            x2={180}
+            y2={134}
+            stroke={C.aid}
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          <Callout n={1} x={290} y={88} />
+          <L x={260} y={74}>Ball</L>
+          <Callout n={2} x={180} y={70} />
+          <L x={120} y={74}>Gate (2-3 ft ahead)</L>
+          <Callout n={3} x={42} y={70} />
+          <L x={58} y={74}>Hole</L>
+          <Path d="M278 110 L60 110" />
+          <L x={40} y={195}>Gate ahead of the ball · not around the putter</L>
+          <L x={40} y={210}>Roll through clean · start line feedback</L>
         </>
       )
 

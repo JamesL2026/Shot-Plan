@@ -23,28 +23,67 @@ interface DrillDiagramProps {
  * TOP VIEW convention (right-handed):
  * Target is to the LEFT. Feet at the bottom. Ball between feet and target line.
  * SIDE VIEW: Target is ahead (to the RIGHT).
+ *
+ * Instruction text lives BELOW the SVG so it never gets clipped.
  */
 export function DrillDiagram({
   drillId,
   view,
   variant = 'default',
 }: DrillDiagramProps) {
+  const kind = clubKindFor(drillId, variant)
+  const tag = clubLabel(kind)
+  const note = diagramNote(drillId, tag)
+
   return (
     <div className="drill-diagram">
       <p className="drill-diagram__view-label">
         {view === 'top' ? 'Top view (right handed)' : 'Side view'}
       </p>
       <svg
-        viewBox="0 0 340 220"
+        viewBox="0 0 340 200"
         role="img"
         aria-label={`${view === 'top' ? 'Top' : 'Side'} view setup diagram for ${drillId}${variant !== 'default' ? ` · ${variant}` : ''}`}
         className="drill-diagram__svg"
       >
-        <rect width="340" height="220" rx="18" fill={C.ground} />
+        <rect width="340" height="200" rx="18" fill={C.ground} />
         {renderDiagram(drillId, variant)}
       </svg>
+      {note && <p className="drill-diagram__note">{note}</p>}
     </div>
   )
+}
+
+function diagramNote(id: string, tag: string): string {
+  const club = tag.toLowerCase()
+  switch (id) {
+    case 'slice-alignment-stick':
+      return `Stand on Stick B. Hit your ${club} toward the target.`
+    case 'slice-object-avoidance':
+      return `Miss the red object. Then hit the ball with your ${club}.`
+    case 'hook-finish-position':
+      return 'Swing to this finish. Hold it for one second.'
+    case 'hook-split-hand':
+      return 'Leave a 2-3 inch gap between your hands. Hit easy half swings.'
+    case 'fat-towel-behind':
+      return `Hit the ball with your ${club}. Miss the towel.`
+    case 'fat-tee-in-front':
+      return 'Hit the ball. Then let the club pass over the coin.'
+    case 'thin-brush-line':
+      return 'Hit the ball first. Then brush the coin or line.'
+    case 'thin-towel-low-point':
+      return 'Hit the ball. Then miss the towel, or barely touch it.'
+    case 'chip-wedge-ladder':
+      return 'One wedge. Three swing lengths: short, medium, then long.'
+    case 'chip-headcover':
+      return 'Chip soft. Do not drop the headcover.'
+    case 'putt-lag-ladder':
+      return 'Putt short, then medium, then long. Stop the ball near the hole.'
+    case 'putt-start-line-gate':
+      return 'Roll the ball through the gate. Do not put the gate around the putter.'
+    default:
+      return ''
+  }
 }
 
 function L({
@@ -65,7 +104,7 @@ function L({
       x={x}
       y={y}
       fill={C.label}
-      fontSize="11"
+      fontSize="12"
       fontFamily="system-ui, sans-serif"
       fontWeight={weight}
       textAnchor={anchor}
@@ -577,10 +616,6 @@ function Ground() {
   )
 }
 
-function FootNote({ children }: { children: string }) {
-  return <L x={40} y={212}>{children}</L>
-}
-
 function renderDiagram(id: string, variant: DiagramVariant) {
   const isDriver = variant === 'driver'
   const kind = clubKindFor(id, variant)
@@ -610,7 +645,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <LabeledCallout
             n={2}
             x={100}
-            y={198}
+            y={178}
             label={isDriver ? 'Feet on Stick B (wider)' : 'Feet on Stick B'}
           />
           <LabeledCallout
@@ -620,7 +655,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
             label={ballPosLabel}
           />
           <ClubLabel>{tag}</ClubLabel>
-          <FootNote>{`Stand on Stick B. Hit your ${tag.toLowerCase()} toward the target.`}</FootNote>
+
         </>
       )
     }
@@ -676,7 +711,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
             side="left"
           />
           <ClubLabel>{tag}</ClubLabel>
-          <FootNote>{`Miss the red object. Then hit the ball with your ${tag.toLowerCase()}.`}</FootNote>
+
         </>
       )
     }
@@ -687,18 +722,18 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <Ground />
           <TargetArrowSide />
           <PersonAddressFaded x={58} />
-          <L x={58} y={188} anchor="middle">
+          <L x={58} y={185} anchor="middle">
             Start
           </L>
           <PersonFinish x={148} />
-          <L x={210} y={188} anchor="middle">
+          <L x={210} y={185} anchor="middle">
             Finish
           </L>
           <LabeledCallout n={1} x={168} y={28} label="Chest faces target" />
           <LabeledCallout n={2} x={278} y={64} label="Both hands wrap" side="left" />
           <LabeledCallout n={3} x={118} y={148} label="Trail foot up" side="left" />
           <ClubLabel>{tag}</ClubLabel>
-          <FootNote>Swing to this finish. Hold it for one second.</FootNote>
+
         </>
       )
 
@@ -739,7 +774,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           />
           <LabeledCallout n={3} x={ballX + 36} y={ballY - 6} label="Ball" />
           <ClubLabel>{tag}</ClubLabel>
-          <FootNote>Leave a 2-3 inch gap. Hit easy half swings.</FootNote>
+
         </>
       )
     }
@@ -772,7 +807,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <LabeledCallout n={2} x={ballX + 36} y={ballY - 8} label={ballPosLabel} />
           <LabeledCallout n={3} x={152} y={118} label="Do not hit towel" />
           <ClubLabel>{tag}</ClubLabel>
-          <FootNote>{`Hit the ball with your ${tag.toLowerCase()}. Miss the towel.`}</FootNote>
+
         </>
       )
     }
@@ -794,7 +829,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <LabeledCallout n={2} x={246} y={148} label="Coin in front" />
           <LabeledCallout n={3} x={100} y={48} label="Swing through" />
           <ClubLabel>{tag}</ClubLabel>
-          <FootNote>Hit the ball. Then let the club pass over the coin.</FootNote>
+
         </>
       )
     }
@@ -825,7 +860,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <LabeledCallout n={2} x={230} y={148} label="Brush this after" />
           <LabeledCallout n={3} x={100} y={48} label="Stay down" />
           <ClubLabel>{tag}</ClubLabel>
-          <FootNote>Hit the ball first. Then brush the coin or line.</FootNote>
+
         </>
       )
     }
@@ -858,7 +893,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <LabeledCallout n={2} x={268} y={148} label="Towel ahead" side="left" />
           <LabeledCallout n={3} x={100} y={48} label="Quiet wrists" />
           <ClubLabel>{tag}</ClubLabel>
-          <FootNote>Hit the ball. Then miss the towel, or barely touch it.</FootNote>
+
         </>
       )
     }
@@ -897,16 +932,14 @@ function renderDiagram(id: string, variant: DiagramVariant) {
             strokeWidth="2.5"
             strokeDasharray="4 3"
           />
-          <LabeledCallout n={1} x={250} y={196} label="Same wedge" side="below" />
-          <LabeledCallout n={2} x={190} y={78} label="Short" side="above" />
-          <LabeledCallout n={3} x={130} y={70} label="Medium" side="above" />
-          <L x={70} y={58} anchor="middle" weight={700}>
+          <LabeledCallout n={1} x={295} y={168} label="Same wedge" side="left" />
+          <LabeledCallout n={2} x={190} y={52} label="Short" />
+          <LabeledCallout n={3} x={130} y={44} label="Medium" />
+          <L x={48} y={42} weight={700}>
             Long
           </L>
           <ClubLabel>Wedge</ClubLabel>
-          <FootNote>
-            One wedge. Three swing lengths. Land short, then medium, then long.
-          </FootNote>
+
         </>
       )
 
@@ -939,7 +972,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <LabeledCallout n={2} x={220} y={148} label="Ball" />
           <LabeledCallout n={3} x={70} y={48} label="Both arms on club" />
           <ClubLabel>Wedge</ClubLabel>
-          <FootNote>Chip soft. Do not drop the headcover.</FootNote>
+
         </>
       )
     }
@@ -963,14 +996,12 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <Ball cx={140} cy={110} r={8} />
           <Ball cx={210} cy={110} r={8} />
           <Ball cx={290} cy={110} r={8} />
-          <LabeledCallout n={1} x={140} y={155} label="Short" side="below" />
-          <LabeledCallout n={2} x={210} y={155} label="Medium" side="below" />
-          <LabeledCallout n={3} x={290} y={155} label="Long" side="below" />
+          <LabeledCallout n={1} x={140} y={138} label="Short" />
+          <LabeledCallout n={2} x={210} y={138} label="Medium" />
+          <LabeledCallout n={3} x={290} y={138} label="Long" />
           <ClubLabel>Putter</ClubLabel>
           <Path d="M280 110 L70 110" />
-          <FootNote>
-            Putt from short, then medium, then long. Stop the ball near the hole.
-          </FootNote>
+
         </>
       )
 
@@ -1017,12 +1048,10 @@ function renderDiagram(id: string, variant: DiagramVariant) {
             label="Gate 2-3 feet ahead"
             side="above"
           />
-          <LabeledCallout n={3} x={42} y={140} label="Hole" side="below" />
+          <LabeledCallout n={3} x={42} y={148} label="Hole" />
           <ClubLabel>Putter</ClubLabel>
           <Path d="M278 110 L60 110" />
-          <FootNote>
-            Roll the ball through the gate. Do not put the gate around the putter.
-          </FootNote>
+
         </>
       )
 

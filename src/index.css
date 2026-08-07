@@ -1185,7 +1185,7 @@ button.back-link {
 }
 
 .drill-diagram__view-label {
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.45rem;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -1196,8 +1196,21 @@ button.back-link {
 .drill-diagram__svg {
   display: block;
   width: 100%;
+  min-height: 17rem;
   height: auto;
   border-radius: var(--radius-md);
+}
+
+.drill-diagram__note {
+  margin: 0.7rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: var(--color-sand-soft);
+  border: 1px solid rgb(196 181 154 / 35%);
+  font-size: 1.02rem;
+  font-weight: 650;
+  line-height: 1.4;
+  color: var(--color-ink);
 }
 
 .setup-view-toggle {

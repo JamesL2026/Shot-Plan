@@ -1,14 +1,18 @@
 import { useState } from 'react'
 import { Check, Image as ImageIcon, LayoutGrid } from 'lucide-react'
 import { getSymptom } from '../data/symptoms'
-import type { Drill, SurfaceType } from '../types'
+import type { AdaptedDrill, Drill, SurfaceType } from '../types'
 import { DrillDiagram } from './DrillDiagram'
 import { EquipmentIcons } from './EquipmentIcons'
 import { Card } from './ui/Card'
 
 interface DrillCardProps {
-  drill: Drill
+  drill: Drill | AdaptedDrill
   index?: number
+}
+
+function isAdapted(drill: Drill | AdaptedDrill): drill is AdaptedDrill {
+  return 'diagramVariant' in drill
 }
 
 function SurfaceChecks({ worksOn }: { worksOn: SurfaceType }) {
@@ -39,6 +43,8 @@ export function DrillCard({ drill, index }: DrillCardProps) {
   const symptomLabel = getSymptom(drill.symptomId)?.label ?? drill.symptomId
   const [setupView, setSetupView] = useState<SetupView>('diagram')
   const photoSrc = `/drills/${drill.id}.jpg`
+  const clubLabel = isAdapted(drill) ? drill.clubLabel : null
+  const diagramVariant = isAdapted(drill) ? drill.diagramVariant : 'default'
 
   return (
     <Card className="drill-card" padding="lg">
@@ -50,6 +56,9 @@ export function DrillCard({ drill, index }: DrillCardProps) {
           <span className="drill-card__badge">{symptomLabel}</span>
         </div>
         <h2 className="drill-card__name">{drill.name}</h2>
+        {clubLabel && (
+          <p className="drill-card__club-note">Setup for {clubLabel}</p>
+        )}
       </header>
 
       <div className="drill-card__section">
@@ -58,7 +67,7 @@ export function DrillCard({ drill, index }: DrillCardProps) {
       </div>
 
       <div className="drill-card__section">
-        <h3 className="drill-card__label">Works on</h3>
+        <h3 className="drill-card__label">Works On</h3>
         <SurfaceChecks worksOn={drill.worksOn} />
         {drill.matAdjustment && (
           <div className="mat-adjustment">
@@ -108,7 +117,11 @@ export function DrillCard({ drill, index }: DrillCardProps) {
 
         {setupView === 'diagram' ? (
           <>
-            <DrillDiagram drillId={drill.id} view={drill.view} />
+            <DrillDiagram
+              drillId={drill.id}
+              view={drill.view}
+              variant={diagramVariant}
+            />
             <p className="drill-card__diagram-hint muted">
               Numbers match the setup pieces above. Glance once, then set it up.
             </p>
@@ -126,7 +139,9 @@ export function DrillCard({ drill, index }: DrillCardProps) {
               />
             </figure>
             <p className="drill-card__diagram-hint muted">
-              Photo of how this drill looks in real life. Match this layout on your mat.
+              {clubLabel
+                ? `Photo of the core setup. Match the ${clubLabel.toLowerCase()} ball position and stance from the diagram.`
+                : 'Photo of how this drill looks in real life. Match this layout on your mat.'}
             </p>
           </>
         )}
@@ -147,7 +162,7 @@ export function DrillCard({ drill, index }: DrillCardProps) {
       </div>
 
       <div className="drill-card__mistake">
-        <h3 className="drill-card__label">Common mistake</h3>
+        <h3 className="drill-card__label">Common Mistake</h3>
         <p className="drill-card__mistake-bad">{drill.commonMistake.mistake}</p>
         <p className="drill-card__mistake-good">
           <span>Instead:</span> {drill.commonMistake.instead}
@@ -155,12 +170,12 @@ export function DrillCard({ drill, index }: DrillCardProps) {
       </div>
 
       <div className="drill-card__cue-block">
-        <h3 className="drill-card__label">Coaching cue</h3>
+        <h3 className="drill-card__label">Coaching Cue</h3>
         <p className="drill-card__cue">{drill.cue}</p>
       </div>
 
       <div className="drill-card__section">
-        <h3 className="drill-card__label">Why it works</h3>
+        <h3 className="drill-card__label">Why It Works</h3>
         <p>{drill.whyItWorks}</p>
       </div>
     </Card>

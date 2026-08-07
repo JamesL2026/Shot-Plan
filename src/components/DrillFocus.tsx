@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import type { Drill } from '../types'
+import type { AdaptedDrill, Drill } from '../types'
 import { DrillCard } from './DrillCard'
 import { Button } from './ui/Button'
 
 interface DrillFocusProps {
-  drills: Drill[]
+  drills: Array<Drill | AdaptedDrill>
   index: number
   onIndexChange: (index: number) => void
   onExit: () => void
   onFinishedAll: () => void
+  exitLabel?: string
 }
 
 export function DrillFocus({
@@ -17,6 +18,7 @@ export function DrillFocus({
   onIndexChange,
   onExit,
   onFinishedAll,
+  exitLabel = 'Back to plan',
 }: DrillFocusProps) {
   const [showHelp, setShowHelp] = useState(false)
   const drill = drills[index]
@@ -86,7 +88,7 @@ export function DrillFocus({
           )}
           {drill.view === 'top' && (
             <p className="clarify-panel__orient muted">
-              Top view tip: for a right-handed golfer, the target is to your left —
+              Top view tip: for a right-handed golfer, the target is to your left,
               not in front of your toes.
             </p>
           )}
@@ -95,7 +97,7 @@ export function DrillFocus({
 
       <div className="drill-focus__actions">
         <Button variant="primary" block onClick={handleContinue}>
-          {isLast ? 'Done with drills — practice checklist' : 'Continue to next drill'}
+          {isLast ? 'Ready for checklist' : 'Continue to next drill'}
         </Button>
         <Button
           variant="secondary"
@@ -105,7 +107,7 @@ export function DrillFocus({
           {showHelp ? 'Hide clarification' : 'Ask for clarification'}
         </Button>
         <Button variant="secondary" block onClick={onExit}>
-          Exit to plan
+          {exitLabel}
         </Button>
       </div>
     </section>

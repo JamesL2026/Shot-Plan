@@ -1,12 +1,36 @@
+import { useState } from 'react'
 import { BookOpen, Clock3, Target } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { BetaWelcomeModal } from '../components/BetaWelcomeModal'
+import { useFeedback } from '../components/FeedbackContext'
 import { HomeHero } from '../components/HomeHero'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 
 export function Home() {
+  const { openFeedback } = useFeedback()
+  const [betaOpen, setBetaOpen] = useState(false)
+
   return (
     <section className="page home animate-in">
+      <aside className="beta-banner" aria-label="Early beta">
+        <h2 className="beta-banner__title">
+          <span className="beta-banner__badge">{'\u{1F6A7}'} Early Beta</span>
+        </h2>
+        <p className="beta-banner__text">
+          Built with real golfer feedback.
+          <br />
+          Every suggestion helps shape the next version of ShotPlan.
+        </p>
+        <button
+          type="button"
+          className="beta-banner__btn"
+          onClick={() => setBetaOpen(true)}
+        >
+          Learn More
+        </button>
+      </aside>
+
       <HomeHero />
 
       <div className="home-intro">
@@ -56,6 +80,12 @@ export function Home() {
           </Link>
         </div>
       </nav>
+
+      <BetaWelcomeModal
+        open={betaOpen}
+        onClose={() => setBetaOpen(false)}
+        onHelpImprove={() => openFeedback()}
+      />
     </section>
   )
 }

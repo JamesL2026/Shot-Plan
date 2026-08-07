@@ -27,7 +27,7 @@ export const drills: Drill[] = [
     },
     cue: 'Body and face point the same way.',
     whyItWorks:
-      'The sticks show a crossed setup before you swing—so you can fix aim, not guess.',
+      'The sticks show a crossed setup before you swing, so you can fix aim, not guess.',
   },
   {
     id: 'slice-object-avoidance',
@@ -94,7 +94,7 @@ export const drills: Drill[] = [
       mistake: 'Holding the face open to “save” a hook.',
       instead: 'Miss the inside object. Keep the face quiet.',
     },
-    cue: 'Swing around—not under and out.',
+    cue: 'Swing around, not under and out.',
     whyItWorks:
       'Guarding the inside object softens an extreme path that closes the face through impact.',
   },
@@ -119,7 +119,7 @@ export const drills: Drill[] = [
     },
     cue: 'Ball first. Ground second.',
     whyItWorks:
-      'If the towel stays clean, the club is bottoming out after the ball—not before.',
+      'If the towel stays clean, the club is bottoming out after the ball, not before.',
   },
   {
     id: 'fat-tee-in-front',
@@ -128,10 +128,10 @@ export const drills: Drill[] = [
     goal: 'Stop fat shots by swinging through to a marker past the ball.',
     worksOn: 'both',
     matAdjustment:
-      'On mats, do not push a tee in. Place a coin 2–3 inches in front of the ball toward the target.',
+      'On mats, do not push a tee in. Place a coin 2 to 3 inches in front of the ball toward the target.',
     equipment: ['coin', 'ball'],
     setup:
-      'Place a coin (or tee on grass) 2–3 inches in front of the ball toward the target. After you hit the ball, your club should pass over that marker.',
+      'Place a coin (or tee on grass) 2 to 3 inches in front of the ball toward the target. After you hit the ball, your club should pass over that marker.',
     view: 'side',
     steps: [
       'Place the coin in front of the ball toward the target.',
@@ -144,7 +144,7 @@ export const drills: Drill[] = [
     },
     cue: 'Finish past the ball.',
     whyItWorks:
-      'Reaching a marker in front moves pressure and contact forward—so you stop hitting ground first.',
+      'Reaching a marker in front moves pressure and contact forward, so you stop hitting ground first.',
   },
   {
     id: 'thin-tee-under',
@@ -179,12 +179,12 @@ export const drills: Drill[] = [
     worksOn: 'both',
     equipment: ['towel', 'ball'],
     setup:
-      'Place a towel a few inches in front of the ball toward the target. Hit the ball first. Miss the towel—or barely touch it after the ball.',
+      'Place a towel a few inches in front of the ball toward the target. Hit the ball first. Miss the towel, or barely touch it after the ball.',
     view: 'side',
     steps: [
       'Place the towel a few inches in front of the ball.',
       'Hit 10 smooth swings.',
-      'Ball first. Towel second—or not at all.',
+      'Ball first. Towel second, or not at all.',
     ],
     commonMistake: {
       mistake: 'Flipping the wrists to help the ball up.',
@@ -263,7 +263,7 @@ export const drills: Drill[] = [
     },
     cue: 'Square face. Straight start.',
     whyItWorks:
-      'The gate gives instant feedback on face and start line—no guesswork.',
+      'The gate gives instant feedback on face and start line. No guesswork.',
   },
   {
     id: 'putt-around-the-world',
@@ -273,7 +273,7 @@ export const drills: Drill[] = [
     worksOn: 'both',
     equipment: ['ball'],
     setup:
-      'Place 6–8 balls in a circle 3–5 feet from a hole or cup target. Go around the circle. Miss one? Redo that spot before moving on.',
+      'Place 6 to 8 balls in a circle 3 to 5 feet from a hole or cup target. Go around the circle. Miss one? Redo that spot before moving on.',
     view: 'top',
     steps: [
       'Set balls in a circle around the hole.',
@@ -378,7 +378,7 @@ export function buildPrescription(
         : `${labels[0].charAt(0).toUpperCase() + labels[0].slice(1)} · ${labels[1]}`
 
   const estimatedTime =
-    recommended.length >= 3 ? '20–25 minutes' : '15–20 minutes'
+    recommended.length >= 3 ? '20 to 25 minutes' : '15 to 20 minutes'
 
   const remember =
     recommended[0]?.cue ?? 'One clear feel beats ten swing thoughts.'
@@ -391,28 +391,29 @@ export function buildPracticeOrder(recommended: Drill[]): PracticeOrderStep[] {
   let n = 1
 
   recommended.forEach((drill, index) => {
+    const label = `Drill ${index + 1}`
     steps.push({
       number: n++,
-      title: `Set up ${drill.name}`,
-      detail: drill.steps[0],
+      title: `Set up ${label}`,
+      detail: `${drill.name}. ${drill.steps[0]}`,
     })
     steps.push({
       number: n++,
-      title: `Complete Drill ${index + 1}`,
-      detail: `${drill.steps[1]} ${drill.steps[2]}`,
+      title: `Complete ${label}`,
+      detail: `${drill.steps[1]} Then: ${drill.steps[2]}`,
     })
   })
 
   steps.push({
     number: n++,
-    title: 'Hit 10 normal swings',
-    detail: 'Use the same feeling. Pick a target. No new thoughts.',
+    title: 'Hit 10 shots to a target',
+    detail: 'Use today’s swing thought. No new ideas.',
   })
 
   steps.push({
     number: n++,
     title: 'Reflect',
-    detail: 'Did contact or start line improve? Note one thing that worked.',
+    detail: 'Did contact improve? Note one thing that worked.',
   })
 
   return steps

@@ -70,7 +70,7 @@ export function FollowUp({ session, onUpdate }: FollowUpProps) {
     return (
       <aside className="follow-up" aria-label="Did it help?">
         <p className="follow-up__title">Did it help?</p>
-        <p className="muted">Be honest — it helps shape what you try next.</p>
+        <p className="muted">Be honest. It helps shape what you try next.</p>
         <div className="follow-up__actions">
           <Button variant="primary" block onClick={() => handleHelped(true)}>
             Yes, it helped

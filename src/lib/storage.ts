@@ -1,5 +1,11 @@
-import type { Session, SessionResult, SymptomId } from '../types'
+import type {
+  ClubFocusBySymptom,
+  Session,
+  SessionResult,
+  SymptomId,
+} from '../types'
 import { isSymptomId } from '../data/symptoms'
+import { parseClubFocusMap } from '../data/clubFocus'
 
 const SESSIONS_KEY = 'shotplan:sessions'
 
@@ -15,6 +21,11 @@ function isSessionResult(value: unknown): value is SessionResult {
 function isSession(value: unknown): value is Session {
   if (!value || typeof value !== 'object') return false
   const s = value as Record<string, unknown>
+  const clubFocus =
+    s.clubFocus === undefined ? undefined : parseClubFocusMap(s.clubFocus)
+  if (s.clubFocus !== undefined && clubFocus === undefined) {
+    // Tolerate unknown shapes by dropping clubFocus rather than rejecting the session.
+  }
   return (
     typeof s.id === 'string' &&
     typeof s.createdAt === 'string' &&
@@ -28,6 +39,11 @@ function isSession(value: unknown): value is Session {
   )
 }
 
+function normalizeSession(value: Session): Session {
+  const clubFocus = parseClubFocusMap(value.clubFocus)
+  return clubFocus ? { ...value, clubFocus } : { ...value, clubFocus: undefined }
+}
+
 export function getSessions(): Session[] {
   try {
     const raw = localStorage.getItem(SESSIONS_KEY)
@@ -36,6 +52,7 @@ export function getSessions(): Session[] {
     if (!Array.isArray(parsed)) return []
     return parsed
       .filter(isSession)
+      .map(normalizeSession)
       .sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -62,12 +79,14 @@ export function saveSession(session: Session): void {
 export function createSession(input: {
   symptomIds: SymptomId[]
   drillIds: string[]
+  clubFocus?: ClubFocusBySymptom
 }): Session {
   const session: Session = {
     id: crypto.randomUUID(),
     createdAt: new Date().toISOString(),
     symptomIds: input.symptomIds,
     drillIds: input.drillIds,
+    clubFocus: input.clubFocus,
     tried: null,
     helped: null,
     result: null,

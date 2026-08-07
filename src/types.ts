@@ -20,6 +20,14 @@ export type SurfaceType = 'mats' | 'grass' | 'both'
 
 export type DiagramView = 'top' | 'side'
 
+/** Club follow-up answers. Path shots use driver/irons; strike shots use irons/wedges. */
+export type ClubFocus = 'driver' | 'irons' | 'wedges' | 'both'
+
+export type ClubFocusBySymptom = Partial<Record<SymptomId, ClubFocus>>
+
+/** Diagram flavor — only when setup genuinely changes. */
+export type DiagramVariant = 'default' | 'driver' | 'irons' | 'wedges'
+
 export interface Symptom {
   id: SymptomId
   label: string
@@ -45,6 +53,12 @@ export interface Drill {
   whyItWorks: string
 }
 
+/** Same drill content with optional club-specific copy and diagram flavor. */
+export interface AdaptedDrill extends Drill {
+  diagramVariant: DiagramVariant
+  clubLabel: string | null
+}
+
 export type SessionResult = 'helped' | 'did-not-help' | 'not-tried' | null
 
 export interface Session {
@@ -52,6 +66,8 @@ export interface Session {
   createdAt: string
   symptomIds: SymptomId[]
   drillIds: string[]
+  /** Club follow-up answers keyed by symptom. */
+  clubFocus?: ClubFocusBySymptom
   tried: boolean | null
   helped: boolean | null
   result: SessionResult

@@ -11,13 +11,16 @@ import {
 import { BackLink } from '../components/ui/BackLink'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
+import { formatClubFocusLabel } from '../data/clubFocus'
 import {
   buildChecklist,
+  buildPracticeOrder,
   buildPrescription,
   getDrillById,
   getDrillsForSymptoms,
 } from '../data/drills'
 import { isSymptomId } from '../data/symptoms'
+import { adaptDrills } from '../lib/adaptDrill'
 import { getSession, updateSession } from '../lib/storage'
 import type { Drill, Session, SymptomId } from '../types'
 
@@ -41,6 +44,15 @@ function drillsForSession(session: Session): Drill[] {
   return getDrillsForSymptoms(session.symptomIds)
 }
 
+function clubFocusSummary(session: Session | undefined): string | null {
+  if (!session?.clubFocus) return null
+  const parts = session.symptomIds
+    .map((id) => formatClubFocusLabel(session.clubFocus?.[id]))
+    .filter((label): label is string => Boolean(label))
+  if (parts.length === 0) return null
+  return [...new Set(parts)].join(' · ')
+}
+
 export function Results() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -55,6 +67,9 @@ export function Results() {
     session?.practiceDone ? 'done' : 'plan',
   )
   const [drillIndex, setDrillIndex] = useState(0)
+  const [drillReturnPhase, setDrillReturnPhase] = useState<'plan' | 'practice'>(
+    'plan',
+  )
 
   const [checked, setChecked] = useState<Record<string, boolean>>(
     () => session?.checklist ?? {},
@@ -69,12 +84,20 @@ export function Results() {
   }, [sessionId])
 
   const symptomIds = session?.symptomIds ?? symptomParamIds
-  const recommended = session
-    ? drillsForSession(session)
-    : getDrillsForSymptoms(symptomIds)
+  const recommended = useMemo(() => {
+    const base = session
+      ? drillsForSession(session)
+      : getDrillsForSymptoms(symptomIds)
+    return adaptDrills(base, session?.clubFocus)
+  }, [session, symptomIds])
   const prescription = buildPrescription(symptomIds, recommended)
+  const practiceOrder = useMemo(
+    () => buildPracticeOrder(recommended),
+    [recommended],
+  )
   const checklist = useMemo(() => buildChecklist(recommended), [recommended])
   const followUpDone = session?.result !== null && session?.result !== undefined
+  const clubSummary = clubFocusSummary(session)
 
   function persistChecklist(next: Record<string, boolean>) {
     setChecked(next)
@@ -98,8 +121,9 @@ export function Results() {
     setPhase('done')
   }
 
-  function openDrill(index: number) {
+  function openDrill(index: number, returnTo: 'plan' | 'practice' = 'plan') {
     setDrillIndex(index)
+    setDrillReturnPhase(returnTo)
     setPhase('drill')
   }
 
@@ -136,8 +160,11 @@ export function Results() {
           drills={recommended}
           index={drillIndex}
           onIndexChange={setDrillIndex}
-          onExit={() => setPhase('plan')}
+          onExit={() => setPhase(drillReturnPhase)}
           onFinishedAll={() => setPhase('practice')}
+          exitLabel={
+            drillReturnPhase === 'practice' ? 'Back to checklist' : 'Back to plan'
+          }
         />
       </section>
     )
@@ -153,6 +180,10 @@ export function Results() {
           onFinish={finishPractice}
           onBack={() => setPhase('plan')}
           swingThought={prescription.remember}
+          onOpenDrill={(drillId) => {
+            const index = recommended.findIndex((d) => d.id === drillId)
+            if (index >= 0) openDrill(index, 'practice')
+          }}
         />
       </section>
     )
@@ -187,7 +218,7 @@ export function Results() {
   }
 
   return (
-    <section className="page results animate-in">
+    <section className="page results results--plan animate-in">
       <BackLink to={session ? '/sessions' : '/check-in'}>
         {session ? 'Sessions' : 'Check in'}
       </BackLink>
@@ -198,16 +229,19 @@ export function Results() {
         <p className="summary-card__kicker">Today’s Practice</p>
         <dl className="summary-card__meta">
           <div>
-            <dt>Estimated time</dt>
+            <dt>Estimated Time</dt>
             <dd>{prescription.estimatedTime}</dd>
           </div>
           <div>
-            <dt>Today’s goal</dt>
+            <dt>Today’s Goal</dt>
             <dd>{prescription.goal}</dd>
           </div>
           <div>
-            <dt>Primary focus</dt>
-            <dd>{prescription.primaryFocus}</dd>
+            <dt>Primary Focus</dt>
+            <dd>
+              {prescription.primaryFocus}
+              {clubSummary ? ` · ${clubSummary}` : ''}
+            </dd>
           </div>
         </dl>
       </Card>
@@ -215,12 +249,33 @@ export function Results() {
       <aside className="confidence-banner" aria-label="Recommendation note">
         <ShieldCheck size={20} strokeWidth={2} aria-hidden="true" />
         <div>
-          <p className="confidence-banner__title">Recommended Practice Plan</p>
+          <p className="confidence-banner__title">Your plan is ready</p>
           <p className="confidence-banner__text">
-            Based on the symptoms you selected and established golf instruction.
+            {clubSummary
+              ? `Built for your ${clubSummary.toLowerCase()} focus. Follow the order below.`
+              : 'Follow the order below. One clear feel beats ten swing thoughts.'}
           </p>
         </div>
       </aside>
+
+      <div className="practice-order">
+        <h2 className="practice-order__title">Practice Order</h2>
+        <ol className="practice-order__list">
+          {practiceOrder.map((step) => (
+            <li key={`${step.number}-${step.title}`}>
+              <span className="practice-order__num" aria-hidden="true">
+                {step.number}
+              </span>
+              <span>
+                <span className="practice-order__step-title">{step.title}</span>
+                <span className="practice-order__step-detail muted">
+                  {step.detail}
+                </span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
 
       <aside className="swing-thought" aria-label="Today's swing thought">
         <p className="swing-thought__label">Today’s Swing Thought</p>
@@ -228,9 +283,9 @@ export function Results() {
       </aside>
 
       <div className="drill-picker">
-        <h2 className="drill-picker__title">Your drills</h2>
+        <h2 className="drill-picker__title">Drill setups</h2>
         <p className="muted drill-picker__hint">
-          Open one drill at a time. No long scrolling.
+          Tap a drill anytime to see the diagram and steps.
         </p>
         <ul className="drill-picker__list">
           {recommended.map((drill, index) => (
@@ -257,13 +312,13 @@ export function Results() {
           variant="primary"
           block
           className="ready-cta__btn"
-          onClick={() => openDrill(0)}
+          onClick={() => setPhase('practice')}
         >
-          Start Drill 1
+          Ready to Practice
         </Button>
-        <Button variant="secondary" block onClick={() => setPhase('practice')}>
-          Skip to practice checklist
-        </Button>
+        <p className="ready-cta__hint muted">
+          Opens a simple checklist so you always know what’s next.
+        </p>
       </div>
     </section>
   )

@@ -1,4 +1,4 @@
-import type { DiagramView, Drill } from '../types'
+import type { DiagramVariant, DiagramView, Drill } from '../types'
 
 const C = {
   ball: '#FFFFFF',
@@ -15,6 +15,7 @@ const C = {
 interface DrillDiagramProps {
   drillId: Drill['id']
   view: DiagramView
+  variant?: DiagramVariant
 }
 
 /**
@@ -22,7 +23,11 @@ interface DrillDiagramProps {
  * Target is to the LEFT. Feet at the bottom. Ball between feet and target line.
  * SIDE VIEW: Target is ahead (to the RIGHT).
  */
-export function DrillDiagram({ drillId, view }: DrillDiagramProps) {
+export function DrillDiagram({
+  drillId,
+  view,
+  variant = 'default',
+}: DrillDiagramProps) {
   return (
     <div className="drill-diagram">
       <svg
@@ -45,7 +50,7 @@ export function DrillDiagram({ drillId, view }: DrillDiagramProps) {
         >
           {view === 'top' ? 'TOP VIEW · RH' : 'SIDE VIEW'}
         </text>
-        {renderDiagram(drillId)}
+        {renderDiagram(drillId, variant)}
       </svg>
     </div>
   )
@@ -108,12 +113,38 @@ function Ball({ cx, cy, r = 10 }: { cx: number; cy: number; r?: number }) {
 }
 
 /** Feet side-by-side along a horizontal toe line (toes face up toward the ball). */
-function Feet({ cx, cy }: { cx: number; cy: number }) {
+function Feet({
+  cx,
+  cy,
+  spread = 20,
+}: {
+  cx: number
+  cy: number
+  /** Half-gap between feet — larger = wider stance. */
+  spread?: number
+}) {
   return (
     <>
-      <ellipse cx={cx - 20} cy={cy} rx="11" ry="17" fill={C.body} opacity="0.4" />
-      <ellipse cx={cx + 20} cy={cy} rx="11" ry="17" fill={C.body} opacity="0.4" />
+      <ellipse cx={cx - spread} cy={cy} rx="11" ry="17" fill={C.body} opacity="0.4" />
+      <ellipse cx={cx + spread} cy={cy} rx="11" ry="17" fill={C.body} opacity="0.4" />
     </>
+  )
+}
+
+function Tee({ cx, cy }: { cx: number; cy: number }) {
+  return (
+    <g>
+      <line x1={cx} y1={cy + 2} x2={cx} y2={cy + 14} stroke={C.aid} strokeWidth="3" strokeLinecap="round" />
+      <ellipse cx={cx} cy={cy + 14} rx="5" ry="2.5" fill={C.aid} opacity="0.35" />
+    </g>
+  )
+}
+
+function ClubLabel({ x, y, children }: { x: number; y: number; children: string }) {
+  return (
+    <L x={x} y={y} weight={700}>
+      {children}
+    </L>
   )
 }
 
@@ -168,38 +199,55 @@ function Path({ d }: { d: string }) {
   )
 }
 
-function renderDiagram(id: string) {
+function renderDiagram(id: string, variant: DiagramVariant) {
+  const isDriver = variant === 'driver'
+  const isWedge = variant === 'wedges'
+  // Wider for driver; slightly narrower for wedges; neutral otherwise.
+  const footSpread = isDriver ? 28 : isWedge ? 16 : 20
+  // Driver ball toward lead heel (left / target side). Wedge slightly back (right).
+  const ballShiftX = isDriver ? -28 : isWedge ? 10 : 0
+  const sideBallY = isDriver ? 142 : 158
+  const clubTag = isDriver ? 'Driver' : isWedge ? 'Wedge' : variant === 'irons' ? 'Iron' : null
+
   switch (id) {
-    case 'slice-alignment-stick':
-      // 1 Stick A · 2 Stick B (stand here) · 3 Ball — target LEFT
+    case 'slice-alignment-stick': {
+      const ballX = 190 + ballShiftX
       return (
         <>
           <TargetLeft />
           <line x1={55} y1={100} x2={300} y2={100} stroke={C.aid} strokeWidth="5" strokeLinecap="round" />
           <line x1={100} y1={165} x2={280} y2={165} stroke={C.aid} strokeWidth="5" strokeLinecap="round" />
-          <Feet cx={190} cy={165} />
-          <Ball cx={190} cy={100} />
+          <Feet cx={190} cy={165} spread={footSpread} />
+          {isDriver && <Tee cx={ballX} cy={100} />}
+          <Ball cx={ballX} cy={isDriver ? 96 : 100} />
           <Callout n={1} x={70} y={78} />
           <L x={86} y={82}>Stick A → target</L>
           <Callout n={2} x={115} y={185} />
-          <L x={131} y={189}>Stick B · stand here</L>
-          <Callout n={3} x={210} y={82} />
-          <L x={226} y={86}>Ball</L>
-          <Path d="M230 120 Q210 105 160 100" />
+          <L x={131} y={189}>
+            {isDriver ? 'Stick B · wider stance' : 'Stick B · stand here'}
+          </L>
+          <Callout n={3} x={ballX + 20} y={78} />
+          <L x={ballX + 36} y={82}>
+            {isDriver ? 'Ball · lead heel' : isWedge ? 'Ball · back a touch' : 'Ball · mid-stance'}
+          </L>
+          {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
+          <Path d={`M${ballX + 40} 120 Q${ballX + 20} 105 ${ballX - 30} 100`} />
           <L x={40} y={215}>Swing toward ← target (left of your feet)</L>
         </>
       )
+    }
 
-    case 'slice-object-avoidance':
-      // Outside = away from body = above ball in this view (farther from feet)
+    case 'slice-object-avoidance': {
+      const ballX = 200 + ballShiftX
       return (
         <>
           <TargetLeft />
           <line x1={55} y1={100} x2={300} y2={100} stroke={C.target} strokeWidth="1.5" strokeDasharray="4 3" />
-          <Feet cx={200} cy={170} />
-          <Ball cx={200} cy={100} />
+          <Feet cx={200} cy={170} spread={footSpread} />
+          {isDriver && <Tee cx={ballX} cy={100} />}
+          <Ball cx={ballX} cy={isDriver ? 96 : 100} />
           <ellipse
-            cx={200}
+            cx={ballX}
             cy={62}
             rx="20"
             ry="14"
@@ -209,15 +257,17 @@ function renderDiagram(id: string) {
             strokeWidth="3"
           />
           <Callout n={1} x={200} y={195} />
-          <L x={216} y={199}>Your feet</L>
-          <Callout n={2} x={220} y={100} />
-          <L x={236} y={104}>Ball</L>
-          <Callout n={3} x={200} y={42} />
-          <L x={216} y={46}>AVOID (outside)</L>
-          <Path d="M240 145 Q220 115 160 100" />
+          <L x={216} y={199}>{isDriver ? 'Wider stance' : 'Your feet'}</L>
+          <Callout n={2} x={ballX + 20} y={100} />
+          <L x={ballX + 36} y={104}>{isDriver ? 'Ball · teed' : 'Ball'}</L>
+          <Callout n={3} x={ballX} y={42} />
+          <L x={ballX + 16} y={46}>AVOID (outside)</L>
+          {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
+          <Path d={`M${ballX + 40} 145 Q${ballX + 20} 115 ${ballX - 40} 100`} />
           <L x={40} y={215}>Miss red object · swing toward ← target</L>
         </>
       )
+    }
 
     case 'hook-grip-check':
       return (
@@ -233,20 +283,26 @@ function renderDiagram(id: string) {
           <Callout n={2} x={145} y={100} />
           <L x={100} y={155}>See knuckle 1 and 2</L>
           <L x={100} y={172}>Hide knuckle 3</L>
-          <L x={40} y={210}>Face the club at the target before setting hands</L>
+          <L x={40} y={210}>
+            {isDriver
+              ? 'Driver: face at target first · wider stance · ball near lead heel'
+              : 'Face the club at the target before setting hands'}
+          </L>
+          {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
         </>
       )
 
-    case 'hook-mirrored-path':
-      // Inside = toward body = between feet and ball
+    case 'hook-mirrored-path': {
+      const ballX = 200 + ballShiftX
       return (
         <>
           <TargetLeft />
           <line x1={55} y1={100} x2={300} y2={100} stroke={C.target} strokeWidth="1.5" strokeDasharray="4 3" />
-          <Feet cx={200} cy={170} />
-          <Ball cx={200} cy={100} />
+          <Feet cx={200} cy={170} spread={footSpread} />
+          {isDriver && <Tee cx={ballX} cy={100} />}
+          <Ball cx={ballX} cy={isDriver ? 96 : 100} />
           <ellipse
-            cx={200}
+            cx={ballX}
             cy={132}
             rx="18"
             ry="12"
@@ -256,15 +312,17 @@ function renderDiagram(id: string) {
             strokeWidth="3"
           />
           <Callout n={1} x={200} y={195} />
-          <L x={216} y={199}>Your feet</L>
-          <Callout n={2} x={220} y={100} />
-          <L x={236} y={104}>Ball</L>
-          <Callout n={3} x={200} y={132} />
-          <L x={222} y={136}>AVOID (inside)</L>
-          <Path d="M240 155 Q220 120 160 100" />
+          <L x={216} y={199}>{isDriver ? 'Wider stance' : 'Your feet'}</L>
+          <Callout n={2} x={ballX + 20} y={100} />
+          <L x={ballX + 36} y={104}>{isDriver ? 'Ball · teed' : 'Ball'}</L>
+          <Callout n={3} x={ballX} y={132} />
+          <L x={ballX + 22} y={136}>AVOID (inside)</L>
+          {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
+          <Path d={`M${ballX + 40} 155 Q${ballX + 20} 120 ${ballX - 40} 100`} />
           <L x={40} y={215}>Miss red object on the inside · toward ← target</L>
         </>
       )
+    }
 
     case 'fat-towel-behind':
       return (
@@ -284,13 +342,14 @@ function renderDiagram(id: string) {
             strokeWidth="2.5"
             strokeDasharray="5 3"
           />
-          <Ball cx={205} cy={158} />
+          <Ball cx={205 + (isWedge ? -8 : 0)} cy={158} />
           <Callout n={1} x={75} y={40} />
           <L x={90} y={44}>You</L>
           <Callout n={2} x={149} y={130} />
           <L x={70} y={134}>Towel (behind ball)</L>
           <Callout n={3} x={205} y={140} />
-          <L x={220} y={144}>Ball</L>
+          <L x={220} y={144}>{isWedge ? 'Ball · back a touch' : 'Ball'}</L>
+          {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
           <Path d="M110 105 Q165 145 215 160" />
           <L x={40} y={210}>Hit ball · miss towel · brush after ball</L>
         </>
@@ -302,14 +361,15 @@ function renderDiagram(id: string) {
           <TargetArrowSide />
           <PersonSide x={75} />
           <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
-          <Ball cx={170} cy={158} />
+          <Ball cx={170 + (isWedge ? -8 : 0)} cy={158} />
           <circle cx={220} cy={164} r="9" fill={C.aid} />
           <Callout n={1} x={75} y={40} />
           <L x={90} y={44}>You</L>
           <Callout n={2} x={170} y={140} />
-          <L x={184} y={144}>Ball</L>
+          <L x={184} y={144}>{isWedge ? 'Ball · back a touch' : 'Ball'}</L>
           <Callout n={3} x={220} y={145} />
           <L x={235} y={149}>Coin / marker</L>
+          {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
           <Path d="M110 105 Q175 140 230 164" />
           <L x={40} y={210}>Swing through so club passes the coin after the ball</L>
         </>
@@ -321,14 +381,15 @@ function renderDiagram(id: string) {
           <TargetArrowSide />
           <PersonSide x={80} />
           <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
-          <Ball cx={185} cy={150} r={9} />
+          <Ball cx={185 + (isWedge ? -8 : 0)} cy={sideBallY > 150 ? 150 : sideBallY} r={9} />
           <Callout n={1} x={80} y={40} />
           <L x={95} y={44}>You</L>
           <Callout n={2} x={185} y={130} />
-          <L x={200} y={134}>Low ball on mat</L>
+          <L x={200} y={134}>{isWedge ? 'Low ball · back a touch' : 'Low ball on mat'}</L>
+          {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
           <Path d="M115 110 Q170 145 230 168" />
           <L x={40} y={195}>Stay down</L>
-          <L x={40} y={210}>Brush mat AFTER the ball — do not scoop up</L>
+          <L x={40} y={210}>Brush mat AFTER the ball. Do not scoop up</L>
         </>
       )
 
@@ -338,7 +399,7 @@ function renderDiagram(id: string) {
           <TargetArrowSide />
           <PersonSide x={75} />
           <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
-          <Ball cx={165} cy={158} />
+          <Ball cx={165 + (isWedge ? -8 : 0)} cy={158} />
           <rect
             x={200}
             y={142}
@@ -352,9 +413,10 @@ function renderDiagram(id: string) {
             strokeDasharray="5 3"
           />
           <Callout n={1} x={165} y={140} />
-          <L x={100} y={144}>Ball first</L>
+          <L x={100} y={144}>{isWedge ? 'Ball · back a touch' : 'Ball first'}</L>
           <Callout n={2} x={224} y={130} />
           <L x={240} y={134}>Towel ahead</L>
+          {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
           <Path d="M110 105 Q155 145 175 158" />
           <L x={40} y={210}>Ball → then towel (or miss towel)</L>
         </>
@@ -474,7 +536,7 @@ function renderDiagram(id: string) {
           <Callout n={1} x={170} y={115} />
           <L x={186} y={118}>Hole</L>
           <Callout n={2} x={170} y={48} />
-          <L x={186} y={52}>Balls (3–5 ft)</L>
+          <L x={186} y={52}>Balls (3 to 5 ft)</L>
           <L x={40} y={210}>Putt around · redo any miss</L>
         </>
       )

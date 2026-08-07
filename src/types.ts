@@ -22,16 +22,16 @@ export type DiagramView = 'top' | 'side'
 
 /** Main coaching focus so drills feel distinct from each other. */
 export type BodyFocus =
-  | 'Setup / Alignment'
-  | 'Path'
-  | 'Rotation / Balance'
-  | 'Hands / Wrists'
-  | 'Low Point'
-  | 'Extension'
-  | 'Distance Control'
-  | 'Start Line'
+  | 'Aim and setup'
+  | 'Swing path'
+  | 'Finish balance'
+  | 'Hands'
+  | 'Where the club hits'
+  | 'Swing through'
+  | 'Distance'
+  | 'Start line'
   | 'Speed'
-  | 'Connection'
+  | 'Connected arms'
 
 /** Club follow-up answers. Path shots use driver/irons; strike shots use irons/wedges. */
 export type ClubFocus = 'driver' | 'irons' | 'wedges' | 'both'

@@ -55,6 +55,8 @@ export function DrillCard({
   const diagramVariant = isAdapted(drill) ? drill.diagramVariant : 'default'
   const successCondition = isAdapted(drill) ? drill.successCondition : undefined
   const reflection = isAdapted(drill) ? drill.reflection : undefined
+  const objective = isAdapted(drill) ? drill.objective : undefined
+  const focusText = objective ?? drill.goal
 
   const photoCaptionLines = (() => {
     if (!photo) return null
@@ -99,9 +101,9 @@ export function DrillCard({
 
       <div className="drill-card__section">
         <h3 className="drill-card__label">
-          {guided ? "Today's Focus" : "Today's Focus"}
+          {guided ? 'This challenge' : "Today's Focus"}
         </h3>
-        <p>{drill.goal}</p>
+        <p>{focusText}</p>
       </div>
 
       {!guided && (
@@ -183,7 +185,7 @@ export function DrillCard({
             </p>
             {guided && drill.view === 'top' && (
               <p className="drill-card__orient muted">
-                Top view: for a right handed golfer, the target is to your left.
+                Top view for a right handed golfer: target is left. Left handed: flip it.
               </p>
             )}
             {!photo && (
@@ -263,7 +265,7 @@ export function DrillCard({
       )}
 
       <div className="drill-card__section">
-        <h3 className="drill-card__label">What I Want You To Feel</h3>
+        <h3 className="drill-card__label">What you should feel</h3>
         <p>{drill.whyItWorks}</p>
       </div>
 

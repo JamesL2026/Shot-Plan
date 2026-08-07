@@ -3,33 +3,33 @@ import type { AdaptedDrill, Drill, SymptomId } from '../types'
 /** One short encouragement for the Coach Brief. */
 const encouragementBySymptom: Record<SymptomId, string[]> = {
   slice: [
-    'Slices are one of the most common misses. We are only chasing a better start line today.',
-    'Forget distance today. We are building a straighter ball flight first.',
-    'One good strike at a time. Progress beats perfection.',
+    'Slices are common. Today we only chase a straighter start.',
+    'Forget distance today. Straighter first.',
+    'One good swing at a time.',
   ],
   hook: [
-    'Hooks happen to good golfers. Today we calm the face and finish in balance.',
-    'Do not chase score with this miss. We are building a quieter release.',
-    'One balanced finish is all we are looking for.',
+    'Hooks happen to good golfers. Today we finish in balance.',
+    'Do not chase score. Calm your hands and finish tall.',
+    'One balanced finish is enough.',
   ],
   fat: [
-    'Today we are only focusing on clean contact.',
-    'Forget distance today. We are chasing crisp turf after the ball.',
-    'One great strike is all we are looking for.',
+    'Today we only care about clean contact.',
+    'Forget distance. Hit the ball first.',
+    'One solid strike is enough.',
   ],
   thin: [
-    'Thin shots are common. We are only chasing solid contact today.',
-    'Do not worry about distance. Stay down through the ball.',
-    'We are building confidence first. One flush strike at a time.',
+    'Thin shots are common. Today we chase solid contact.',
+    'Stay down through the ball. Distance can wait.',
+    'One flush strike at a time.',
   ],
   chipping: [
-    'We are building confidence first around the green.',
-    'Today we only care about predictable contact and landing spots.',
-    'One good chip at a time. Progress beats perfection.',
+    'Today we build simple, repeatable chips.',
+    'Only care about solid contact and a clear landing spot.',
+    'One good chip at a time.',
   ],
   putting: [
-    'We are building confidence first on the greens.',
-    'Forget making everything. We are chasing a clear start line.',
+    'Today we build confidence on the greens.',
+    'Forget making everything. Start it on line.',
     'One committed stroke at a time.',
   ],
 }
@@ -126,8 +126,8 @@ export function coachBiggestWin(
   swingThought: string,
 ): string {
   const first = drills[0]
-  if (first && 'successCondition' in first && first.successCondition) {
-    return first.successCondition
+  if (first && 'objective' in first && first.objective) {
+    return first.objective
   }
   if (first?.goal) return first.goal
   return swingThought

@@ -11,7 +11,7 @@ export const drills: Drill[] = [
     symptomId: 'slice',
     name: 'Alignment stick drill',
     goal: 'Aim your body and clubface at the same target to reduce slices.',
-    bodyFocus: 'Setup / Alignment',
+    bodyFocus: 'Aim and setup',
     worksOn: 'both',
     equipment: ['alignment-stick', 'ball'],
     setup: [
@@ -32,14 +32,14 @@ export const drills: Drill[] = [
     },
     cue: 'Body and face point the same way.',
     whyItWorks:
-      'The sticks show a crossed setup before you swing, so you can fix aim, not guess.',
+      'Your feet and the clubface should feel aimed at the same target.',
   },
   {
     id: 'slice-object-avoidance',
     symptomId: 'slice',
     name: 'Object avoidance drill',
     goal: 'Train a better swing path to reduce slices.',
-    bodyFocus: 'Path',
+    bodyFocus: 'Swing path',
     worksOn: 'both',
     equipment: ['headcover', 'ball'],
     setup: [
@@ -59,14 +59,14 @@ export const drills: Drill[] = [
     },
     cue: 'Miss the object. Then the ball.',
     whyItWorks:
-      'Missing the outside object stops the over the top cut that creates a slice.',
+      'You should feel the club swing more from the inside, not cutting across the ball.',
   },
   {
     id: 'hook-finish-position',
     symptomId: 'hook',
     name: 'Finish position drill',
     goal: 'Reduce hooks by rotating through and holding a balanced finish.',
-    bodyFocus: 'Rotation / Balance',
+    bodyFocus: 'Finish balance',
     worksOn: 'both',
     equipment: ['ball'],
     setup: [
@@ -86,14 +86,14 @@ export const drills: Drill[] = [
     },
     cue: 'Finish tall. Chest to the target.',
     whyItWorks:
-      'A balanced finish encourages full rotation and a quieter face through impact.',
+      'You should feel tall and balanced, with your chest facing the target.',
   },
   {
     id: 'hook-split-hand',
     symptomId: 'hook',
     name: 'Split hand drill',
     goal: 'Calm hands and face control so the clubface does not shut too early.',
-    bodyFocus: 'Hands / Wrists',
+    bodyFocus: 'Hands',
     worksOn: 'both',
     equipment: ['ball'],
     setup: [
@@ -113,14 +113,14 @@ export const drills: Drill[] = [
     },
     cue: 'Quiet hands. Soft face.',
     whyItWorks:
-      'A split grip reduces hand dominance so the face stays more stable through impact.',
+      'You should feel quieter hands. The clubface should not snap shut early.',
   },
   {
     id: 'fat-towel-behind',
     symptomId: 'fat',
     name: 'Towel behind the ball',
     goal: 'Improve strike by moving your low point in front of the ball.',
-    bodyFocus: 'Low Point',
+    bodyFocus: 'Where the club hits',
     worksOn: 'both',
     equipment: ['towel', 'ball'],
     setup: [
@@ -140,14 +140,14 @@ export const drills: Drill[] = [
     },
     cue: 'Ball first. Ground second.',
     whyItWorks:
-      'If the towel stays clean, the club is bottoming out after the ball, not before.',
+      'You should feel the club hit the ball before it touches the ground.',
   },
   {
     id: 'fat-tee-in-front',
     symptomId: 'fat',
     name: 'Marker in front',
     goal: 'Stop fat shots by swinging through to a marker past the ball.',
-    bodyFocus: 'Extension',
+    bodyFocus: 'Swing through',
     worksOn: 'both',
     matAdjustment:
       'On mats, do not push a tee in. Place a coin 2-3 inches in front of the ball toward the target.',
@@ -169,14 +169,14 @@ export const drills: Drill[] = [
     },
     cue: 'Finish past the ball.',
     whyItWorks:
-      'Reaching a marker in front moves pressure and contact forward, so you stop hitting ground first.',
+      'You should feel the club keep moving past the ball, not stop at impact.',
   },
   {
     id: 'thin-brush-line',
     symptomId: 'thin',
     name: 'Brush the line',
     goal: 'Stop thin shots by brushing a line on the ground just after the ball.',
-    bodyFocus: 'Low Point',
+    bodyFocus: 'Where the club hits',
     worksOn: 'both',
     matAdjustment:
       'On mats, lay a coin or the edge of a towel as your brush line. Do not dig. Just brush past it after the ball.',
@@ -198,14 +198,14 @@ export const drills: Drill[] = [
     },
     cue: 'Ball, then brush the line.',
     whyItWorks:
-      'Brushing a clear line after the ball proves your low point is in front, not early.',
+      'You should feel the club brush the ground right after the ball.',
   },
   {
     id: 'thin-towel-low-point',
     symptomId: 'thin',
     name: 'Towel ahead drill',
     goal: 'Stop scooping by keeping the wrists quiet through contact.',
-    bodyFocus: 'Hands / Wrists',
+    bodyFocus: 'Hands',
     worksOn: 'both',
     equipment: ['towel', 'ball'],
     setup: [
@@ -225,14 +225,14 @@ export const drills: Drill[] = [
     },
     cue: 'Compress. Don’t scoop.',
     whyItWorks:
-      'When the ball comes before the towel with quiet hands, you stop scooping thin.',
+      'You should feel quiet wrists and the ball first, with no scoop.',
   },
   {
     id: 'chip-headcover',
     symptomId: 'chipping',
     name: 'Headcover under arm',
     goal: 'Quiet busy wrists so chip contact stays predictable.',
-    bodyFocus: 'Connection',
+    bodyFocus: 'Connected arms',
     worksOn: 'both',
     equipment: ['headcover', 'ball'],
     setup: [
@@ -252,14 +252,14 @@ export const drills: Drill[] = [
     },
     cue: 'Quiet wrists. Connected arms.',
     whyItWorks:
-      'The headcover keeps your arms connected so the club bottoms out in the same place.',
+      'You should feel your arms move together, not flipping with the hands.',
   },
   {
     id: 'chip-wedge-ladder',
     symptomId: 'chipping',
     name: 'One wedge ladder',
     goal: 'Control chip distance with one wedge and three swing lengths.',
-    bodyFocus: 'Distance Control',
+    bodyFocus: 'Distance',
     worksOn: 'both',
     equipment: ['clubs', 'ball'],
     setup: [
@@ -279,7 +279,7 @@ export const drills: Drill[] = [
     },
     cue: 'One wedge. Three distances.',
     whyItWorks:
-      'Distance comes from swing length, not from swapping clubs every chip.',
+      'You should feel distance change only from a longer or shorter swing.',
   },
   {
     id: 'putt-lag-ladder',
@@ -306,14 +306,14 @@ export const drills: Drill[] = [
     },
     cue: 'Die it near the hole.',
     whyItWorks:
-      'Ladder distances train tempo and speed so lag putts finish tap in close.',
+      'You should feel soft speed that dies near the hole.',
   },
   {
     id: 'putt-start-line-gate',
     symptomId: 'putting',
     name: 'Start line gate',
     goal: 'Start putts on line with a square face through a gate ahead of the ball.',
-    bodyFocus: 'Start Line',
+    bodyFocus: 'Start line',
     worksOn: 'both',
     matAdjustment:
       'On mats, use two coins as the gate if you cannot stick tees in.',
@@ -335,7 +335,7 @@ export const drills: Drill[] = [
     },
     cue: 'Square face. Clean start.',
     whyItWorks:
-      'A gate ahead of the ball gives honest feedback on start line and face, not just stroke path.',
+      'You should feel a square face and a clean roll straight through the gate.',
   },
 ]
 

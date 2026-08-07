@@ -4,12 +4,12 @@ export const symptoms: Symptom[] = [
   {
     id: 'slice',
     label: 'Slice',
-    description: 'Ball curves hard to the right',
+    description: 'Ball curves hard right (lefty: curves left)',
   },
   {
     id: 'hook',
     label: 'Hook',
-    description: 'Ball curves hard to the left',
+    description: 'Ball curves hard left (lefty: curves right)',
   },
   {
     id: 'fat',
@@ -23,12 +23,12 @@ export const symptoms: Symptom[] = [
   },
   {
     id: 'chipping',
-    label: 'Chipping inconsistency',
-    description: 'Short game feels unpredictable',
+    label: 'Chipping',
+    description: 'Chips go fat, thin, or leave you guessing on distance',
   },
   {
     id: 'putting',
-    label: 'Putting inconsistency',
+    label: 'Putting',
     description: 'Hard to start putts on line or control speed',
   },
 ]

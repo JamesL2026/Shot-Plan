@@ -182,9 +182,9 @@ export function CheckIn() {
 
       <div className="page-intro">
         <p className="page-intro__kicker">Check in · under a minute</p>
-        <h1>What went wrong today?</h1>
+        <h1>What do you want to fix?</h1>
         <p className="muted">
-          Pick one or two misses. Your coach builds the session from there.
+          Pick one or two. Your coach builds a short practice from there.
         </p>
       </div>
 

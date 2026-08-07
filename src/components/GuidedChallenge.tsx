@@ -18,11 +18,10 @@ export function GuidedChallenge({
     <section className="guided-challenge animate-in">
       <p className="guided-challenge__count">Challenge {challengeNumber}</p>
       <p className="guided-challenge__coach">
-        Set this up from the diagram, then run the challenge. I am right here
-        with you.
+        Match the diagram setup, then follow the numbered challenge steps.
       </p>
       <aside className="guided-challenge__cue" aria-label="Remember">
-        <p className="guided-challenge__cue-label">Hold this feel</p>
+        <p className="guided-challenge__cue-label">Remember this</p>
         <p className="guided-challenge__cue-text">{drill.cue}</p>
       </aside>
       <DrillCard drill={drill} index={challengeNumber} mode="guided" />

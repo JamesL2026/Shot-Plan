@@ -164,7 +164,7 @@ export function PracticeComplete({
           </div>
           {biggestWin && (
             <div>
-              <dt>Today&apos;s Biggest Win</dt>
+              <dt>What you worked on</dt>
               <dd>{biggestWin}</dd>
             </div>
           )}

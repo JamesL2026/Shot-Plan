@@ -3,8 +3,7 @@ import type { FeedbackAnswers, FeedbackSubmission } from '../types/feedback'
 const FEEDBACK_KEY = 'shotplan:feedback'
 
 /**
- * Local feedback store.
- * Swap `submitFeedback` body later to POST to an API; keep the same signature.
+ * Submits feedback to the server API and keeps a local copy on this device.
  */
 export async function submitFeedback(input: {
   answers: FeedbackAnswers
@@ -18,9 +17,20 @@ export async function submitFeedback(input: {
     answers: input.answers,
   }
 
-  // Local persistence (backend hook point):
-  // await fetch('/api/feedback', { method: 'POST', body: JSON.stringify(submission) })
   saveFeedbackLocally(submission)
+
+  try {
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(submission),
+    })
+    if (!response.ok) {
+      console.warn('Feedback API error', response.status, await response.text())
+    }
+  } catch (error) {
+    console.warn('Feedback API unreachable; saved locally only.', error)
+  }
 
   return submission
 }
@@ -45,6 +55,23 @@ export function getFeedbackSubmissions(): FeedbackSubmission[] {
   } catch {
     return []
   }
+}
+
+export async function fetchFeedbackInbox(
+  secret: string,
+): Promise<FeedbackSubmission[]> {
+  const response = await fetch('/api/feedback', {
+    headers: { 'X-Feedback-Secret': secret },
+  })
+  if (!response.ok) {
+    const message = await response.text()
+    throw new Error(message || `Request failed (${response.status})`)
+  }
+  const data: unknown = await response.json()
+  if (!data || typeof data !== 'object') return []
+  const submissions = (data as { submissions?: unknown }).submissions
+  if (!Array.isArray(submissions)) return []
+  return submissions.filter(isFeedbackSubmission)
 }
 
 function isFeedbackSubmission(value: unknown): value is FeedbackSubmission {

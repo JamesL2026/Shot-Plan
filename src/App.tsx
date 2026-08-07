@@ -25,6 +25,11 @@ const RecentSessions = lazy(() =>
 const Library = lazy(() =>
   import('./pages/Library').then((module) => ({ default: module.Library })),
 )
+const FeedbackInbox = lazy(() =>
+  import('./pages/FeedbackInbox').then((module) => ({
+    default: module.FeedbackInbox,
+  })),
+)
 
 function PageFallback() {
   return <div className="page-fallback" aria-hidden="true" />
@@ -80,6 +85,14 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <Library />
+              </Suspense>
+            }
+          />
+          <Route
+            path="inbox"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <FeedbackInbox />
               </Suspense>
             }
           />

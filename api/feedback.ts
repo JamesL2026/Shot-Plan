@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { get, list, put } from '@vercel/blob'
+import { del, get, list, put } from '@vercel/blob'
 
 interface FeedbackAnswers {
   golferType?: string
@@ -54,12 +54,16 @@ async function readBlobJson(urlOrPath: string): Promise<unknown | null> {
   return JSON.parse(text) as unknown
 }
 
+function pathnameFor(submission: FeedbackSubmission): string {
+  return `feedback/${submission.createdAt.slice(0, 10)}-${submission.id}.json`
+}
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
 ): Promise<void> {
   res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS')
   res.setHeader(
     'Access-Control-Allow-Headers',
     'Content-Type, X-Feedback-Secret',
@@ -85,7 +89,7 @@ export default async function handler(
       return
     }
 
-    const pathname = `feedback/${body.createdAt.slice(0, 10)}-${body.id}.json`
+    const pathname = pathnameFor(body)
     await put(pathname, JSON.stringify(body, null, 2), {
       access: 'private',
       contentType: 'application/json',
@@ -118,6 +122,30 @@ export default async function handler(
     }
 
     res.status(200).json({ count: submissions.length, submissions })
+    return
+  }
+
+  if (req.method === 'DELETE') {
+    if (!adminAuthorized(req)) {
+      res.status(401).json({ error: 'Unauthorized. Provide X-Feedback-Secret.' })
+      return
+    }
+
+    const id = typeof req.query.id === 'string' ? req.query.id : undefined
+    if (!id) {
+      res.status(400).json({ error: 'Missing feedback id.' })
+      return
+    }
+
+    const { blobs } = await list({ prefix: 'feedback/', limit: 200 })
+    const match = blobs.find((blob) => blob.pathname.endsWith(`-${id}.json`))
+    if (!match) {
+      res.status(404).json({ error: 'Feedback not found.' })
+      return
+    }
+
+    await del(match.url)
+    res.status(200).json({ ok: true, id })
     return
   }
 

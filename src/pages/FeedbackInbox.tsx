@@ -1,8 +1,13 @@
-import { useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import { BackLink } from '../components/ui/BackLink'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
-import { fetchFeedbackInbox } from '../lib/feedback'
+import {
+  deleteFeedbackSubmission,
+  feedbackDayKey,
+  feedbackDayLabel,
+  fetchFeedbackInbox,
+} from '../lib/feedback'
 import type { FeedbackSubmission } from '../types/feedback'
 
 const SECRET_KEY = 'shotplan:feedback-admin-secret'
@@ -14,9 +19,26 @@ export function FeedbackInbox() {
   const [items, setItems] = useState<FeedbackSubmission[]>([])
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [activeDay, setActiveDay] = useState<string | null>(null)
   const [unlocked, setUnlocked] = useState(
     () => Boolean(sessionStorage.getItem(SECRET_KEY)),
   )
+
+  const dayKeys = useMemo(() => {
+    const keys = new Set<string>()
+    for (const item of items) {
+      keys.add(feedbackDayKey(item.createdAt))
+    }
+    return [...keys].sort((a, b) => (a < b ? 1 : -1))
+  }, [items])
+
+  const selectedDay = activeDay && dayKeys.includes(activeDay) ? activeDay : dayKeys[0] ?? null
+
+  const dayItems = useMemo(() => {
+    if (!selectedDay) return []
+    return items.filter((item) => feedbackDayKey(item.createdAt) === selectedDay)
+  }, [items, selectedDay])
 
   async function load(nextSecret: string) {
     setLoading(true)
@@ -26,9 +48,15 @@ export function FeedbackInbox() {
       sessionStorage.setItem(SECRET_KEY, nextSecret)
       setItems(submissions)
       setUnlocked(true)
+      if (submissions.length > 0) {
+        setActiveDay(feedbackDayKey(submissions[0].createdAt))
+      } else {
+        setActiveDay(null)
+      }
     } catch (err) {
       setUnlocked(false)
       setItems([])
+      setActiveDay(null)
       setError(
         err instanceof Error
           ? err.message
@@ -47,6 +75,39 @@ export function FeedbackInbox() {
       return
     }
     void load(trimmed)
+  }
+
+  async function handleDelete(item: FeedbackSubmission) {
+    const trimmed = secret.trim()
+    if (!trimmed) {
+      setError('Enter your feedback admin secret.')
+      return
+    }
+    const confirmed = window.confirm('Delete this feedback? This cannot be undone.')
+    if (!confirmed) return
+
+    setDeletingId(item.id)
+    setError(null)
+    try {
+      await deleteFeedbackSubmission(trimmed, item.id)
+      setItems((prev) => {
+        const next = prev.filter((entry) => entry.id !== item.id)
+        const remainingDays = [
+          ...new Set(next.map((entry) => feedbackDayKey(entry.createdAt))),
+        ].sort((a, b) => (a < b ? 1 : -1))
+        const dayOfDeleted = feedbackDayKey(item.createdAt)
+        if (!remainingDays.includes(dayOfDeleted)) {
+          setActiveDay(remainingDays[0] ?? null)
+        }
+        return next
+      })
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : 'Could not delete this feedback.',
+      )
+    } finally {
+      setDeletingId(null)
+    }
   }
 
   return (
@@ -90,12 +151,64 @@ export function FeedbackInbox() {
               ? 'No submissions yet.'
               : `${items.length} submission${items.length === 1 ? '' : 's'}`}
           </p>
-          {items.map((item) => (
+
+          {dayKeys.length > 0 && (
+            <div
+              className="feedback-inbox__days"
+              role="tablist"
+              aria-label="Feedback by day"
+            >
+              {dayKeys.map((day) => {
+                const count = items.filter(
+                  (item) => feedbackDayKey(item.createdAt) === day,
+                ).length
+                const selected = day === selectedDay
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    className={
+                      selected
+                        ? 'feedback-inbox__day feedback-inbox__day--active'
+                        : 'feedback-inbox__day'
+                    }
+                    onClick={() => setActiveDay(day)}
+                  >
+                    <span className="feedback-inbox__day-date">
+                      {feedbackDayLabel(day)}
+                    </span>
+                    <span className="feedback-inbox__day-count">{count}</span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
+          {selectedDay && (
+            <p className="feedback-inbox__day-heading muted">
+              {feedbackDayLabel(selectedDay)} · {dayItems.length}{' '}
+              {dayItems.length === 1 ? 'response' : 'responses'}
+            </p>
+          )}
+
+          {dayItems.map((item) => (
             <Card key={item.id} padding="lg" className="feedback-inbox__card">
-              <p className="feedback-inbox__meta">
-                {new Date(item.createdAt).toLocaleString()} · from{' '}
-                {item.openedFrom}
-              </p>
+              <div className="feedback-inbox__card-top">
+                <p className="feedback-inbox__meta">
+                  {new Date(item.createdAt).toLocaleString()} · from{' '}
+                  {item.openedFrom}
+                </p>
+                <button
+                  type="button"
+                  className="feedback-inbox__delete"
+                  disabled={deletingId === item.id}
+                  onClick={() => void handleDelete(item)}
+                >
+                  {deletingId === item.id ? 'Deleting…' : 'Delete'}
+                </button>
+              </div>
               <dl className="feedback-inbox__answers">
                 {item.answers.golferType && (
                   <div>

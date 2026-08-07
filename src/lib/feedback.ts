@@ -74,6 +74,35 @@ export async function fetchFeedbackInbox(
   return submissions.filter(isFeedbackSubmission)
 }
 
+export async function deleteFeedbackSubmission(
+  secret: string,
+  id: string,
+): Promise<void> {
+  const response = await fetch(`/api/feedback?id=${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: { 'X-Feedback-Secret': secret },
+  })
+  if (!response.ok) {
+    const message = await response.text()
+    throw new Error(message || `Delete failed (${response.status})`)
+  }
+}
+
+/** Local calendar day key for grouping (YYYY-MM-DD). */
+export function feedbackDayKey(iso: string): string {
+  const date = new Date(iso)
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+/** Short tab label like 8/7. */
+export function feedbackDayLabel(dayKey: string): string {
+  const [, month, day] = dayKey.split('-')
+  return `${Number(month)}/${Number(day)}`
+}
+
 function isFeedbackSubmission(value: unknown): value is FeedbackSubmission {
   if (!value || typeof value !== 'object') return false
   const s = value as Record<string, unknown>

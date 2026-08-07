@@ -385,82 +385,165 @@ function ClubSide({
   )
 }
 
-function PersonSide({ x }: { x: number }) {
+/** Side-view address: both arms to the grip, facing target (right). */
+function PersonSide({
+  x,
+  leadHand,
+  trailHand,
+}: {
+  x: number
+  leadHand?: { x: number; y: number }
+  trailHand?: { x: number; y: number }
+}) {
+  const lead = leadHand ?? { x: x + 46, y: 100 }
+  const trail = trailHand ?? { x: x + 52, y: 112 }
   return (
     <g>
-      <circle cx={x} cy={52} r="11" fill={C.body} opacity="0.9" />
-      <line x1={x} y1={63} x2={x} y2={108} stroke={C.body} strokeWidth="6" strokeLinecap="round" />
-      <line x1={x} y1={78} x2={x + 32} y2={98} stroke={C.body} strokeWidth="5" strokeLinecap="round" />
-      <line x1={x} y1={108} x2={x - 14} y2={150} stroke={C.body} strokeWidth="5" strokeLinecap="round" />
-      <line x1={x} y1={108} x2={x + 12} y2={150} stroke={C.body} strokeWidth="5" strokeLinecap="round" />
+      <circle cx={x} cy={46} r="11" fill={C.body} opacity="0.95" />
+      <line
+        x1={x}
+        y1={57}
+        x2={x + 8}
+        y2={102}
+        stroke={C.body}
+        strokeWidth="6"
+        strokeLinecap="round"
+      />
+      {/* Lead arm */}
+      <line
+        x1={x + 2}
+        y1={70}
+        x2={lead.x}
+        y2={lead.y}
+        stroke={C.body}
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      {/* Trail arm */}
+      <line
+        x1={x + 6}
+        y1={78}
+        x2={trail.x}
+        y2={trail.y}
+        stroke={C.body}
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <circle cx={lead.x} cy={lead.y} r="7" fill={C.body} />
+      <circle cx={trail.x} cy={trail.y} r="7" fill={C.body} opacity="0.9" />
+      <line
+        x1={x + 8}
+        y1={102}
+        x2={x - 12}
+        y2={158}
+        stroke={C.body}
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <line
+        x1={x + 8}
+        y1={102}
+        x2={x + 24}
+        y2={158}
+        stroke={C.body}
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
     </g>
   )
 }
 
-/** Clear finish pose: chest to target, trail foot up, club wrapping. */
+/** Finish pose: chest to target, both arms wrapping the club, trail foot up. */
 function PersonFinish({ x }: { x: number }) {
+  const chestX = x + 36
+  const chestY = 88
   return (
     <g>
-      <circle cx={x + 8} cy={48} r="12" fill={C.body} opacity="0.95" />
-      {/* torso angled toward target */}
+      <circle cx={x + 18} cy={42} r="12" fill={C.body} opacity="0.95" />
       <line
-        x1={x + 8}
-        y1={60}
-        x2={x + 42}
-        y2={100}
+        x1={x + 18}
+        y1={54}
+        x2={chestX}
+        y2={chestY}
         stroke={C.body}
         strokeWidth="7"
         strokeLinecap="round"
       />
-      {/* lead leg planted */}
+      {/* Lead arm wrapping high */}
       <line
-        x1={x + 42}
-        y1={100}
-        x2={x + 48}
+        x1={x + 24}
+        y1={66}
+        x2={x + 78}
+        y2={58}
+        stroke={C.body}
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      {/* Trail arm wrapping under */}
+      <line
+        x1={x + 28}
+        y1={74}
+        x2={x + 72}
+        y2={78}
+        stroke={C.body}
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <circle cx={x + 78} cy={58} r="6" fill={C.body} />
+      <circle cx={x + 72} cy={78} r="6" fill={C.body} opacity="0.9" />
+      {/* Club shaft over the shoulder */}
+      <line
+        x1={x + 75}
+        y1={68}
+        x2={x + 108}
+        y2={42}
+        stroke={C.aid}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+      />
+      <rect
+        x={x + 104}
+        y={34}
+        width={14}
+        height={8}
+        rx="1.5"
+        fill={C.aid}
+        transform={`rotate(28 ${x + 108} 42)`}
+      />
+      {/* Lead leg planted */}
+      <line
+        x1={chestX}
+        y1={chestY}
+        x2={x + 58}
         y2={158}
         stroke={C.body}
         strokeWidth="6"
         strokeLinecap="round"
       />
-      {/* trail leg up on toe */}
+      {/* Trail leg up on toe */}
       <line
-        x1={x + 42}
-        y1={100}
-        x2={x + 18}
-        y2={148}
+        x1={chestX}
+        y1={chestY}
+        x2={x + 12}
+        y2={140}
         stroke={C.body}
         strokeWidth="5"
         strokeLinecap="round"
       />
-      <ellipse cx={x + 14} cy={152} rx="10" ry="5" fill={C.body} opacity="0.45" />
-      {/* arms wrapping club around body toward target */}
-      <path
-        d={`M${x + 28} 78 Q${x + 70} 58 ${x + 95} 78`}
-        fill="none"
-        stroke={C.path}
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-      <path
-        d={`M${x + 95} 78 Q${x + 110} 95 ${x + 88} 112`}
-        fill="none"
-        stroke={C.path}
-        strokeWidth="4"
-        strokeLinecap="round"
-      />
+      <ellipse cx={x + 8} cy={148} rx="11" ry="5" fill={C.body} opacity="0.45" />
     </g>
   )
 }
 
-/** Faded address silhouette for before/after. */
+/** Faded address silhouette for before/after (both arms). */
 function PersonAddressFaded({ x }: { x: number }) {
   return (
-    <g opacity="0.28">
-      <circle cx={x} cy={58} r="9" fill={C.body} />
-      <line x1={x} y1={67} x2={x} y2={105} stroke={C.body} strokeWidth="5" strokeLinecap="round" />
-      <line x1={x} y1={80} x2={x + 28} y2={100} stroke={C.body} strokeWidth="4" strokeLinecap="round" />
-      <line x1={x} y1={105} x2={x - 12} y2={150} stroke={C.body} strokeWidth="4" strokeLinecap="round" />
-      <line x1={x} y1={105} x2={x + 10} y2={150} stroke={C.body} strokeWidth="4" strokeLinecap="round" />
+    <g opacity="0.3">
+      <PersonSide
+        x={x}
+        leadHand={{ x: x + 40, y: 98 }}
+        trailHand={{ x: x + 46, y: 110 }}
+      />
     </g>
   )
 }
@@ -479,13 +562,14 @@ function TargetLeft() {
   )
 }
 
+/** Side-view target along the ground, label kept clear of the setup. */
 function TargetArrowSide() {
   return (
     <g>
-      <line x1={140} y1={168} x2={300} y2={168} stroke={C.target} strokeWidth="2.5" />
-      <polygon points="312,168 296,160 296,176" fill={C.target} />
-      <L x={220} y={158} weight={700}>
-        {'Target →'}
+      <line x1={250} y1={168} x2={308} y2={168} stroke={C.target} strokeWidth="2.5" />
+      <polygon points="320,168 304,160 304,176" fill={C.target} />
+      <L x={320} y={152} weight={700} anchor="end">
+        Target
       </L>
     </g>
   )
@@ -611,44 +695,64 @@ function renderDiagram(id: string, variant: DiagramVariant) {
     case 'hook-finish-position':
       return (
         <>
-          <TargetArrowSide />
           <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
-          <PersonAddressFaded x={70} />
-          <L x={52} y={190}>Start</L>
-          <PersonFinish x={150} />
-          <Callout n={1} x={198} y={42} />
-          <L x={214} y={46}>{'Chest → target'}</L>
-          <Callout n={2} x={250} y={88} />
-          <L x={265} y={92}>Club wraps</L>
-          <Callout n={3} x={162} y={148} />
-          <L x={70} y={152}>Trail foot up</L>
-          <L x={200} y={190}>Finish, hold it</L>
+          <TargetArrowSide />
+          <PersonAddressFaded x={58} />
+          <L x={58} y={188} anchor="middle">
+            Start
+          </L>
+          <PersonFinish x={148} />
+          <L x={210} y={188} anchor="middle">
+            Finish
+          </L>
+          <LabeledCallout n={1} x={168} y={28} label="Chest to target" />
+          <LabeledCallout n={2} x={268} y={70} label="Both hands wrap" side="left" />
+          <LabeledCallout n={3} x={128} y={148} label="Trail foot up" side="left" />
           <ClubLabel>{tag}</ClubLabel>
-          <L x={40} y={212}>{`Hold a tall finish for one second · ${tag.toLowerCase()}`}</L>
+          <L x={40} y={212}>{`Hold this finish for one second · ${tag.toLowerCase()}`}</L>
         </>
       )
 
     case 'hook-split-hand': {
-      const ballX = 198
+      const ballX = 215
       const ballY = 158
+      const lead = { x: 138, y: 88 }
+      const trail = { x: 168, y: 118 }
       return (
         <>
-          <TargetArrowSide />
-          <PersonSide x={90} />
           <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
+          <TargetArrowSide />
+          <PersonSide x={72} leadHand={lead} trailHand={trail} />
           <ClubSide ballX={ballX} ballY={ballY} kind={kind} />
-          <circle cx={138} cy={102} r="9" fill={C.body} />
-          <circle cx={162} cy={124} r="9" fill={C.path} />
           <Ball cx={ballX} cy={ballY} r={9} />
-          <Callout n={1} x={138} y={82} />
-          <L x={154} y={86}>Lead hand</L>
-          <Callout n={2} x={162} y={140} />
-          <L x={178} y={144}>Trail hand (lower)</L>
-          <Callout n={3} x={ballX} y={140} />
-          <L x={ballX + 16} y={144}>{`Ball · ${tag}`}</L>
+          {/* Visible gap mark between hands */}
+          <line
+            x1={148}
+            y1={98}
+            x2={158}
+            y2={110}
+            stroke={C.path}
+            strokeWidth="2.5"
+            strokeDasharray="3 3"
+            strokeLinecap="round"
+          />
+          <LabeledCallout
+            n={1}
+            x={lead.x}
+            y={lead.y - 26}
+            label="Lead hand higher"
+            side="above"
+          />
+          <LabeledCallout
+            n={2}
+            x={trail.x + 40}
+            y={trail.y + 4}
+            label="Trail hand lower"
+          />
+          <LabeledCallout n={3} x={ballX + 36} y={ballY - 6} label="Ball" />
           <ClubLabel>{tag}</ClubLabel>
-          <L x={40} y={195}>Gap between hands, about 2-3 inches</L>
-          <L x={40} y={210}>Half swings, quiet face through the ball</L>
+          <L x={40} y={198}>Leave a 2-3 inch gap between your hands</L>
+          <L x={40} y={212}>Half swings only. Quiet face through the ball</L>
         </>
       )
     }

@@ -28,10 +28,10 @@ export function Library() {
       <BackLink to="/">Home</BackLink>
 
       <div className="page-intro">
-        <h1>Drill library</h1>
+        <h1>Practice Library</h1>
         <p className="muted">
-          Drills are grouped by the trouble they help most. Browse when you want
-          ideas, or check in when you need a full practice plan.
+          Browse challenges by miss when you want ideas. For a full session,
+          check in and let your coach lead.
         </p>
       </div>
 

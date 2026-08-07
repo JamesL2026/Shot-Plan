@@ -9,6 +9,8 @@ import { Card } from './ui/Card'
 interface DrillCardProps {
   drill: Drill | AdaptedDrill
   index?: number
+  /** Guided session: only coach-useful sections. Library keeps fuller detail. */
+  mode?: 'guided' | 'library'
 }
 
 function isAdapted(drill: Drill | AdaptedDrill): drill is AdaptedDrill {
@@ -39,65 +41,56 @@ function SurfaceChecks({ worksOn }: { worksOn: SurfaceType }) {
 
 type SetupView = 'diagram' | 'photo'
 
-export function DrillCard({ drill, index }: DrillCardProps) {
+export function DrillCard({
+  drill,
+  index,
+  mode = 'library',
+}: DrillCardProps) {
+  const guided = mode === 'guided'
   const symptomLabel = getSymptom(drill.symptomId)?.label ?? drill.symptomId
   const [setupView, setSetupView] = useState<SetupView>('diagram')
   const photoSrc = `/drills/${drill.id}.jpg`
   const clubLabel = isAdapted(drill) ? drill.clubLabel : null
   const diagramVariant = isAdapted(drill) ? drill.diagramVariant : 'default'
-  const templateLabel = isAdapted(drill) ? drill.templateLabel : undefined
-  const objective = isAdapted(drill) ? drill.objective : undefined
   const successCondition = isAdapted(drill) ? drill.successCondition : undefined
   const reflection = isAdapted(drill) ? drill.reflection : undefined
-  const estimatedMinutes = isAdapted(drill) ? drill.estimatedMinutes : undefined
 
   return (
     <Card className="drill-card" padding="lg">
       <header className="drill-card__header">
-        <div className="drill-card__topline">
-          {typeof index === 'number' && (
-            <span className="drill-card__index">Challenge {index}</span>
-          )}
-          <span className="drill-card__badge">{symptomLabel}</span>
-        </div>
-        <h2 className="drill-card__name">{drill.name}</h2>
-        {templateLabel && (
-          <p className="drill-card__template">{templateLabel}</p>
+        {!guided && (
+          <div className="drill-card__topline">
+            {typeof index === 'number' && (
+              <span className="drill-card__index">Challenge {index}</span>
+            )}
+            <span className="drill-card__badge">{symptomLabel}</span>
+          </div>
         )}
+        <h2 className="drill-card__name">{drill.name}</h2>
         {clubLabel && (
           <p className="drill-card__club-note">Setup for {clubLabel}</p>
         )}
       </header>
 
       <div className="drill-card__section">
-        <h3 className="drill-card__label">Goal</h3>
+        <h3 className="drill-card__label">
+          {guided ? "Today's Focus" : "Today's Focus"}
+        </h3>
         <p>{drill.goal}</p>
       </div>
 
-      {estimatedMinutes && (
+      {!guided && (
         <div className="drill-card__section">
-          <h3 className="drill-card__label">Estimated Time</h3>
-          <p>About {estimatedMinutes} minutes</p>
+          <h3 className="drill-card__label">Works On</h3>
+          <SurfaceChecks worksOn={drill.worksOn} />
+          {drill.matAdjustment && (
+            <div className="mat-adjustment">
+              <p className="mat-adjustment__title">Mat Adjustment</p>
+              <p>{drill.matAdjustment}</p>
+            </div>
+          )}
         </div>
       )}
-
-      {objective && (
-        <div className="drill-card__section">
-          <h3 className="drill-card__label">Objective</h3>
-          <p>{objective}</p>
-        </div>
-      )}
-
-      <div className="drill-card__section">
-        <h3 className="drill-card__label">Works On</h3>
-        <SurfaceChecks worksOn={drill.worksOn} />
-        {drill.matAdjustment && (
-          <div className="mat-adjustment">
-            <p className="mat-adjustment__title">Mat Adjustment</p>
-            <p>{drill.matAdjustment}</p>
-          </div>
-        )}
-      </div>
 
       <div className="drill-card__section">
         <h3 className="drill-card__label">Equipment</h3>
@@ -107,6 +100,12 @@ export function DrillCard({ drill, index }: DrillCardProps) {
       <div className="drill-card__section">
         <h3 className="drill-card__label">Setup</h3>
         <p className="drill-card__setup">{drill.setup}</p>
+        {guided && drill.matAdjustment && (
+          <div className="mat-adjustment">
+            <p className="mat-adjustment__title">On mats</p>
+            <p>{drill.matAdjustment}</p>
+          </div>
+        )}
 
         <div className="setup-view-toggle" role="group" aria-label="Setup view">
           <button
@@ -145,8 +144,15 @@ export function DrillCard({ drill, index }: DrillCardProps) {
               variant={diagramVariant}
             />
             <p className="drill-card__diagram-hint muted">
-              Numbers match the setup pieces above. Glance once, then set it up.
+              {guided
+                ? 'Match the numbered pieces on the ground. No video needed.'
+                : 'Numbers match the setup. Glance once, then set it up.'}
             </p>
+            {guided && drill.view === 'top' && (
+              <p className="drill-card__orient muted">
+                Top view: for a right-handed golfer, the target is to your left.
+              </p>
+            )}
           </>
         ) : (
           <>
@@ -162,15 +168,15 @@ export function DrillCard({ drill, index }: DrillCardProps) {
             </figure>
             <p className="drill-card__diagram-hint muted">
               {clubLabel
-                ? `Photo of the core setup. Match the ${clubLabel.toLowerCase()} ball position and stance from the diagram.`
-                : 'Photo of how this drill looks in real life. Match this layout on your mat.'}
+                ? `Match the ${clubLabel.toLowerCase()} ball position and stance from the diagram.`
+                : 'Match this layout on your mat.'}
             </p>
           </>
         )}
       </div>
 
       <div className="drill-card__section">
-        <h3 className="drill-card__label">Practice</h3>
+        <h3 className="drill-card__label">Coach&apos;s Challenge</h3>
         <ol className="drill-card__steps">
           {drill.steps.map((step, stepIndex) => (
             <li key={`${stepIndex}-${step}`}>
@@ -183,28 +189,41 @@ export function DrillCard({ drill, index }: DrillCardProps) {
         </ol>
       </div>
 
+      {guided && (
+        <div className="drill-card__watch">
+          <h3 className="drill-card__label">Watch Out For</h3>
+          <p>{drill.commonMistake.instead}</p>
+        </div>
+      )}
+
       {successCondition && (
         <div className="drill-card__success">
-          <h3 className="drill-card__label">Success Condition</h3>
+          <h3 className="drill-card__label">
+            {guided ? "How You'll Know It Worked" : 'Success Condition'}
+          </h3>
           <p>{successCondition}</p>
         </div>
       )}
 
-      <div className="drill-card__mistake">
-        <h3 className="drill-card__label">Common Mistake</h3>
-        <p className="drill-card__mistake-bad">{drill.commonMistake.mistake}</p>
-        <p className="drill-card__mistake-good">
-          <span>Instead:</span> {drill.commonMistake.instead}
-        </p>
-      </div>
+      {!guided && (
+        <>
+          <div className="drill-card__mistake">
+            <h3 className="drill-card__label">Common Mistake</h3>
+            <p className="drill-card__mistake-bad">{drill.commonMistake.mistake}</p>
+            <p className="drill-card__mistake-good">
+              <span>Instead:</span> {drill.commonMistake.instead}
+            </p>
+          </div>
 
-      <div className="drill-card__cue-block">
-        <h3 className="drill-card__label">Coaching Cue</h3>
-        <p className="drill-card__cue">{drill.cue}</p>
-      </div>
+          <div className="drill-card__cue-block">
+            <h3 className="drill-card__label">Coaching Cue</h3>
+            <p className="drill-card__cue">{drill.cue}</p>
+          </div>
+        </>
+      )}
 
       <div className="drill-card__section">
-        <h3 className="drill-card__label">Why It Works</h3>
+        <h3 className="drill-card__label">What I Want You To Feel</h3>
         <p>{drill.whyItWorks}</p>
       </div>
 

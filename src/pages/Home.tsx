@@ -13,31 +13,28 @@ export function Home() {
 
   return (
     <section className="page home animate-in">
-      <aside className="beta-banner" aria-label="Early beta">
-        <h2 className="beta-banner__title">
-          <span className="beta-banner__badge">{'\u{1F6A7}'} Early Beta</span>
-        </h2>
-        <p className="beta-banner__text">
-          Built with real golfer feedback.
-          <br />
-          Every suggestion helps shape the next version of ShotPlan.
-        </p>
+      <aside className="beta-strip" aria-label="Early beta">
+        <span className="beta-strip__badge">Early Beta</span>
         <button
           type="button"
-          className="beta-banner__btn"
+          className="beta-strip__link"
           onClick={() => setBetaOpen(true)}
         >
-          Learn More
+          Built with golfer feedback · Learn more
         </button>
       </aside>
 
       <HomeHero />
 
       <div className="home-intro">
-        <h1>Practice with Purpose</h1>
-        <p className="muted">
-          Tell ShotPlan what happened today and get a focused practice plan in
-          seconds.
+        <p className="home-intro__brand">ShotPlan</p>
+        <h1>Your practice coach</h1>
+        <p className="home-intro__lead">
+          Tell us what went wrong. Get a focused coaching session in under a
+          minute. No video. No guesswork.
+        </p>
+        <p className="home-intro__path muted" aria-hidden="true">
+          Check in → Practice → Round Ready
         </p>
       </div>
 
@@ -48,7 +45,7 @@ export function Home() {
             <span>
               <span className="home-primary__title">Check In</span>
               <span className="home-primary__desc">
-                Build today’s practice prescription
+                Start today&apos;s session · about 60 seconds
               </span>
             </span>
           </span>
@@ -59,9 +56,9 @@ export function Home() {
             <Card padding="md" className="home-secondary-card__surface">
               <BookOpen size={20} strokeWidth={2} aria-hidden="true" />
               <span>
-                <span className="home-secondary-card__title">Drill Library</span>
+                <span className="home-secondary-card__title">Practice Library</span>
                 <span className="home-secondary-card__desc muted">
-                  Browse by symptom
+                  Browse by miss
                 </span>
               </span>
             </Card>
@@ -71,15 +68,27 @@ export function Home() {
             <Card padding="md" className="home-secondary-card__surface">
               <Clock3 size={20} strokeWidth={2} aria-hidden="true" />
               <span>
-                <span className="home-secondary-card__title">Recent Sessions</span>
+                <span className="home-secondary-card__title">Practice Journal</span>
                 <span className="home-secondary-card__desc muted">
-                  Your past plans
+                  Your past sessions
                 </span>
               </span>
             </Card>
           </Link>
         </div>
       </nav>
+
+      <p className="home-feedback-nudge">
+        Something unclear? Tap{' '}
+        <button
+          type="button"
+          className="home-feedback-nudge__btn"
+          onClick={() => openFeedback()}
+        >
+          Help Improve
+        </button>{' '}
+        anytime. Your notes shape this beta.
+      </p>
 
       <BetaWelcomeModal
         open={betaOpen}

@@ -106,7 +106,7 @@ function resultMessage(session: Session): string {
     case 'did-not-help':
       return 'Useful feedback. Try the other drill next session, or check in again.'
     case 'not-tried':
-      return 'No rush. Your plan is saved under Recent Sessions when you’re ready.'
+      return 'No rush. Your session is saved in Practice Journal when you are ready.'
     default:
       return 'Your session is saved on this device.'
   }

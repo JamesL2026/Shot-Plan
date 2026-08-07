@@ -67,17 +67,13 @@ export function BetaWelcomeModal({
         </p>
         <h2 id={titleId}>Welcome to the ShotPlan Beta</h2>
         <div className="beta-welcome__body muted">
-          <p>ShotPlan is being built alongside golfers of every skill level.</p>
           <p>
-            The goal is simple:
-            <br />
-            Help golfers know exactly what to practice after a bad round.
+            ShotPlan is a practice coach. Check in after a round, get one focused
+            session, and leave Round Ready.
           </p>
           <p>
-            Some features are still evolving and your feedback directly
-            influences what gets built next.
+            This is an early beta. Your feedback shapes what we build next.
           </p>
-          <p>Thank you for helping shape ShotPlan.</p>
         </div>
 
         <div className="beta-welcome__actions">

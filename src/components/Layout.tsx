@@ -14,8 +14,9 @@ function LayoutChrome() {
           type="button"
           className="header-feedback header-feedback--btn"
           onClick={() => openFeedback()}
+          aria-label="Help improve ShotPlan. Leave feedback."
         >
-          {'\u{1F4AC}'} Help Improve
+          Help Improve
         </button>
       </header>
       <main className="app-main">

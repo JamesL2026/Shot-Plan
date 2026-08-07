@@ -50,16 +50,16 @@ export function RecentSessions() {
       <BackLink to="/">Home</BackLink>
 
       <div className="page-intro">
-        <h1>Recent sessions</h1>
-        <p className="muted">Your past check-ins on this device.</p>
+        <h1>Practice Journal</h1>
+        <p className="muted">Your past coaching sessions on this device.</p>
       </div>
 
       {sessions.length === 0 ? (
         <div className="empty-state">
           <ClipboardList size={28} strokeWidth={1.75} aria-hidden="true" />
-          <p className="empty-state__title">No practice sessions yet.</p>
+          <p className="empty-state__title">No sessions yet.</p>
           <p className="muted">
-            Complete your first check in to start building better practice habits.
+            Check in once and your coach will start building your journal.
           </p>
           <Button to="/check-in" variant="primary" block>
             Check In

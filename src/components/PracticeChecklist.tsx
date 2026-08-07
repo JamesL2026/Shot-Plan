@@ -100,6 +100,7 @@ interface PracticeCompleteProps {
   drillsTotal?: number
   todayGoal?: string
   swingThought?: string
+  biggestWin?: string
 }
 
 const contactChoices: { value: ContactFeel; label: string }[] = [
@@ -118,6 +119,7 @@ export function PracticeComplete({
   drillsTotal,
   todayGoal,
   swingThought,
+  biggestWin,
 }: PracticeCompleteProps) {
   const { openFeedback } = useFeedback()
   const [contactFeel, setContactFeel] = useState<ContactFeel | null>(null)
@@ -140,14 +142,14 @@ export function PracticeComplete({
   return (
     <div className="practice-complete-stack animate-in">
       <Card className="round-ready" padding="lg">
-        <p className="round-ready__kicker">Today&apos;s Practice Summary</p>
-        <h2 className="round-ready__title">Practice Complete</h2>
+        <p className="round-ready__kicker">Round Ready</p>
+        <h2 className="round-ready__title">Today&apos;s Practice Summary</h2>
 
         <dl className="round-ready__meta">
           <div>
-            <dt>Today&apos;s Goal</dt>
+            <dt>Today&apos;s Focus</dt>
             <dd>
-              {todayGoal ?? 'Complete your coaching session'}
+              {todayGoal ?? 'Your practice focus'}
               <span className="round-ready__check" aria-label="Completed">
                 {' '}
                 Completed ✓
@@ -155,20 +157,22 @@ export function PracticeComplete({
             </dd>
           </div>
           <div>
-            <dt>Drills Finished</dt>
+            <dt>Challenges Completed</dt>
             <dd>
               {finished} of {total || finished || 0}
             </dd>
           </div>
-          <div>
-            <dt>Today&apos;s Challenge</dt>
-            <dd>Completed</dd>
-          </div>
+          {biggestWin && (
+            <div>
+              <dt>Today&apos;s Biggest Win</dt>
+              <dd>{biggestWin}</dd>
+            </div>
+          )}
         </dl>
 
         {swingThought && (
           <aside className="round-ready__thought" aria-label="Swing thought">
-            <p className="round-ready__thought-label">Swing Thought</p>
+            <p className="round-ready__thought-label">Today&apos;s Swing Thought</p>
             <p className="round-ready__thought-cue">{swingThought}</p>
           </aside>
         )}
@@ -222,7 +226,11 @@ export function PracticeComplete({
       </Card>
 
       <Card className="session-pulse" padding="lg">
-        <p className="session-pulse__title">Want to help shape ShotPlan?</p>
+        <p className="session-pulse__title">Help shape this beta</p>
+        <p className="session-pulse__body muted">
+          What felt clear? What felt confusing? Tap below anytime, or use Help
+          Improve in the top corner on any screen.
+        </p>
         <button
           type="button"
           className="session-pulse__link"
@@ -241,7 +249,7 @@ export function PracticeComplete({
             })
           }
         >
-          Help Improve ShotPlan →
+          Leave feedback →
         </button>
       </Card>
     </div>

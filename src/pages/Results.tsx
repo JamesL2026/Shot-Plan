@@ -1,20 +1,21 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronRight, Check, ShieldCheck } from 'lucide-react'
-import { DrillFocus } from '../components/DrillFocus'
-import { FlowProgress } from '../components/FlowProgress'
+import { CoachBrief } from '../components/CoachBrief'
+import { CoachTransition } from '../components/CoachTransition'
 import { FollowUp } from '../components/FollowUp'
-import {
-  PracticeChecklist,
-  PracticeComplete,
-} from '../components/PracticeChecklist'
+import { GuidedChallenge } from '../components/GuidedChallenge'
+import { PracticeComplete } from '../components/PracticeChecklist'
 import { BackLink } from '../components/ui/BackLink'
 import { Button } from '../components/ui/Button'
-import { Card } from '../components/ui/Card'
 import { formatClubFocusLabel } from '../data/clubFocus'
 import {
-  buildChecklist,
-  buildPracticeOrder,
+  coachBiggestWin,
+  coachEncouragement,
+  coachFocusLine,
+  coachPrePracticeLines,
+  coachTransition,
+} from '../data/coachVoice'
+import {
   buildPrescription,
   getDrillById,
   getDrillsForSymptoms,
@@ -26,7 +27,7 @@ import { applySessionChallenges } from '../lib/sessionPractice'
 import { getSession, updateSession } from '../lib/storage'
 import type { Drill, Session, SymptomId } from '../types'
 
-type Phase = 'plan' | 'drill' | 'practice' | 'done' | 'followup'
+type Phase = 'brief' | 'pre' | 'challenge' | 'transition' | 'done' | 'followup'
 
 function parseSymptomIds(raw: string | null): SymptomId[] {
   if (!raw) return []
@@ -66,23 +67,17 @@ export function Results() {
   )
 
   const [phase, setPhase] = useState<Phase>(() =>
-    session?.practiceDone ? 'done' : 'plan',
+    session?.practiceDone ? 'done' : 'brief',
   )
-  const [drillIndex, setDrillIndex] = useState(0)
-  const [drillReturnPhase, setDrillReturnPhase] = useState<'plan' | 'practice'>(
-    'plan',
-  )
-
-  const [checked, setChecked] = useState<Record<string, boolean>>(
-    () => session?.checklist ?? {},
-  )
+  const [challengeIndex, setChallengeIndex] = useState(0)
+  const [completedCount, setCompletedCount] = useState(0)
 
   useEffect(() => {
     const next = sessionId ? getSession(sessionId) : undefined
     setSession(next)
-    setChecked(next?.checklist ?? {})
-    setPhase(next?.practiceDone ? 'done' : 'plan')
-    setDrillIndex(0)
+    setPhase(next?.practiceDone ? 'done' : 'brief')
+    setChallengeIndex(0)
+    setCompletedCount(0)
   }, [sessionId])
 
   const symptomIds = session?.symptomIds ?? symptomParamIds
@@ -95,55 +90,72 @@ export function Results() {
     return applySessionChallenges(adapted, sessionSeed)
   }, [session, symptomIds, sessionSeed])
   const prescription = buildPrescription(symptomIds, recommended)
-  const practiceOrder = useMemo(
-    () => buildPracticeOrder(recommended),
-    [recommended],
-  )
-  const checklist = useMemo(() => buildChecklist(recommended), [recommended])
   const followUpDone = session?.result !== null && session?.result !== undefined
   const clubSummary = clubFocusSummary(session)
-  const challengeCount = recommended.length
-  const checkedCount = recommended.filter(
-    (drill) => checked[`drill-${drill.id}`],
-  ).length
   const prePractice = useMemo(
     () => getPrePracticeChecks(symptomIds),
     [symptomIds],
   )
+  const focusLine = coachFocusLine(prescription.primaryFocus, clubSummary)
+  const encouragement = coachEncouragement(symptomIds, sessionSeed)
+  const biggestWin = coachBiggestWin(recommended, prescription.remember)
+  const currentDrill = recommended[challengeIndex]
+  const nextDrill = recommended[challengeIndex + 1]
+  const transitionCopy = currentDrill
+    ? coachTransition(currentDrill, nextDrill, sessionSeed, challengeIndex)
+    : null
 
-  function persistChecklist(next: Record<string, boolean>) {
-    setChecked(next)
+  function markChallengeDone(drillId: string) {
     if (!session) return
-    const updated = updateSession(session.id, { checklist: next })
+    const checklist = {
+      ...(session.checklist ?? {}),
+      [`drill-${drillId}`]: true,
+    }
+    const updated = updateSession(session.id, { checklist })
     if (updated) setSession(updated)
-  }
-
-  function toggleCheck(id: string) {
-    persistChecklist({ ...checked, [id]: !checked[id] })
   }
 
   function finishPractice() {
     if (session) {
       const updated = updateSession(session.id, {
         practiceDone: true,
-        checklist: checked,
+        checklist: session.checklist,
       })
       if (updated) setSession(updated)
     }
     setPhase('done')
   }
 
-  function openDrill(index: number, returnTo: 'plan' | 'practice' = 'plan') {
-    setDrillIndex(index)
-    setDrillReturnPhase(returnTo)
-    setPhase('drill')
+  function handleStartPractice() {
+    if (prePractice.length > 0) {
+      setPhase('pre')
+      return
+    }
+    setChallengeIndex(0)
+    setPhase('challenge')
+  }
+
+  function handleChallengeComplete() {
+    if (!currentDrill) return
+    markChallengeDone(currentDrill.id)
+    setCompletedCount((n) => Math.max(n, challengeIndex + 1))
+    setPhase('transition')
+  }
+
+  function handleTransitionContinue() {
+    if (challengeIndex >= recommended.length - 1) {
+      finishPractice()
+      return
+    }
+    setChallengeIndex((i) => i + 1)
+    setPhase('challenge')
   }
 
   if (symptomIds.length === 0) {
     return (
       <section className="page results animate-in">
         <BackLink to="/check-in">Check in</BackLink>
-        <h1>Today’s Practice</h1>
+        <h1>Today&apos;s Practice</h1>
         <p className="muted">No symptoms selected yet.</p>
         <Button to="/check-in" variant="primary" block>
           Start check in
@@ -165,56 +177,84 @@ export function Results() {
     )
   }
 
-  if (phase === 'drill') {
+  if (phase === 'brief') {
     return (
-      <section className="page results">
-        <DrillFocus
-          drills={recommended}
-          index={drillIndex}
-          onIndexChange={setDrillIndex}
-          onExit={() => setPhase(drillReturnPhase)}
-          onFinishedAll={() => setPhase('practice')}
-          exitLabel={
-            drillReturnPhase === 'practice' ? 'Back to checklist' : 'Back to plan'
-          }
+      <section className="page results results--brief">
+        <CoachBrief
+          focusLine={focusLine}
+          estimatedTime={prescription.estimatedTime}
+          swingThought={prescription.remember}
+          encouragement={encouragement}
+          onStart={handleStartPractice}
+          onBack={() => navigate(session ? '/sessions' : '/check-in')}
+          backLabel={session ? 'Practice Journal' : 'Check in'}
         />
       </section>
     )
   }
 
-  if (phase === 'practice') {
+  if (phase === 'pre' && prePractice[0]) {
+    const check = prePractice[0]
+    const copy = coachPrePracticeLines(check.title, check.body)
     return (
       <section className="page results">
-        <PracticeChecklist
-          items={checklist}
-          checked={checked}
-          onToggle={toggleCheck}
-          onFinish={finishPractice}
-          onBack={() => setPhase('plan')}
-          swingThought={prescription.remember}
-          onOpenDrill={(drillId) => {
-            const index = recommended.findIndex((d) => d.id === drillId)
-            if (index >= 0) openDrill(index, 'practice')
+        <CoachTransition
+          headline={copy.headline}
+          body={`${copy.body} ${check.timeNote}`}
+          cta={copy.cta}
+          onContinue={() => {
+            setChallengeIndex(0)
+            setPhase('challenge')
           }}
         />
       </section>
     )
   }
 
+  if (phase === 'challenge' && currentDrill) {
+    return (
+      <section className="page results">
+        <GuidedChallenge
+          drill={currentDrill}
+          challengeNumber={challengeIndex + 1}
+          onComplete={handleChallengeComplete}
+        />
+      </section>
+    )
+  }
+
+  if (phase === 'transition' && transitionCopy) {
+    return (
+      <section className="page results">
+        <CoachTransition
+          headline={transitionCopy.headline}
+          body={transitionCopy.body}
+          cta={transitionCopy.cta}
+          onContinue={handleTransitionContinue}
+        />
+      </section>
+    )
+  }
+
   if (phase === 'done') {
+    const finished = Math.max(
+      completedCount,
+      recommended.filter((d) => session?.checklist?.[`drill-${d.id}`]).length,
+      session?.practiceDone ? recommended.length : 0,
+    )
     return (
       <section className="page results animate-in">
         <BackLink to="/">Home</BackLink>
-        <FlowProgress step={3} />
         <PracticeComplete
           showFollowUp={Boolean(session) && !followUpDone}
           onHome={() => navigate('/')}
           onFollowUp={() => setPhase('followup')}
-          challengeCount={challengeCount}
-          drillsFinished={Math.max(checkedCount, challengeCount)}
-          drillsTotal={challengeCount}
-          todayGoal={prescription.goal}
+          challengeCount={recommended.length}
+          drillsFinished={finished}
+          drillsTotal={recommended.length}
+          todayGoal={prescription.primaryFocus}
           swingThought={prescription.remember}
+          biggestWin={biggestWin}
         />
       </section>
     )
@@ -223,8 +263,7 @@ export function Results() {
   if (phase === 'followup' && session) {
     return (
       <section className="page results animate-in">
-        <BackLink to="/sessions">Sessions</BackLink>
-        <FlowProgress step={3} />
+        <BackLink to="/sessions">Practice Journal</BackLink>
         <FollowUp
           key={session.id}
           session={session}
@@ -235,127 +274,9 @@ export function Results() {
   }
 
   return (
-    <section className="page results results--plan animate-in">
-      <BackLink to={session ? '/sessions' : '/check-in'}>
-        {session ? 'Sessions' : 'Check in'}
-      </BackLink>
-
-      <FlowProgress step={2} />
-
-      <Card className="summary-card" tone="default">
-        <p className="summary-card__kicker">Today’s Practice</p>
-        <dl className="summary-card__meta">
-          <div>
-            <dt>Estimated Time</dt>
-            <dd>{prescription.estimatedTime}</dd>
-          </div>
-          <div>
-            <dt>Today’s Goal</dt>
-            <dd>{prescription.goal}</dd>
-          </div>
-          <div>
-            <dt>Primary Focus</dt>
-            <dd>
-              {prescription.primaryFocus}
-              {clubSummary ? ` · ${clubSummary}` : ''}
-            </dd>
-          </div>
-        </dl>
-      </Card>
-
-      <aside className="confidence-banner" aria-label="Recommendation note">
-        <ShieldCheck size={20} strokeWidth={2} aria-hidden="true" />
-        <div>
-          <p className="confidence-banner__title">Your coaching session is ready</p>
-          <p className="confidence-banner__text">
-            {clubSummary
-              ? `Built for your ${clubSummary.toLowerCase()} focus. Complete each challenge, then move on.`
-              : 'Complete each challenge. Clear goals beat endless reps.'}
-          </p>
-        </div>
-      </aside>
-
-      {prePractice.length > 0 && (
-        <aside className="before-begin" aria-label="Before you begin">
-          <p className="before-begin__kicker">Before You Begin</p>
-          {prePractice.map((check) => (
-            <div key={check.id} className="before-begin__item">
-              <p className="before-begin__title">
-                <Check size={16} strokeWidth={2.5} aria-hidden="true" />
-                {check.title}
-              </p>
-              <p className="before-begin__body">{check.body}</p>
-              <p className="before-begin__time muted">{check.timeNote}</p>
-              <p className="before-begin__next muted">Then begin practicing.</p>
-            </div>
-          ))}
-        </aside>
-      )}
-
-      <div className="practice-order">
-        <h2 className="practice-order__title">Practice Order</h2>
-        <ol className="practice-order__list">
-          {practiceOrder.map((step) => (
-            <li key={`${step.number}-${step.title}`}>
-              <span className="practice-order__num" aria-hidden="true">
-                {step.number}
-              </span>
-              <span>
-                <span className="practice-order__step-title">{step.title}</span>
-                <span className="practice-order__step-detail muted">
-                  {step.detail}
-                </span>
-              </span>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      <aside className="swing-thought" aria-label="Today's swing thought">
-        <p className="swing-thought__label">Today’s Swing Thought</p>
-        <p className="swing-thought__cue">{prescription.remember}</p>
-      </aside>
-
-      <div className="drill-picker">
-        <h2 className="drill-picker__title">Drill setups</h2>
-        <p className="muted drill-picker__hint">
-          Tap a challenge anytime to see the setup, objective, and success condition.
-        </p>
-        <ul className="drill-picker__list">
-          {recommended.map((drill, index) => (
-            <li key={drill.id}>
-              <button
-                type="button"
-                className="drill-picker__item"
-                onClick={() => openDrill(index)}
-              >
-                <span className="drill-picker__num">{index + 1}</span>
-                <span className="drill-picker__copy">
-                  <span className="drill-picker__name">{drill.name}</span>
-                  <span className="drill-picker__cue muted">
-                    {drill.successCondition ?? drill.cue}
-                  </span>
-                </span>
-                <ChevronRight size={20} strokeWidth={2} aria-hidden="true" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="ready-cta">
-        <Button
-          variant="primary"
-          block
-          className="ready-cta__btn"
-          onClick={() => setPhase('practice')}
-        >
-          Ready to Practice
-        </Button>
-        <p className="ready-cta__hint muted">
-          Opens a simple checklist so you always know what’s next.
-        </p>
-      </div>
+    <section className="page results animate-in">
+      <BackLink to="/">Home</BackLink>
+      <p className="muted">Loading your session…</p>
     </section>
   )
 }

@@ -365,11 +365,11 @@ export function buildPrescription(
     .map((id) => getSymptom(id)?.label.toLowerCase())
     .filter((label): label is string => Boolean(label))
 
-  let goal = 'Leave the range with one clearer feel.'
+  let goal = 'Leave with one clearer feel.'
   if (labels.length === 1) {
-    goal = `Improve your ${labels[0]} with a focused coaching session.`
+    goal = `Fix your ${labels[0]} today.`
   } else if (labels.length >= 2) {
-    goal = `Improve your ${labels[0]} and ${labels[1]} with clear challenges.`
+    goal = `Work your ${labels[0]} and ${labels[1]} with calm focus.`
   }
 
   const primaryFocus =

@@ -18,11 +18,11 @@ export function DrillDetail() {
   if (!drill) {
     return (
       <section className="page animate-in">
-        <BackLink to="/library">Library</BackLink>
-        <h1>Drill not found</h1>
-        <p className="muted">That drill isn’t in the library.</p>
+        <BackLink to="/library">Practice Library</BackLink>
+        <h1>Challenge not found</h1>
+        <p className="muted">That challenge is not in the library.</p>
         <Button to="/library" variant="primary" block>
-          Back to library
+          Back to Practice Library
         </Button>
       </section>
     )
@@ -32,7 +32,7 @@ export function DrillDetail() {
 
   return (
     <section className="page drill-detail animate-in">
-      <BackLink to="/library">Library</BackLink>
+      <BackLink to="/library">Practice Library</BackLink>
 
       {symptom && (
         <p className="drill-detail__context muted">
@@ -40,10 +40,10 @@ export function DrillDetail() {
         </p>
       )}
 
-      <DrillCard drill={drill} />
+      <DrillCard drill={drill} mode="library" />
 
       <Button to="/check-in" variant="primary" block>
-        Check in for a full plan
+        Check in for a coaching session
       </Button>
     </section>
   )

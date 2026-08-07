@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Check } from 'lucide-react'
-import { FlowProgress } from '../components/FlowProgress'
 import { Button } from '../components/ui/Button'
 import { BackLink } from '../components/ui/BackLink'
 import { clubFocusQueue } from '../data/clubFocus'
@@ -92,7 +91,7 @@ export function CheckIn() {
   const symptomHint = useMemo(() => {
     if (selected.length === 0) return 'Select at least one area to continue.'
     if (selected.length === 1) return '1 selected. You can add one more.'
-    return '2 selected. Ready for your plan.'
+    return '2 selected. Ready for your coach.'
   }, [selected.length])
 
   if (step === 'club' && currentQuestion) {
@@ -107,13 +106,12 @@ export function CheckIn() {
           <span>Back</span>
         </button>
 
-        <FlowProgress step={1} />
-
         <div className="page-intro">
+          <p className="page-intro__kicker">Almost there</p>
           <p className="club-focus__eyebrow muted">{symptomLabel}</p>
           <h1>{currentQuestion.prompt}</h1>
           <p className="muted">
-            One quick detail so setup and diagrams match what you were hitting.
+            One quick detail so your setup matches what you were hitting.
           </p>
         </div>
 
@@ -160,7 +158,7 @@ export function CheckIn() {
           {selectedClub
             ? moreAhead > 0
               ? 'Next: one more quick question.'
-              : 'Ready for your plan.'
+              : 'Ready for your coach.'
             : 'Pick one to continue.'}
         </p>
 
@@ -171,7 +169,7 @@ export function CheckIn() {
             disabled={!selectedClub}
             onClick={handleClubContinue}
           >
-            {moreAhead > 0 ? 'Continue' : 'Continue to plan'}
+            {moreAhead > 0 ? 'Continue' : 'Meet your coach'}
           </Button>
         </div>
       </section>
@@ -182,12 +180,11 @@ export function CheckIn() {
     <section className="page check-in animate-in">
       <BackLink to="/">Home</BackLink>
 
-      <FlowProgress step={1} />
-
       <div className="page-intro">
-        <h1>How did today go?</h1>
+        <p className="page-intro__kicker">Check in · under a minute</p>
+        <h1>What went wrong today?</h1>
         <p className="muted">
-          Choose one or two areas that caused you the most trouble today.
+          Pick one or two misses. Your coach builds the session from there.
         </p>
       </div>
 
@@ -239,7 +236,7 @@ export function CheckIn() {
           disabled={!canContinueSymptoms}
           onClick={handleSymptomsContinue}
         >
-          Continue
+          Get my session
         </Button>
       </div>
     </section>

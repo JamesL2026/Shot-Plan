@@ -269,7 +269,16 @@ button {
 .page-intro h1 {
   font-size: clamp(1.7rem, 5.5vw, 2rem);
   letter-spacing: -0.03em;
-  margin-bottom: var(--space-3);
+  margin: 0 0 var(--space-2);
+}
+
+.page-intro__kicker {
+  margin: 0 0 var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
 }
 
 .page-intro .muted {
@@ -337,7 +346,32 @@ button {
 .home-intro h1 {
   font-size: clamp(1.9rem, 6.5vw, 2.35rem);
   letter-spacing: -0.035em;
-  margin-bottom: var(--space-3);
+  margin: 0 0 var(--space-3);
+}
+
+.home-intro__brand {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.home-intro__lead {
+  margin: 0;
+  font-size: 1.12rem;
+  line-height: 1.45;
+  max-width: 24rem;
+  color: var(--color-ink);
+}
+
+.home-intro__path {
+  margin: var(--space-3) 0 0;
+  font-size: 0.9rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
 }
 
 .home-intro .muted {
@@ -345,6 +379,28 @@ button {
   margin: 0;
   max-width: 22rem;
   line-height: 1.45;
+}
+
+.home-feedback-nudge {
+  margin: 0;
+  padding: var(--space-3) 0 var(--space-2);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--color-ink-muted);
+  text-align: center;
+}
+
+.home-feedback-nudge__btn {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-accent);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
 }
 
 .home-actions {
@@ -795,6 +851,177 @@ button {
 .before-begin__next {
   margin-top: var(--space-2);
   font-weight: 650;
+}
+
+.coach-brief {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  min-height: min(70vh, 36rem);
+}
+
+.coach-brief__kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.coach-brief__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 6vw, 2.1rem);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.coach-brief__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.coach-brief__block--quiet .coach-brief__time {
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.coach-brief__label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.coach-brief__focus {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 4.5vw, 1.45rem);
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.coach-brief__time {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.coach-brief__encourage {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.45;
+  color: var(--color-ink);
+}
+
+.results--brief {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.coach-transition {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-5);
+  min-height: min(72vh, 28rem);
+  padding: var(--space-4) 0 var(--space-6);
+}
+
+.coach-transition__kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.coach-transition__headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 2.6rem);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--color-accent);
+}
+
+.coach-transition__body {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.45;
+  max-width: 28rem;
+}
+
+.guided-challenge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+.guided-challenge__count {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.guided-challenge__coach {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.guided-challenge__cue {
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: var(--color-accent);
+  color: #f7faf6;
+}
+
+.guided-challenge__cue-label {
+  margin: 0 0 var(--space-2);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(247 250 246 / 72%);
+}
+
+.guided-challenge__cue-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.drill-card__watch {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-sand-soft);
+  border: 1px solid rgb(196 181 154 / 40%);
+}
+
+.drill-card__watch p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.drill-card__orient {
+  margin: var(--space-2) 0 0;
+  font-size: 0.9rem;
 }
 
 .round-ready__kicker {
@@ -2270,6 +2497,43 @@ button.back-link {
 }
 
 /* —— Early beta —— */
+.beta-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-sand-soft);
+  border: 1px solid rgb(27 67 50 / 8%);
+}
+
+.beta-strip__badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.beta-strip__link {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-ink-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.beta-strip__link:hover {
+  color: var(--color-accent);
+}
+
 .beta-banner {
   display: flex;
   flex-direction: column;
@@ -2419,6 +2683,12 @@ button.back-link {
   font-size: 1.2rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+}
+
+.session-pulse__body {
+  margin: var(--space-2) 0 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .session-pulse__thanks {

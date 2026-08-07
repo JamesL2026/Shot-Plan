@@ -62,7 +62,7 @@ export const playFrequencyChoices: FeedbackChoice<PlayFrequency>[] = [
 
 export const practiceFrequencyChoices: FeedbackChoice<PracticeFrequency>[] = [
   { value: 'three-plus-week', label: '3+ times a week' },
-  { value: 'one-two-week', label: '1 to 2 times a week' },
+  { value: 'one-two-week', label: '1-2 times a week' },
   { value: 'few-month', label: 'A few times a month' },
   { value: 'rarely', label: 'Rarely' },
 ]

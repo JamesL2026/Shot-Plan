@@ -128,10 +128,10 @@ export const drills: Drill[] = [
     goal: 'Stop fat shots by swinging through to a marker past the ball.',
     worksOn: 'both',
     matAdjustment:
-      'On mats, do not push a tee in. Place a coin 2 to 3 inches in front of the ball toward the target.',
+      'On mats, do not push a tee in. Place a coin 2-3 inches in front of the ball toward the target.',
     equipment: ['coin', 'ball'],
     setup:
-      'Place a coin (or tee on grass) 2 to 3 inches in front of the ball toward the target. After you hit the ball, your club should pass over that marker.',
+      'Place a coin (or tee on grass) 2-3 inches in front of the ball toward the target. After you hit the ball, your club should pass over that marker.',
     view: 'side',
     steps: [
       'Place the coin in front of the ball toward the target.',
@@ -273,7 +273,7 @@ export const drills: Drill[] = [
     worksOn: 'both',
     equipment: ['ball'],
     setup:
-      'Place 6 to 8 balls in a circle 3 to 5 feet from a hole or cup target. Go around the circle. Miss one? Redo that spot before moving on.',
+      'Place 6-8 balls in a circle 3-5 feet from a hole or cup target. Go around the circle. Miss one? Redo that spot before moving on.',
     view: 'top',
     steps: [
       'Set balls in a circle around the hole.',
@@ -378,7 +378,7 @@ export function buildPrescription(
         : `${labels[0].charAt(0).toUpperCase() + labels[0].slice(1)} · ${labels[1]}`
 
   const estimatedTime =
-    recommended.length >= 3 ? '20 to 25 minutes' : '15 to 20 minutes'
+    recommended.length >= 3 ? '20-25 minutes' : '15-20 minutes'
 
   const remember =
     recommended[0]?.cue ?? 'One clear feel beats ten swing thoughts.'

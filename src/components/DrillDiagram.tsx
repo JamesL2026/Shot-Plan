@@ -536,7 +536,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <Callout n={1} x={170} y={115} />
           <L x={186} y={118}>Hole</L>
           <Callout n={2} x={170} y={48} />
-          <L x={186} y={52}>Balls (3 to 5 ft)</L>
+          <L x={186} y={52}>Balls (3-5 ft)</L>
           <L x={40} y={210}>Putt around · redo any miss</L>
         </>
       )

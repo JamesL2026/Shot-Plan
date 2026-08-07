@@ -151,10 +151,10 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     irons: {
       diagramVariant: 'irons',
       setup:
-        'Use a mid-iron. Place a coin (or tee on grass) 2 to 3 inches in front of the ball toward the target. Neutral stance. Mid-stance ball. After you hit the ball, your club should pass over that marker.',
+        'Use a mid-iron. Place a coin (or tee on grass) 2-3 inches in front of the ball toward the target. Neutral stance. Mid-stance ball. After you hit the ball, your club should pass over that marker.',
       cue: 'Mid-iron: finish past the ball.',
       matAdjustment:
-        'On mats, do not push a tee in. Place a coin 2 to 3 inches in front of the ball toward the target.',
+        'On mats, do not push a tee in. Place a coin 2-3 inches in front of the ball toward the target.',
       steps: [
         'Mid-iron. Coin in front of the ball toward the target.',
         'Hit 10 half swings that pass the coin after the ball.',
@@ -164,10 +164,10 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     wedges: {
       diagramVariant: 'wedges',
       setup:
-        'Use a wedge. Place a coin (or tee on grass) 2 to 3 inches in front of the ball toward the target. Slightly narrower stance. Ball a touch back of center. After you hit the ball, your club should pass over that marker.',
+        'Use a wedge. Place a coin (or tee on grass) 2-3 inches in front of the ball toward the target. Slightly narrower stance. Ball a touch back of center. After you hit the ball, your club should pass over that marker.',
       cue: 'Wedge: finish past the ball.',
       matAdjustment:
-        'On mats, do not push a tee in. Place a coin 2 to 3 inches in front of the ball toward the target.',
+        'On mats, do not push a tee in. Place a coin 2-3 inches in front of the ball toward the target.',
       steps: [
         'Wedge. Coin in front of the ball toward the target.',
         'Hit 10 half swings that pass the coin after the ball.',

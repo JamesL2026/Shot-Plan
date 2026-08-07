@@ -420,19 +420,8 @@ export function buildPracticeOrder(recommended: Drill[]): PracticeOrderStep[] {
 }
 
 export function buildChecklist(recommended: Drill[]): ChecklistItem[] {
-  const items: ChecklistItem[] = [
-    { id: 'equipment', label: 'Gather equipment' },
-  ]
-
-  recommended.forEach((drill, index) => {
-    items.push({
-      id: `drill-${drill.id}`,
-      label: `Complete Drill ${index + 1}: ${drill.name}`,
-    })
-  })
-
-  items.push({ id: 'normal', label: 'Hit 10 normal swings' })
-  items.push({ id: 'reflect', label: 'Reflect on ball flight' })
-
-  return items
+  return recommended.map((drill, index) => ({
+    id: `drill-${drill.id}`,
+    label: `Complete Drill ${index + 1}: ${drill.name}`,
+  }))
 }

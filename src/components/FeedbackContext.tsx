@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import type { FeedbackAnswers } from '../types/feedback'
-import { FeedbackFab, FeedbackSheet } from './FeedbackSheet'
+import { FeedbackSheet } from './FeedbackSheet'
 
 interface OpenFeedbackOptions {
   /** Prefill answers when opening from a contextual prompt. */
@@ -44,7 +44,6 @@ export function FeedbackProvider({ children }: { children: ReactNode }) {
   return (
     <FeedbackContext.Provider value={value}>
       {children}
-      {!feedbackOpen && <FeedbackFab onClick={() => openFeedback()} />}
       <FeedbackSheet
         open={feedbackOpen}
         onClose={closeFeedback}

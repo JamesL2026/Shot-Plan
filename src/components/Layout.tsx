@@ -12,10 +12,10 @@ function LayoutChrome() {
         </Link>
         <button
           type="button"
-          className="header-feedback"
+          className="header-feedback header-feedback--btn"
           onClick={() => openFeedback()}
         >
-          Help Improve ShotPlan
+          {'\u{1F4AC}'} Help Improve
         </button>
       </header>
       <main className="app-main">

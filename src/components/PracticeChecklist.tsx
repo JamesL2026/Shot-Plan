@@ -25,8 +25,6 @@ export function PracticeChecklist({
   swingThought,
   onOpenDrill,
 }: PracticeChecklistProps) {
-  const allDone = items.every((item) => checked[item.id])
-
   return (
     <section className="practice-mode animate-in">
       <button type="button" className="back-link" onClick={onBack}>
@@ -35,7 +33,7 @@ export function PracticeChecklist({
 
       <header className="page-intro">
         <h1>Today’s Practice</h1>
-        <p className="muted">Check each box as you go. Keep it simple.</p>
+        <p className="muted">Check drills off as you go. Finish whenever you’re ready.</p>
       </header>
 
       <aside className="swing-thought swing-thought--compact" aria-label="Swing thought">
@@ -84,12 +82,7 @@ export function PracticeChecklist({
         })}
       </ul>
 
-      <Button
-        variant="primary"
-        block
-        disabled={!allDone}
-        onClick={onFinish}
-      >
+      <Button variant="primary" block onClick={onFinish}>
         Finish practice
       </Button>
     </section>

@@ -1677,9 +1677,9 @@ button.back-link {
 
 /* —— Feedback (optional, non-blocking) —— */
 .header-feedback {
-  flex-shrink: 1;
+  flex-shrink: 0;
   min-height: 2.5rem;
-  max-width: 11.5rem;
+  max-width: none;
   padding: 0.35rem 0.55rem;
   border: 0;
   border-radius: var(--radius-sm);
@@ -1689,6 +1689,29 @@ button.back-link {
   font-weight: 650;
   line-height: 1.2;
   text-align: right;
+}
+
+.header-feedback--btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.75rem;
+  border: 1.5px solid rgb(27 67 50 / 16%);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 2px 8px rgb(18 26 20 / 8%);
+}
+
+.header-feedback--btn:hover {
+  border-color: var(--color-accent);
+  background: var(--color-highlight);
+  color: var(--color-accent);
 }
 
 .header-feedback:hover {
@@ -2038,7 +2061,8 @@ button.back-link {
     bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
   }
 
-  .header-feedback {
+  .header-feedback,
+  .header-feedback--btn {
     max-width: none;
     font-size: 0.85rem;
   }

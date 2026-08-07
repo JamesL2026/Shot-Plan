@@ -43,7 +43,7 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
       cue: 'Ball centered. Neutral stance. Body and face match.',
       steps: [
         'Ball on the ground. Stick A at target. Stick B along your toes.',
-        'Neutral stance. Mid-stance ball. Hit 10 easy half swings.',
+        'Neutral stance. Ball near mid stance. Hit 10 easy half swings.',
         'Hit 10 fuller iron swings if the start line looks better.',
       ],
     },
@@ -89,7 +89,7 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     irons: {
       diagramVariant: 'irons',
       setup:
-        'Ball on the mat or turf. Point the iron face at your target. Place your lead hand so you see about two knuckles. Do not twist the face closed after your hands are set. Neutral stance. Mid-stance ball.',
+        'Ball on the mat or turf. Point the iron face at your target. Place your lead hand so you see about two knuckles. Do not twist the face closed after your hands are set. Neutral stance. Ball near mid stance.',
       cue: 'Two knuckles on the iron. Quiet face.',
       steps: [
         'Ball on the ground. Point the face at the target.',
@@ -151,7 +151,7 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     irons: {
       diagramVariant: 'irons',
       setup:
-        'Use a mid-iron. Place a coin (or tee on grass) 2-3 inches in front of the ball toward the target. Neutral stance. Mid-stance ball. After you hit the ball, your club should pass over that marker.',
+        'Use a mid-iron. Place a coin (or tee on grass) 2-3 inches in front of the ball toward the target. Neutral stance. Ball near mid stance. After you hit the ball, your club should pass over that marker.',
       cue: 'Mid-iron: finish past the ball.',
       matAdjustment:
         'On mats, do not push a tee in. Place a coin 2-3 inches in front of the ball toward the target.',
@@ -179,7 +179,7 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     irons: {
       diagramVariant: 'irons',
       setup:
-        'Use a mid-iron. Place the ball very low on the mat (or on a short tee in grass). Neutral stance. Mid-stance ball. Do not try to lift it. Brush the surface after the ball.',
+        'Use a mid-iron. Place the ball very low on the mat (or on a short tee in grass). Neutral stance. Ball near mid stance. Do not try to lift it. Brush the surface after the ball.',
       cue: 'Mid-iron: stay down through the ball.',
       matAdjustment:
         'On mats, rest the ball as low as possible on the mat. Focus on brushing the mat just after the ball.',
@@ -207,7 +207,7 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
     irons: {
       diagramVariant: 'irons',
       setup:
-        'Use a mid-iron. Place a towel a few inches in front of the ball toward the target. Neutral stance. Mid-stance ball. Hit the ball first. Miss the towel, or barely touch it after the ball.',
+        'Use a mid-iron. Place a towel a few inches in front of the ball toward the target. Neutral stance. Ball near mid stance. Hit the ball first. Miss the towel, or barely touch it after the ball.',
       cue: 'Mid-iron: compress. Don’t scoop.',
       steps: [
         'Mid-iron. Towel a few inches in front of the ball.',

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronRight, ShieldCheck } from 'lucide-react'
+import { ChevronRight, Check, ShieldCheck } from 'lucide-react'
 import { DrillFocus } from '../components/DrillFocus'
 import { FlowProgress } from '../components/FlowProgress'
 import { FollowUp } from '../components/FollowUp'
@@ -19,6 +19,7 @@ import {
   getDrillById,
   getDrillsForSymptoms,
 } from '../data/drills'
+import { getPrePracticeChecks } from '../data/prePractice'
 import { isSymptomId } from '../data/symptoms'
 import { adaptDrills } from '../lib/adaptDrill'
 import { applySessionChallenges } from '../lib/sessionPractice'
@@ -102,14 +103,13 @@ export function Results() {
   const followUpDone = session?.result !== null && session?.result !== undefined
   const clubSummary = clubFocusSummary(session)
   const challengeCount = recommended.length
-  const accomplishment = recommended[0]?.templateLabel
-    ? `You worked on ${recommended
-        .map((d) => d.templateLabel)
-        .filter(Boolean)
-        .filter((v, i, arr) => arr.indexOf(v) === i)
-        .slice(0, 2)
-        .join(' and ')}.`
-    : 'You finished your practice plan.'
+  const checkedCount = recommended.filter(
+    (drill) => checked[`drill-${drill.id}`],
+  ).length
+  const prePractice = useMemo(
+    () => getPrePracticeChecks(symptomIds),
+    [symptomIds],
+  )
 
   function persistChecklist(next: Record<string, boolean>) {
     setChecked(next)
@@ -211,7 +211,10 @@ export function Results() {
           onHome={() => navigate('/')}
           onFollowUp={() => setPhase('followup')}
           challengeCount={challengeCount}
-          accomplishment={accomplishment}
+          drillsFinished={Math.max(checkedCount, challengeCount)}
+          drillsTotal={challengeCount}
+          todayGoal={prescription.goal}
+          swingThought={prescription.remember}
         />
       </section>
     )
@@ -271,6 +274,23 @@ export function Results() {
           </p>
         </div>
       </aside>
+
+      {prePractice.length > 0 && (
+        <aside className="before-begin" aria-label="Before you begin">
+          <p className="before-begin__kicker">Before You Begin</p>
+          {prePractice.map((check) => (
+            <div key={check.id} className="before-begin__item">
+              <p className="before-begin__title">
+                <Check size={16} strokeWidth={2.5} aria-hidden="true" />
+                {check.title}
+              </p>
+              <p className="before-begin__body">{check.body}</p>
+              <p className="before-begin__time muted">{check.timeNote}</p>
+              <p className="before-begin__next muted">Then begin practicing.</p>
+            </div>
+          ))}
+        </aside>
+      )}
 
       <div className="practice-order">
         <h2 className="practice-order__title">Practice Order</h2>

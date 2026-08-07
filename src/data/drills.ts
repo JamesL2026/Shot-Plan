@@ -53,27 +53,27 @@ export const drills: Drill[] = [
       'Missing the outside object stops the over-the-top cut that creates a slice.',
   },
   {
-    id: 'hook-grip-check',
+    id: 'hook-finish-position',
     symptomId: 'hook',
-    name: 'Grip check',
-    goal: 'Use a calmer grip so the clubface does not shut too soon.',
+    name: 'Finish position drill',
+    goal: 'Reduce hooks by improving body rotation and club release.',
     worksOn: 'both',
     equipment: ['ball'],
     setup:
-      'Point the clubface at your target. Place your lead hand so you see about two knuckles. Do not twist the face closed after your hands are set.',
-    view: 'top',
+      'Normal practice setup. No special equipment required. Take your usual address and plan to finish every swing in balance.',
+    view: 'side',
     steps: [
-      'Point the face at the target.',
-      'Set the lead hand to show two knuckles.',
-      'Hit 10 smooth shots. Watch where the ball starts.',
+      'Hit controlled half swings.',
+      'Finish every swing balanced with your chest facing the target.',
+      'Let the club finish around your body instead of getting stuck behind you.',
     ],
     commonMistake: {
-      mistake: 'Closing the face after you set the grip.',
-      instead: 'Face first. Hands second. Leave them alone.',
+      mistake: 'Spinning out early or quitting on the finish.',
+      instead: 'Rotate through. Hold a tall, balanced finish.',
     },
-    cue: 'Two knuckles. Quiet face.',
+    cue: 'Finish tall. Chest to the target.',
     whyItWorks:
-      'A grip that is too “strong” shuts the face early. Two knuckles is a simple neutral check.',
+      'A balanced finish encourages a more neutral path and reduces excessive clubface closure.',
   },
   {
     id: 'hook-mirrored-path',
@@ -294,7 +294,7 @@ const MAX_RECOMMENDATIONS = 3
 
 const drillsBySymptomId: Record<SymptomId, string[]> = {
   slice: ['slice-alignment-stick', 'slice-object-avoidance'],
-  hook: ['hook-grip-check', 'hook-mirrored-path'],
+  hook: ['hook-finish-position', 'hook-mirrored-path'],
   fat: ['fat-towel-behind', 'fat-tee-in-front'],
   thin: ['thin-tee-under', 'thin-towel-low-point'],
   chipping: ['chip-club-ladder', 'chip-headcover'],
@@ -302,7 +302,9 @@ const drillsBySymptomId: Record<SymptomId, string[]> = {
 }
 
 export function getDrillById(id: string): Drill | undefined {
-  return drills.find((drill) => drill.id === id)
+  // Old sessions may still reference the retired grip-check primary drill.
+  const resolved = id === 'hook-grip-check' ? 'hook-finish-position' : id
+  return drills.find((drill) => drill.id === resolved)
 }
 
 export function getDrillsBySymptom(symptomId: SymptomId): Drill[] {

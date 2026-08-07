@@ -269,26 +269,42 @@ function renderDiagram(id: string, variant: DiagramVariant) {
       )
     }
 
-    case 'hook-grip-check':
+    case 'hook-finish-position':
       return (
         <>
-          <rect x={60} y={50} width={220} height={130} rx="16" fill="#F7F6F2" stroke={C.aid} strokeWidth="2.5" />
-          <L x={90} y={78} weight={700}>
-            Lead hand (top of grip)
-          </L>
-          <circle cx={120} cy={120} r="9" fill={C.aid} />
-          <circle cx={145} cy={120} r="9" fill={C.aid} />
-          <circle cx={170} cy={120} r="9" fill="#C5CCC4" stroke={C.label} strokeWidth="1.5" />
-          <Callout n={1} x={120} y={100} />
-          <Callout n={2} x={145} y={100} />
-          <L x={100} y={155}>See knuckle 1 and 2</L>
-          <L x={100} y={172}>Hide knuckle 3</L>
-          <L x={40} y={210}>
-            {isDriver
-              ? 'Driver: face at target first · wider stance · ball near lead heel'
-              : 'Face the club at the target before setting hands'}
-          </L>
+          <TargetArrowSide />
+          <PersonSide x={95} />
+          {/* Finish pose suggestion: arms through toward target */}
+          <line
+            x1={95}
+            y1={78}
+            x2={175}
+            y2={70}
+            stroke={C.path}
+            strokeWidth="5"
+            strokeLinecap="round"
+          />
+          <line
+            x1={175}
+            y1={70}
+            x2={210}
+            y2={95}
+            stroke={C.path}
+            strokeWidth="5"
+            strokeLinecap="round"
+          />
+          <Ball cx={195} cy={158} r={9} />
+          <line x1={30} y1={168} x2={320} y2={168} stroke={C.label} strokeWidth="2" />
+          <Callout n={1} x={95} y={40} />
+          <L x={110} y={44}>You</L>
+          <Callout n={2} x={175} y={55} />
+          <L x={190} y={59}>Chest to target</L>
+          <Callout n={3} x={210} y={110} />
+          <L x={225} y={114}>Balanced finish</L>
           {clubTag && <ClubLabel x={250} y={48}>{clubTag}</ClubLabel>}
+          <Path d="M115 110 Q160 90 200 100" />
+          <L x={40} y={195}>Half swing · hold the finish</L>
+          <L x={40} y={210}>Club around the body · stay tall</L>
         </>
       )
 

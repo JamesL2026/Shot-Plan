@@ -89,36 +89,45 @@ export function PracticeChecklist({
   )
 }
 
+type ContactFeel = 'much-better' | 'slightly-better' | 'no-change' | 'worse'
+
 interface PracticeCompleteProps {
   onHome: () => void
   onFollowUp?: () => void
   showFollowUp: boolean
   challengeCount?: number
-  accomplishment?: string
+  drillsFinished?: number
+  drillsTotal?: number
+  todayGoal?: string
+  swingThought?: string
 }
 
-type SessionPulse = 'helpful' | 'okay' | 'needs-improvement'
-
-const pulseToUsefulness: Record<SessionPulse, PlanUsefulness> = {
-  helpful: 4,
-  okay: 3,
-  'needs-improvement': 2,
-}
+const contactChoices: { value: ContactFeel; label: string }[] = [
+  { value: 'much-better', label: 'Much Better' },
+  { value: 'slightly-better', label: 'Slightly Better' },
+  { value: 'no-change', label: 'No Change' },
+  { value: 'worse', label: 'Worse' },
+]
 
 export function PracticeComplete({
   onHome,
   onFollowUp,
   showFollowUp,
   challengeCount = 0,
-  accomplishment,
+  drillsFinished,
+  drillsTotal,
+  todayGoal,
+  swingThought,
 }: PracticeCompleteProps) {
   const { openFeedback } = useFeedback()
-  const [pulse, setPulse] = useState<SessionPulse | null>(null)
+  const [contactFeel, setContactFeel] = useState<ContactFeel | null>(null)
+  const finished = drillsFinished ?? challengeCount
+  const total = drillsTotal ?? challengeCount
 
-  function handlePulse(value: SessionPulse) {
-    setPulse(value)
+  function handleContact(value: ContactFeel) {
+    setContactFeel(value)
     try {
-      const key = 'shotplan:session-pulse'
+      const key = 'shotplan:contact-feel'
       const prev = JSON.parse(localStorage.getItem(key) ?? '[]') as unknown
       const list = Array.isArray(prev) ? prev : []
       list.unshift({ at: new Date().toISOString(), value })
@@ -130,23 +139,72 @@ export function PracticeComplete({
 
   return (
     <div className="practice-complete-stack animate-in">
-      <Card className="practice-complete" padding="lg">
-        <p className="practice-complete__title">Nice work.</p>
-        <p className="practice-complete__text">
-          You completed today&apos;s practice.
-        </p>
-        {challengeCount > 0 && (
-          <p className="practice-complete__highlight">
-            You completed {challengeCount} coaching challenge
-            {challengeCount === 1 ? '' : 's'}.
+      <Card className="round-ready" padding="lg">
+        <p className="round-ready__kicker">Today&apos;s Practice Summary</p>
+        <h2 className="round-ready__title">Practice Complete</h2>
+
+        <dl className="round-ready__meta">
+          <div>
+            <dt>Today&apos;s Goal</dt>
+            <dd>
+              {todayGoal ?? 'Complete your coaching session'}
+              <span className="round-ready__check" aria-label="Completed">
+                {' '}
+                Completed ✓
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>Drills Finished</dt>
+            <dd>
+              {finished} of {total || finished || 0}
+            </dd>
+          </div>
+          <div>
+            <dt>Today&apos;s Challenge</dt>
+            <dd>Completed</dd>
+          </div>
+        </dl>
+
+        {swingThought && (
+          <aside className="round-ready__thought" aria-label="Swing thought">
+            <p className="round-ready__thought-label">Swing Thought</p>
+            <p className="round-ready__thought-cue">{swingThought}</p>
+          </aside>
+        )}
+
+        <div className="round-ready__reflect">
+          <p className="round-ready__reflect-title">Reflection</p>
+          <p className="muted round-ready__reflect-q">
+            How did today&apos;s contact feel?
           </p>
-        )}
-        {accomplishment && (
-          <p className="muted practice-complete__sub">{accomplishment}</p>
-        )}
-        <p className="muted practice-complete__sub">
-          See you after your next round.
+          <div className="round-ready__choices" role="group" aria-label="Contact feel">
+            {contactChoices.map((choice) => {
+              const selected = contactFeel === choice.value
+              return (
+                <button
+                  key={choice.value}
+                  type="button"
+                  className={
+                    selected
+                      ? 'round-ready__choice round-ready__choice--selected'
+                      : 'round-ready__choice'
+                  }
+                  aria-pressed={selected}
+                  onClick={() => handleContact(choice.value)}
+                >
+                  {choice.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        <p className="round-ready__close">
+          Take this feeling into your next round.
         </p>
+        <p className="muted round-ready__sub">See you after your next round.</p>
+
         <div className="practice-complete__actions">
           {showFollowUp && onFollowUp && (
             <Button variant="primary" block onClick={onFollowUp}>
@@ -164,47 +222,22 @@ export function PracticeComplete({
       </Card>
 
       <Card className="session-pulse" padding="lg">
-        <p className="session-pulse__title">How did today&apos;s practice feel?</p>
-        {pulse ? (
-          <p className="session-pulse__thanks muted">
-            Thanks. That helps us keep improving.
-          </p>
-        ) : (
-          <div className="session-pulse__row" role="group" aria-label="Quick rating">
-            <button
-              type="button"
-              className="session-pulse__btn"
-              onClick={() => handlePulse('helpful')}
-            >
-              <span aria-hidden="true">👍</span>
-              Helpful
-            </button>
-            <button
-              type="button"
-              className="session-pulse__btn"
-              onClick={() => handlePulse('okay')}
-            >
-              <span aria-hidden="true">😐</span>
-              It was okay
-            </button>
-            <button
-              type="button"
-              className="session-pulse__btn"
-              onClick={() => handlePulse('needs-improvement')}
-            >
-              <span aria-hidden="true">👎</span>
-              Needs improvement
-            </button>
-          </div>
-        )}
+        <p className="session-pulse__title">Want to help shape ShotPlan?</p>
         <button
           type="button"
           className="session-pulse__link"
           onClick={() =>
             openFeedback({
-              seed: pulse
-                ? { planUsefulness: pulseToUsefulness[pulse] }
-                : undefined,
+              seed:
+                contactFeel === 'much-better'
+                  ? { planUsefulness: 5 as PlanUsefulness }
+                  : contactFeel === 'slightly-better'
+                    ? { planUsefulness: 4 as PlanUsefulness }
+                    : contactFeel === 'no-change'
+                      ? { planUsefulness: 3 as PlanUsefulness }
+                      : contactFeel === 'worse'
+                        ? { planUsefulness: 2 as PlanUsefulness }
+                        : undefined,
             })
           }
         >

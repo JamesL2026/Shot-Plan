@@ -53,19 +53,19 @@ const patches: Record<string, Partial<Record<ClubFocus, Patch>>> = {
       cue: 'Miss the object with the iron. Then the ball.',
     },
   },
-  'hook-grip-check': {
+  'hook-finish-position': {
     driver: {
       diagramVariant: 'driver',
       setup:
-        'Tee the ball. Point the driver face at your target. Place your lead hand so you see about two knuckles. Do not twist the face closed after your hands are set. Wider stance. Ball near the lead heel.',
-      cue: 'Two knuckles on the driver. Quiet face.',
+        'Tee the ball (or use a mat tee insert). Normal driver setup. No special equipment. Plan to finish every swing in balance with your chest facing the target.',
+      cue: 'Finish tall. Chest to the target.',
       matAdjustment: driverTeeMatNote(),
     },
     irons: {
       diagramVariant: 'irons',
       setup:
-        'Ball on the mat or turf. Point the iron face at your target. Place your lead hand so you see about two knuckles. Do not twist the face closed after your hands are set. Neutral stance. Ball near mid stance.',
-      cue: 'Two knuckles on the iron. Quiet face.',
+        'Ball on the mat or turf. Normal iron setup. No special equipment. Plan to finish every swing in balance with your chest facing the target.',
+      cue: 'Finish tall. Chest to the target.',
     },
   },
   'hook-mirrored-path': {

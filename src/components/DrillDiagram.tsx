@@ -110,19 +110,35 @@ function LabeledCallout({
   x,
   y,
   label,
-  labelX,
+  side = 'right',
 }: {
   n: number
   x: number
   y: number
   label: string
-  /** Optional override; defaults to x + 18 */
-  labelX?: number
+  /** Where the text sits relative to the badge */
+  side?: 'right' | 'left' | 'below' | 'above'
 }) {
+  const gap = 16
+  let lx = x + gap + 11
+  let ly = y + 4
+  let anchor: 'start' | 'middle' | 'end' = 'start'
+  if (side === 'left') {
+    lx = x - gap - 11
+    anchor = 'end'
+  } else if (side === 'below') {
+    lx = x
+    ly = y + 26
+    anchor = 'middle'
+  } else if (side === 'above') {
+    lx = x
+    ly = y - 18
+    anchor = 'middle'
+  }
   return (
     <g>
       <Callout n={n} x={x} y={y} />
-      <L x={labelX ?? x + 18} y={y + 4}>
+      <L x={lx} y={ly} anchor={anchor}>
         {label}
       </L>
     </g>
@@ -166,9 +182,19 @@ function Tee({ cx, cy }: { cx: number; cy: number }) {
   )
 }
 
-function ClubLabel({ x, y, children }: { x: number; y: number; children: string }) {
+function ClubLabel({
+  x = 322,
+  y = 34,
+  children,
+  anchor = 'end',
+}: {
+  x?: number
+  y?: number
+  children: string
+  anchor?: 'start' | 'middle' | 'end'
+}) {
   return (
-    <L x={x} y={y} weight={700}>
+    <L x={x} y={y} weight={700} anchor={anchor}>
       {children}
     </L>
   )
@@ -511,8 +537,14 @@ function renderDiagram(id: string, variant: DiagramVariant) {
             y={198}
             label={isDriver ? 'Stick B · wider stance' : 'Stick B · stand here'}
           />
-          <LabeledCallout n={3} x={Math.min(ballX + 24, 250)} y={58} label={ballLabel} />
-          <ClubLabel x={268} y={48}>{tag}</ClubLabel>
+          <LabeledCallout
+            n={3}
+            x={Math.min(ballX + 8, 220)}
+            y={72}
+            label={ballLabel}
+            side="below"
+          />
+          <ClubLabel>{tag}</ClubLabel>
           <Path d={`M${ballX + 40} 120 Q${ballX + 20} 105 ${ballX - 30} 100`} />
           <L x={40} y={215}>{`Use your ${tag.toLowerCase()} · swing toward ← target`}</L>
         </>
@@ -522,6 +554,8 @@ function renderDiagram(id: string, variant: DiagramVariant) {
     case 'slice-object-avoidance': {
       const ballX = 200 + ballShiftX
       const ballY = isDriver ? 96 : 100
+      const avoidX = ballX
+      const avoidY = 56
       return (
         <>
           <TargetLeft />
@@ -539,8 +573,8 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <ClubTop ballX={ballX} ballY={ballY} kind={kind} />
           <Ball cx={ballX} cy={ballY} />
           <ellipse
-            cx={ballX}
-            cy={62}
+            cx={avoidX}
+            cy={avoidY}
             rx="20"
             ry="14"
             fill={C.avoid}
@@ -550,20 +584,26 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           />
           <LabeledCallout
             n={1}
-            x={108}
-            y={198}
+            x={78}
+            y={170}
             label={isDriver ? 'Wider stance' : 'Your feet'}
           />
           <LabeledCallout
             n={2}
-            x={ballX + 28}
-            y={118}
-            label={isDriver ? 'Ball · teed' : 'Ball'}
+            x={ballX + 52}
+            y={ballY + 2}
+            label={isDriver ? 'Ball teed' : 'Ball'}
           />
-          <LabeledCallout n={3} x={ballX - 36} y={42} label="AVOID (outside)" />
-          <ClubLabel x={268} y={48}>{tag}</ClubLabel>
+          <LabeledCallout
+            n={3}
+            x={avoidX - 52}
+            y={avoidY}
+            label="AVOID outside"
+            side="left"
+          />
+          <ClubLabel>{tag}</ClubLabel>
           <Path d={`M${ballX + 40} 145 Q${ballX + 20} 115 ${ballX - 40} 100`} />
-          <L x={40} y={215}>{`Miss red with your ${tag.toLowerCase()} · toward ← target`}</L>
+          <L x={40} y={212}>{`Miss the red object with your ${tag.toLowerCase()}`}</L>
         </>
       )
     }
@@ -583,7 +623,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <Callout n={3} x={162} y={148} />
           <L x={70} y={152}>Trail foot up</L>
           <L x={200} y={190}>Finish, hold it</L>
-          <ClubLabel x={268} y={48}>{tag}</ClubLabel>
+          <ClubLabel>{tag}</ClubLabel>
           <L x={40} y={212}>{`Hold a tall finish for one second · ${tag.toLowerCase()}`}</L>
         </>
       )
@@ -606,7 +646,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <L x={178} y={144}>Trail hand (lower)</L>
           <Callout n={3} x={ballX} y={140} />
           <L x={ballX + 16} y={144}>{`Ball · ${tag}`}</L>
-          <ClubLabel x={250} y={48}>{tag}</ClubLabel>
+          <ClubLabel>{tag}</ClubLabel>
           <L x={40} y={195}>Gap between hands, about 2-3 inches</L>
           <L x={40} y={210}>Half swings, quiet face through the ball</L>
         </>
@@ -643,7 +683,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <L x={ballX + 16} y={144}>
             {kind === 'wedge' ? 'Ball back a touch' : 'Ball'}
           </L>
-          <ClubLabel x={250} y={48}>{tag}</ClubLabel>
+          <ClubLabel>{tag}</ClubLabel>
           <Path d="M110 105 Q165 145 215 160" />
           <L x={40} y={210}>{`Hit with ${tag.toLowerCase()} · miss towel · brush after`}</L>
         </>
@@ -669,7 +709,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           </L>
           <Callout n={3} x={220} y={145} />
           <L x={235} y={149}>Coin / marker</L>
-          <ClubLabel x={250} y={48}>{tag}</ClubLabel>
+          <ClubLabel>{tag}</ClubLabel>
           <Path d="M110 105 Q175 140 230 164" />
           <L x={40} y={210}>{`${tag} passes the coin after the ball`}</L>
         </>
@@ -702,7 +742,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           </L>
           <Callout n={2} x={198} y={140} />
           <L x={214} y={144}>Brush line</L>
-          <ClubLabel x={250} y={48}>{tag}</ClubLabel>
+          <ClubLabel>{tag}</ClubLabel>
           <Path d="M110 105 Q160 145 205 168" />
           <L x={40} y={195}>{`Ball first with ${tag.toLowerCase()}`}</L>
           <L x={40} y={210}>Then brush the coin or line, mats or grass</L>
@@ -738,7 +778,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           </L>
           <Callout n={2} x={224} y={130} />
           <L x={240} y={134}>Towel ahead</L>
-          <ClubLabel x={250} y={48}>{tag}</ClubLabel>
+          <ClubLabel>{tag}</ClubLabel>
           <Path d="M110 105 Q155 145 175 158" />
           <L x={40} y={210}>
             {`Quiet wrists · ${tag.toLowerCase()} · ball → then towel`}
@@ -788,7 +828,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <Callout n={3} x={130} y={72} />
           <L x={108} y={58}>Medium</L>
           <L x={48} y={58}>Long</L>
-          <ClubLabel x={268} y={48}>Wedge</ClubLabel>
+          <ClubLabel>Wedge</ClubLabel>
           <Path d="M240 118 Q200 100 185 105" />
           <L x={40} y={215}>{'One wedge · three swing lengths · toward ← target'}</L>
         </>
@@ -818,7 +858,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <L x={135} y={64}>Headcover under lead arm</L>
           <Callout n={3} x={195} y={142} />
           <L x={210} y={146}>Ball, wedge</L>
-          <ClubLabel x={250} y={48}>Wedge</ClubLabel>
+          <ClubLabel>Wedge</ClubLabel>
           <Path d="M130 105 Q165 140 195 160" />
           <L x={40} y={210}>Chip without dropping the headcover</L>
         </>
@@ -852,7 +892,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <L x={186} y={175}>Medium</L>
           <Callout n={3} x={290} y={155} />
           <L x={272} y={175}>Long</L>
-          <ClubLabel x={250} y={48}>Putter</ClubLabel>
+          <ClubLabel>Putter</ClubLabel>
           <Path d="M280 110 L70 110" />
           <L x={40} y={200}>Same target, three distances</L>
           <L x={40} y={214}>Die the ball near the hole, speed first</L>
@@ -900,7 +940,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <L x={120} y={74}>Gate (2-3 ft ahead)</L>
           <Callout n={3} x={42} y={70} />
           <L x={58} y={74}>Hole</L>
-          <ClubLabel x={250} y={48}>Putter</ClubLabel>
+          <ClubLabel>Putter</ClubLabel>
           <Path d="M278 110 L60 110" />
           <L x={40} y={195}>Gate ahead of the ball, not around the putter</L>
           <L x={40} y={210}>Roll through clean, start line feedback</L>
@@ -914,7 +954,7 @@ function renderDiagram(id: string, variant: DiagramVariant) {
           <Feet cx={200} cy={165} />
           <ClubTop ballX={200} ballY={100} kind={kind} />
           <Ball cx={200} cy={100} />
-          <ClubLabel x={250} y={48}>{tag}</ClubLabel>
+          <ClubLabel>{tag}</ClubLabel>
         </>
       )
   }

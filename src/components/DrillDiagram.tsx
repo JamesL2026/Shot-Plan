@@ -548,29 +548,22 @@ function PersonAddressFaded({ x }: { x: number }) {
   )
 }
 
-/** Target to the LEFT - correct for RH top view. */
+/** Top view: arrow only on the far left. No text (labels crowded the setup). */
 function TargetLeft() {
   return (
     <g>
-      <line x1={55} y1={100} x2={55} y2={100} />
-      <polygon points="28,100 48,90 48,110" fill={C.target} />
-      <line x1={48} y1={100} x2={120} y2={100} stroke={C.target} strokeWidth="2.5" />
-      <L x={28} y={82} weight={700}>
-        {'← Target'}
-      </L>
+      <polygon points="18,100 38,88 38,112" fill={C.target} />
+      <line x1={38} y1={100} x2={72} y2={100} stroke={C.target} strokeWidth="2.5" />
     </g>
   )
 }
 
-/** Side-view target along the ground, label kept clear of the setup. */
+/** Side view: arrow only on the far right ground line. No text. */
 function TargetArrowSide() {
   return (
     <g>
-      <line x1={250} y1={168} x2={308} y2={168} stroke={C.target} strokeWidth="2.5" />
-      <polygon points="320,168 304,160 304,176" fill={C.target} />
-      <L x={320} y={152} weight={700} anchor="end">
-        Target
-      </L>
+      <line x1={286} y1={168} x2={312} y2={168} stroke={C.target} strokeWidth="2.5" />
+      <polygon points="326,168 310,158 310,178" fill={C.target} />
     </g>
   )
 }

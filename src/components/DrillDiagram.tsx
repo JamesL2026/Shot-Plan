@@ -171,7 +171,7 @@ function Path({ d }: { d: string }) {
 function renderDiagram(id: string) {
   switch (id) {
     case 'slice-alignment-stick':
-      // Target LEFT. Stick A = target line (horizontal). Stick B = toe line. Feet below.
+      // 1 Stick A · 2 Stick B (stand here) · 3 Ball — target LEFT
       return (
         <>
           <TargetLeft />
@@ -180,15 +180,11 @@ function renderDiagram(id: string) {
           <Feet cx={190} cy={165} />
           <Ball cx={190} cy={100} />
           <Callout n={1} x={70} y={78} />
-          <L x={86} y={82}>Stick A (at target)</L>
+          <L x={86} y={82}>Stick A → target</L>
           <Callout n={2} x={115} y={185} />
-          <L x={131} y={189}>Stick B (your toes)</L>
+          <L x={131} y={189}>Stick B · stand here</L>
           <Callout n={3} x={210} y={82} />
           <L x={226} y={86}>Ball</L>
-          <Callout n={4} x={190} y={200} />
-          <L x={206} y={204} anchor="start">
-            Stand here
-          </L>
           <Path d="M230 120 Q210 105 160 100" />
           <L x={40} y={215}>Swing toward ← target (left of your feet)</L>
         </>
@@ -420,7 +416,7 @@ function renderDiagram(id: string) {
       )
 
     case 'putt-gate':
-      // Target/hole to the LEFT
+      // 1 Ball · 2 Gate · 3 Hole — hole to the LEFT
       return (
         <>
           <circle
@@ -432,16 +428,15 @@ function renderDiagram(id: string) {
             stroke={C.aid}
             strokeWidth="2.5"
           />
-          <L x={28} y={88} weight={700}>
-            ← Hole
-          </L>
           <Ball cx={280} cy={110} />
           <line x1={200} y1={86} x2={200} y2={102} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
           <line x1={200} y1={118} x2={200} y2={134} stroke={C.aid} strokeWidth="4" strokeLinecap="round" />
           <Callout n={1} x={280} y={88} />
           <L x={250} y={75}>Ball</L>
           <Callout n={2} x={200} y={70} />
-          <L x={120} y={74}>Gate (tees/coins)</L>
+          <L x={120} y={74}>Gate</L>
+          <Callout n={3} x={50} y={70} />
+          <L x={28} y={58}>Hole</L>
           <Path d="M268 110 L70 110" />
           <L x={40} y={195}>Roll through the gate toward the hole</L>
           <L x={40} y={210}>Do not touch either side</L>
@@ -449,6 +444,7 @@ function renderDiagram(id: string) {
       )
 
     case 'putt-around-the-world':
+      // 1 Hole · 2 Balls in a circle
       return (
         <>
           <circle
@@ -460,9 +456,6 @@ function renderDiagram(id: string) {
             stroke={C.aid}
             strokeWidth="2.5"
           />
-          <L x={155} y={95} weight={700}>
-            Hole
-          </L>
           <circle
             cx={170}
             cy={115}
@@ -478,9 +471,11 @@ function renderDiagram(id: string) {
           <Ball cx={118} cy={115} r={8} />
           <Ball cx={208} cy={78} r={8} />
           <Ball cx={132} cy={78} r={8} />
-          <Callout n={1} x={170} y={48} />
-          <L x={186} y={52}>Balls in a circle</L>
-          <L x={40} y={210}>Putt around · 3–5 feet · redo any miss</L>
+          <Callout n={1} x={170} y={115} />
+          <L x={186} y={118}>Hole</L>
+          <Callout n={2} x={170} y={48} />
+          <L x={186} y={52}>Balls (3–5 ft)</L>
+          <L x={40} y={210}>Putt around · redo any miss</L>
         </>
       )
 

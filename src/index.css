@@ -722,6 +722,55 @@ button {
   border-radius: var(--radius-md);
 }
 
+.setup-view-toggle {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-sand-soft);
+  border: 1px solid rgb(196 181 154 / 35%);
+}
+
+.setup-view-toggle__btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 0.45rem 0.65rem;
+  border: 0;
+  border-radius: calc(var(--radius-md) - 2px);
+  background: transparent;
+  color: var(--color-ink-muted);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.setup-view-toggle__btn--active {
+  background: var(--color-surface, #fff);
+  color: var(--color-accent);
+  box-shadow: 0 1px 2px rgb(27 67 50 / 10%);
+}
+
+.drill-photo {
+  margin: 0;
+}
+
+.drill-photo__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: var(--color-sand-soft);
+}
+
 .drill-card__section {
   display: flex;
   flex-direction: column;

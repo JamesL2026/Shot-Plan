@@ -1,4 +1,5 @@
-import { Check } from 'lucide-react'
+import { useState } from 'react'
+import { Check, Image as ImageIcon, LayoutGrid } from 'lucide-react'
 import { getSymptom } from '../data/symptoms'
 import type { Drill, SurfaceType } from '../types'
 import { DrillDiagram } from './DrillDiagram'
@@ -32,8 +33,12 @@ function SurfaceChecks({ worksOn }: { worksOn: SurfaceType }) {
   )
 }
 
+type SetupView = 'diagram' | 'photo'
+
 export function DrillCard({ drill, index }: DrillCardProps) {
   const symptomLabel = getSymptom(drill.symptomId)?.label ?? drill.symptomId
+  const [setupView, setSetupView] = useState<SetupView>('diagram')
+  const photoSrc = `/drills/${drill.id}.jpg`
 
   return (
     <Card className="drill-card" padding="lg">
@@ -71,10 +76,60 @@ export function DrillCard({ drill, index }: DrillCardProps) {
       <div className="drill-card__section">
         <h3 className="drill-card__label">Setup</h3>
         <p className="drill-card__setup">{drill.setup}</p>
-        <DrillDiagram drillId={drill.id} view={drill.view} />
-        <p className="drill-card__diagram-hint muted">
-          Numbers show where each piece goes. Glance once, then set it up.
-        </p>
+
+        <div className="setup-view-toggle" role="group" aria-label="Setup view">
+          <button
+            type="button"
+            className={
+              setupView === 'diagram'
+                ? 'setup-view-toggle__btn setup-view-toggle__btn--active'
+                : 'setup-view-toggle__btn'
+            }
+            onClick={() => setSetupView('diagram')}
+            aria-pressed={setupView === 'diagram'}
+          >
+            <LayoutGrid size={16} strokeWidth={2.25} aria-hidden="true" />
+            Diagram
+          </button>
+          <button
+            type="button"
+            className={
+              setupView === 'photo'
+                ? 'setup-view-toggle__btn setup-view-toggle__btn--active'
+                : 'setup-view-toggle__btn'
+            }
+            onClick={() => setSetupView('photo')}
+            aria-pressed={setupView === 'photo'}
+          >
+            <ImageIcon size={16} strokeWidth={2.25} aria-hidden="true" />
+            See real setup
+          </button>
+        </div>
+
+        {setupView === 'diagram' ? (
+          <>
+            <DrillDiagram drillId={drill.id} view={drill.view} />
+            <p className="drill-card__diagram-hint muted">
+              Numbers match the setup pieces above. Glance once, then set it up.
+            </p>
+          </>
+        ) : (
+          <>
+            <figure className="drill-photo">
+              <img
+                src={photoSrc}
+                alt={`Real-life setup for ${drill.name}`}
+                className="drill-photo__img"
+                loading="lazy"
+                width={1200}
+                height={800}
+              />
+            </figure>
+            <p className="drill-card__diagram-hint muted">
+              Photo of how this drill looks in real life. Match this layout on your mat.
+            </p>
+          </>
+        )}
       </div>
 
       <div className="drill-card__section">

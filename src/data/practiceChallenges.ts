@@ -25,40 +25,6 @@ export interface PracticeChallenge {
   reflection: string
 }
 
-export const templateMeta: Record<
-  TemplateKind,
-  { label: string; goalFocus: string }
-> = {
-  strike: {
-    label: 'Strike Improvement',
-    goalFocus: 'Improve strike quality',
-  },
-  ballFlight: {
-    label: 'Ball Flight Control',
-    goalFocus: 'Start the ball on your intended line',
-  },
-  distance: {
-    label: 'Distance Control',
-    goalFocus: 'Control carry distance',
-  },
-  accuracy: {
-    label: 'Accuracy',
-    goalFocus: 'Improve directional control',
-  },
-  consistency: {
-    label: 'Consistency',
-    goalFocus: 'Repeat the same movement',
-  },
-  pressure: {
-    label: 'Pressure Challenge',
-    goalFocus: 'Finish under pressure',
-  },
-  tempo: {
-    label: 'Tempo',
-    goalFocus: 'Develop smooth rhythm',
-  },
-}
-
 /** Two to three coach-written challenges per drill. */
 export const challengesByDrillId: Record<string, PracticeChallenge[]> = {
   'slice-alignment-stick': [

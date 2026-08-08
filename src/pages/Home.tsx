@@ -90,6 +90,11 @@ export function Home() {
         anytime. Your notes shape this beta.
       </p>
 
+      <p className="home-case-link">
+        <Link to="/case-study">Product case study</Link>
+        <span className="muted"> · Version 1 story</span>
+      </p>
+
       <BetaWelcomeModal
         open={betaOpen}
         onClose={() => setBetaOpen(false)}

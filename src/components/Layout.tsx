@@ -33,5 +33,3 @@ export function Layout() {
     </FeedbackProvider>
   )
 }
-
-export { useFeedback }

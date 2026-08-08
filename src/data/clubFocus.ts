@@ -46,10 +46,6 @@ export const clubFocusQuestions: ClubFocusQuestion[] = [
   },
 ]
 
-export function needsClubFocus(symptomId: SymptomId): boolean {
-  return clubFocusQuestions.some((q) => q.symptomId === symptomId)
-}
-
 export function getClubFocusQuestion(
   symptomId: SymptomId,
 ): ClubFocusQuestion | undefined {

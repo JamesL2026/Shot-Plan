@@ -463,19 +463,3 @@ function ChoiceStep<T extends string>({
     </>
   )
 }
-
-export function FeedbackFab({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      className="feedback-fab"
-      onClick={onClick}
-      aria-label="Help Improve ShotPlan"
-    >
-      <span className="feedback-fab__emoji" aria-hidden="true">
-        💬
-      </span>
-      <span className="feedback-fab__label">Help Improve ShotPlan</span>
-    </button>
-  )
-}

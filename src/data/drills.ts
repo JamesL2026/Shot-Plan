@@ -432,17 +432,6 @@ export interface PracticePrescription {
   remember: string
 }
 
-export interface PracticeOrderStep {
-  number: number
-  title: string
-  detail: string
-}
-
-export interface ChecklistItem {
-  id: string
-  label: string
-}
-
 export function buildPrescription(
   symptomIds: SymptomId[],
   recommended: Drill[],
@@ -476,43 +465,4 @@ export function buildPrescription(
     recommended[0]?.cue ?? 'One clear feel beats ten swing thoughts.'
 
   return { goal, estimatedTime, primaryFocus, remember }
-}
-
-export function buildPracticeOrder(recommended: Drill[]): PracticeOrderStep[] {
-  const steps: PracticeOrderStep[] = []
-  let n = 1
-
-  recommended.forEach((drill, index) => {
-    const adapted = drill as Drill & {
-      objective?: string
-      successCondition?: string
-      templateLabel?: string
-    }
-    const challengeLabel = adapted.templateLabel ?? `Challenge ${index + 1}`
-
-    steps.push({
-      number: n++,
-      title: drill.name,
-      detail: adapted.objective
-        ? `${challengeLabel}. ${adapted.objective}`
-        : `Set up and complete ${drill.name}.`,
-    })
-
-    steps.push({
-      number: n++,
-      title: 'Complete the challenge',
-      detail: adapted.successCondition
-        ? `You're ready when: ${adapted.successCondition}`
-        : 'Finish the challenge, then move on.',
-    })
-  })
-
-  return steps
-}
-
-export function buildChecklist(recommended: Drill[]): ChecklistItem[] {
-  return recommended.map((drill) => ({
-    id: `drill-${drill.id}`,
-    label: drill.name,
-  }))
 }

@@ -89,16 +89,3 @@ export function applySessionChallenges(
   )
 }
 
-export function totalEstimatedMinutes(drills: AdaptedDrill[]): number {
-  const sum = drills.reduce(
-    (acc, drill) => acc + (drill.estimatedMinutes ?? 5),
-    0,
-  )
-  return Math.max(sum, drills.length * 4)
-}
-
-export function formatMinutesRange(total: number): string {
-  const low = Math.max(10, total - 3)
-  const high = total + 3
-  return `${low}-${high} minutes`
-}

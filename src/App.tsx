@@ -40,6 +40,11 @@ const AssessmentPage = lazy(() =>
     default: module.AssessmentPage,
   })),
 )
+const RoundReviewPage = lazy(() =>
+  import('./pages/RoundReview').then((module) => ({
+    default: module.RoundReviewPage,
+  })),
+)
 
 function PageFallback() {
   return <div className="page-fallback" aria-hidden="true" />
@@ -119,6 +124,14 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <AssessmentPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="round"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <RoundReviewPage />
               </Suspense>
             }
           />

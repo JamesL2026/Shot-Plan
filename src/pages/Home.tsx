@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BookOpen, Clock3, Gauge, Target } from 'lucide-react'
+import { BookOpen, Clock3, Flag, Gauge, Target } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { BetaWelcomeModal } from '../components/BetaWelcomeModal'
 import { useFeedback } from '../components/FeedbackContext'
@@ -10,6 +10,7 @@ import {
   getAssessmentDraft,
   getLatestAssessment,
 } from '../lib/assessmentStorage'
+import { getRoundDraft } from '../lib/roundStorage'
 
 export function Home() {
   const { openFeedback } = useFeedback()
@@ -18,14 +19,18 @@ export function Home() {
     () => getLatestAssessment()?.result?.overallScore,
   )
   const [hasDraft] = useState(() => Boolean(getAssessmentDraft()))
+  const [hasRoundDraft] = useState(() => Boolean(getRoundDraft()))
   const assessCta = hasDraft
     ? 'Continue'
     : typeof latestScore === 'number'
       ? 'View Profile'
       : 'Start'
-  const assessTo = hasDraft || typeof latestScore === 'number'
-    ? '/assessment'
-    : '/assessment?start=1'
+  const assessTo = '/assessment'
+  const assessDesc = hasDraft
+    ? 'Pick up where you left off'
+    : typeof latestScore === 'number'
+      ? 'Your 15-shot snapshot'
+      : 'Range snapshot · 10 min'
 
   return (
     <section className="page home animate-in">
@@ -55,20 +60,41 @@ export function Home() {
 
       <nav className="home-actions" aria-label="Main actions">
         <div className="home-assess">
+          <p className="home-assess__kicker">Round Review</p>
+          <p className="home-assess__copy">
+            Track the mistakes that mattered — without tracking every shot.
+          </p>
+          <Button to="/round" variant="primary" block className="home-primary">
+            <span className="home-primary__inner">
+              <Flag size={22} strokeWidth={2.25} aria-hidden="true" />
+              <span>
+                <span className="home-primary__title">
+                  {hasRoundDraft ? 'Continue Round' : 'Start Round'}
+                </span>
+                <span className="home-primary__desc">18 holes · seconds per hole</span>
+              </span>
+            </span>
+          </Button>
+        </div>
+
+        <div className="home-assess">
           <p className="home-assess__kicker">Test Your Game</p>
           {typeof latestScore === 'number' ? (
             <p className="home-assess__score">
               Latest: {latestScore}
             </p>
           ) : (
-            <p className="home-assess__copy">15 shots. Find what to practice.</p>
+            <p className="home-assess__copy">
+              A 15-shot snapshot at the range. See what&apos;s strong and what
+              to practice.
+            </p>
           )}
-          <Button to={assessTo} variant="primary" block className="home-primary">
+          <Button to={assessTo} variant="secondary" block className="home-primary">
             <span className="home-primary__inner">
               <Gauge size={22} strokeWidth={2.25} aria-hidden="true" />
               <span>
                 <span className="home-primary__title">{assessCta}</span>
-                <span className="home-primary__desc">15 shots</span>
+                <span className="home-primary__desc">{assessDesc}</span>
               </span>
             </span>
           </Button>
@@ -124,7 +150,7 @@ export function Home() {
 
       <p className="home-case-link">
         <Link to="/case-study">Product case study</Link>
-        <span className="muted"> · Version 1 story</span>
+        <span className="muted"> · How it evolved</span>
       </p>
 
       <BetaWelcomeModal

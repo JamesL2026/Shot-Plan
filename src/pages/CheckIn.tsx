@@ -25,9 +25,6 @@ export function CheckIn() {
 
   const canContinueSymptoms = selected.length > 0
   const atLimit = selected.length >= MAX_SELECTIONS
-  const selectedClub = currentQuestion
-    ? clubFocus[currentQuestion.symptomId]
-    : undefined
 
   function toggleSymptom(id: SymptomId) {
     setSelected((prev) => {
@@ -65,21 +62,6 @@ export function CheckIn() {
     setStep('club')
   }
 
-  function handleClubContinue() {
-    if (!currentQuestion || !selectedClub) return
-    const nextFocus = {
-      ...clubFocus,
-      [currentQuestion.symptomId]: selectedClub,
-    }
-    const nextIndex = clubQueueIndex + 1
-    if (nextIndex >= queue.length) {
-      finishSession(nextFocus)
-      return
-    }
-    setClubFocus(nextFocus)
-    setClubQueueIndex(nextIndex)
-  }
-
   function handleClubBack() {
     if (clubQueueIndex > 0) {
       setClubQueueIndex((i) => i - 1)
@@ -89,15 +71,14 @@ export function CheckIn() {
   }
 
   const symptomHint = useMemo(() => {
-    if (selected.length === 0) return 'Select at least one area to continue.'
-    if (selected.length === 1) return '1 selected. You can add one more.'
-    return '2 selected. Ready for your coach.'
+    if (selected.length === 0) return 'Pick at least one.'
+    if (selected.length === 1) return '1 selected. Add one more if you want.'
+    return '2 selected.'
   }, [selected.length])
 
   if (step === 'club' && currentQuestion) {
     const symptomLabel =
       getSymptom(currentQuestion.symptomId)?.label ?? currentQuestion.symptomId
-    const moreAhead = queue.length - clubQueueIndex - 1
 
     return (
       <section className="page check-in animate-in">
@@ -110,14 +91,12 @@ export function CheckIn() {
           <p className="page-intro__kicker">Almost there</p>
           <p className="club-focus__eyebrow muted">{symptomLabel}</p>
           <h1>{currentQuestion.prompt}</h1>
-          <p className="muted">
-            One quick detail so your setup matches what you were hitting.
-          </p>
         </div>
 
         <div className="symptom-grid" role="radiogroup" aria-label={currentQuestion.prompt}>
           {currentQuestion.options.map((option) => {
-            const isSelected = selectedClub === option.value
+            const isSelected =
+              clubFocus[currentQuestion.symptomId] === option.value
             return (
               <button
                 key={option.value}
@@ -129,12 +108,19 @@ export function CheckIn() {
                     : 'symptom-card'
                 }
                 aria-checked={isSelected}
-                onClick={() =>
-                  setClubFocus((prev) => ({
-                    ...prev,
+                onClick={() => {
+                  const nextFocus = {
+                    ...clubFocus,
                     [currentQuestion.symptomId]: option.value as ClubFocus,
-                  }))
-                }
+                  }
+                  const nextIndex = clubQueueIndex + 1
+                  if (nextIndex >= queue.length) {
+                    finishSession(nextFocus)
+                    return
+                  }
+                  setClubFocus(nextFocus)
+                  setClubQueueIndex(nextIndex)
+                }}
               >
                 <span className="symptom-card__copy">
                   <span className="symptom-card__label">{option.label}</span>
@@ -153,25 +139,6 @@ export function CheckIn() {
             )
           })}
         </div>
-
-        <p className="selection-hint muted" aria-live="polite">
-          {selectedClub
-            ? moreAhead > 0
-              ? 'Next: one more quick question.'
-              : 'Ready for your coach.'
-            : 'Pick one to continue.'}
-        </p>
-
-        <div className="sticky-footer">
-          <Button
-            variant="primary"
-            block
-            disabled={!selectedClub}
-            onClick={handleClubContinue}
-          >
-            {moreAhead > 0 ? 'Continue' : 'Meet your coach'}
-          </Button>
-        </div>
       </section>
     )
   }
@@ -181,11 +148,9 @@ export function CheckIn() {
       <BackLink to="/">Home</BackLink>
 
       <div className="page-intro">
-        <p className="page-intro__kicker">Check in · under a minute</p>
+        <p className="page-intro__kicker">Check in</p>
         <h1>What do you want to fix?</h1>
-        <p className="muted">
-          Pick one or two. Your coach builds a short practice from there.
-        </p>
+        <p className="muted">Pick one or two.</p>
       </div>
 
       <div className="symptom-grid" role="group" aria-label="Trouble areas">

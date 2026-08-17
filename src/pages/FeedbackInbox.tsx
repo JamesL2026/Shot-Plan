@@ -6,7 +6,12 @@ import {
   deleteFeedbackSubmission,
   feedbackDayKey,
   feedbackDayLabel,
+  feedbackKindLabel,
   fetchFeedbackInbox,
+  practiceChangeLabel,
+  profileAccuracyLabel,
+  useAgainLabel,
+  usefulnessLabel,
 } from '../lib/feedback'
 import type { FeedbackSubmission } from '../types/feedback'
 
@@ -118,8 +123,7 @@ export function FeedbackInbox() {
         <p className="page-intro__kicker">Owner only</p>
         <h1>Feedback inbox</h1>
         <p className="muted">
-          Submissions from Help Improve across the live site. Not linked from the
-          public home screen.
+          Help Improve and Quick Baseline answers from the live app.
         </p>
       </div>
 
@@ -197,8 +201,8 @@ export function FeedbackInbox() {
             <Card key={item.id} padding="lg" className="feedback-inbox__card">
               <div className="feedback-inbox__card-top">
                 <p className="feedback-inbox__meta">
-                  {new Date(item.createdAt).toLocaleString()} · from{' '}
-                  {item.openedFrom}
+                  {new Date(item.createdAt).toLocaleString()} ·{' '}
+                  {feedbackKindLabel(item.answers.kind)}
                 </p>
                 <button
                   type="button"
@@ -210,6 +214,36 @@ export function FeedbackInbox() {
                 </button>
               </div>
               <dl className="feedback-inbox__answers">
+                {item.answers.profileAccuracy && (
+                  <div>
+                    <dt>Feel right?</dt>
+                    <dd>{profileAccuracyLabel(item.answers.profileAccuracy)}</dd>
+                  </div>
+                )}
+                {item.answers.wouldChangePractice && (
+                  <div>
+                    <dt>Change practice?</dt>
+                    <dd>{practiceChangeLabel(item.answers.wouldChangePractice)}</dd>
+                  </div>
+                )}
+                {typeof item.answers.overallScore === 'number' && (
+                  <div>
+                    <dt>Score</dt>
+                    <dd>{item.answers.overallScore}</dd>
+                  </div>
+                )}
+                {item.answers.strongest && (
+                  <div>
+                    <dt>Strongest</dt>
+                    <dd>{item.answers.strongest}</dd>
+                  </div>
+                )}
+                {item.answers.opportunity && (
+                  <div>
+                    <dt>Opportunity</dt>
+                    <dd>{item.answers.opportunity}</dd>
+                  </div>
+                )}
                 {item.answers.golferType && (
                   <div>
                     <dt>Golfer</dt>
@@ -219,7 +253,7 @@ export function FeedbackInbox() {
                 {item.answers.planUsefulness && (
                   <div>
                     <dt>Plan usefulness</dt>
-                    <dd>{item.answers.planUsefulness} / 5</dd>
+                    <dd>{usefulnessLabel(item.answers.planUsefulness)}</dd>
                   </div>
                 )}
                 {item.answers.recommend && (
@@ -231,7 +265,7 @@ export function FeedbackInbox() {
                 {item.answers.useAgain && (
                   <div>
                     <dt>Use again</dt>
-                    <dd>{item.answers.useAgain}</dd>
+                    <dd>{useAgainLabel(item.answers.useAgain)}</dd>
                   </div>
                 )}
                 {item.answers.frustration && (

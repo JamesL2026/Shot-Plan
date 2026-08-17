@@ -43,7 +43,14 @@ export type UseAgainIntent = 'definitely' | 'probably' | 'maybe' | 'probably-not
 
 export type RecommendIntent = 'yes' | 'maybe' | 'no'
 
+export type FeedbackKind = 'help-improve' | 'quick-baseline'
+
+export type ProfileAccuracyAnswer = 'accurate' | 'mostly' | 'inaccurate'
+
+export type PracticeChangeAnswer = 'yes' | 'maybe' | 'no'
+
 export interface FeedbackAnswers {
+  kind?: FeedbackKind
   golferType?: GolferType
   playFrequency?: PlayFrequency
   practiceFrequency?: PracticeFrequency
@@ -53,6 +60,12 @@ export interface FeedbackAnswers {
   improvementIdea?: string
   useAgain?: UseAgainIntent
   recommend?: RecommendIntent
+  profileAccuracy?: ProfileAccuracyAnswer
+  wouldChangePractice?: PracticeChangeAnswer
+  assessmentId?: string
+  overallScore?: number
+  strongest?: string
+  opportunity?: string
 }
 
 export interface FeedbackSubmission {

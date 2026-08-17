@@ -35,6 +35,11 @@ const CaseStudy = lazy(() =>
     default: module.CaseStudy,
   })),
 )
+const AssessmentPage = lazy(() =>
+  import('./pages/Assessment').then((module) => ({
+    default: module.AssessmentPage,
+  })),
+)
 
 function PageFallback() {
   return <div className="page-fallback" aria-hidden="true" />
@@ -106,6 +111,14 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <CaseStudy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="assessment"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <AssessmentPage />
               </Suspense>
             }
           />

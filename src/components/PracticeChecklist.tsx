@@ -139,11 +139,8 @@ export function PracticeComplete({
       </Card>
 
       <Card className="session-pulse" padding="lg">
-        <p className="session-pulse__title">Help shape this beta</p>
-        <p className="session-pulse__body muted">
-          What felt clear? What felt confusing? Tap below anytime, or use Help
-          Improve in the top corner on any screen.
-        </p>
+        <p className="session-pulse__title">Help Improve</p>
+        <p className="session-pulse__body muted">Two taps. That&apos;s it.</p>
         <button
           type="button"
           className="session-pulse__link"
@@ -152,17 +149,16 @@ export function PracticeComplete({
               seed:
                 contactFeel === 'much-better'
                   ? { planUsefulness: 5 as PlanUsefulness }
-                  : contactFeel === 'slightly-better'
-                    ? { planUsefulness: 4 as PlanUsefulness }
-                    : contactFeel === 'no-change'
-                      ? { planUsefulness: 3 as PlanUsefulness }
-                      : contactFeel === 'worse'
-                        ? { planUsefulness: 2 as PlanUsefulness }
-                        : undefined,
+                  : contactFeel === 'slightly-better' ||
+                      contactFeel === 'no-change'
+                    ? { planUsefulness: 3 as PlanUsefulness }
+                    : contactFeel === 'worse'
+                      ? { planUsefulness: 1 as PlanUsefulness }
+                      : undefined,
             })
           }
         >
-          Leave feedback →
+          Tap here
         </button>
       </Card>
     </div>

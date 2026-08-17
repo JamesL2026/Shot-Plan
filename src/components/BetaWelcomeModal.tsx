@@ -65,20 +65,14 @@ export function BetaWelcomeModal({
         <p className="beta-welcome__badge" aria-hidden="true">
           {'\u{1F6A7}'} Early Beta
         </p>
-        <h2 id={titleId}>Welcome to the ShotPlan Beta</h2>
+        <h2 id={titleId}>ShotPlan beta</h2>
         <div className="beta-welcome__body muted">
-          <p>
-            ShotPlan is a practice coach. Check in after a round, get one focused
-            session, and leave Round Ready.
-          </p>
-          <p>
-            This is an early beta. Your feedback shapes what we build next.
-          </p>
+          <p>Early build. Two taps in Help Improve shape what we make next.</p>
         </div>
 
         <div className="beta-welcome__actions">
           <Button variant="primary" block onClick={onClose}>
-            Continue
+            Got it
           </Button>
           <Button
             variant="secondary"
@@ -88,7 +82,7 @@ export function BetaWelcomeModal({
               onHelpImprove()
             }}
           >
-            {'\u{1F4AC}'} Help Improve ShotPlan
+            Help Improve
           </Button>
         </div>
       </div>

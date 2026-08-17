@@ -8,10 +8,12 @@ const FEEDBACK_KEY = 'shotplan:feedback'
 export async function submitFeedback(input: {
   answers: FeedbackAnswers
   openedFrom: string
+  id?: string
+  createdAt?: string
 }): Promise<FeedbackSubmission> {
   const submission: FeedbackSubmission = {
-    id: crypto.randomUUID(),
-    createdAt: new Date().toISOString(),
+    id: input.id ?? crypto.randomUUID(),
+    createdAt: input.createdAt ?? new Date().toISOString(),
     source: 'shotplan-web',
     openedFrom: input.openedFrom,
     answers: input.answers,
@@ -36,7 +38,9 @@ export async function submitFeedback(input: {
 }
 
 export function saveFeedbackLocally(submission: FeedbackSubmission): void {
-  const existing = getFeedbackSubmissions()
+  const existing = getFeedbackSubmissions().filter(
+    (item) => item.id !== submission.id,
+  )
   existing.unshift(submission)
   try {
     localStorage.setItem(FEEDBACK_KEY, JSON.stringify(existing))
@@ -114,6 +118,40 @@ function isFeedbackSubmission(value: unknown): value is FeedbackSubmission {
     typeof s.answers === 'object' &&
     s.answers !== null
   )
+}
+
+export function feedbackKindLabel(kind?: string): string {
+  return kind === 'quick-baseline' ? 'Quick Baseline' : 'Help Improve'
+}
+
+export function profileAccuracyLabel(value?: string): string {
+  if (value === 'accurate') return 'Yes'
+  if (value === 'mostly') return 'Mostly'
+  if (value === 'inaccurate') return 'No'
+  return value ?? ''
+}
+
+export function practiceChangeLabel(value?: string): string {
+  if (value === 'yes') return 'Yes'
+  if (value === 'maybe') return 'Maybe'
+  if (value === 'no') return 'No'
+  return value ?? ''
+}
+
+export function usefulnessLabel(value?: number): string {
+  if (value === 5) return 'Yes'
+  if (value === 4) return 'Very helpful'
+  if (value === 3) return 'Sort of'
+  if (value === 2) return 'Slightly'
+  if (value === 1) return 'No'
+  return value != null ? `${value} / 5` : ''
+}
+
+export function useAgainLabel(value?: string): string {
+  if (value === 'definitely' || value === 'probably') return 'Yes'
+  if (value === 'maybe') return 'Maybe'
+  if (value === 'probably-not') return 'No'
+  return value ?? ''
 }
 
 export { FEEDBACK_KEY }

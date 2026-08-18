@@ -31,7 +31,7 @@ export function RoundHistory({ rounds, onOpen, onNew }: RoundHistoryProps) {
                 >
                   <span className="rr-history-item__top">
                     <span>{formatRoundDate(round.completedAt ?? round.createdAt)}</span>
-                    <strong>{typeof score === 'number' ? score : '—'}</strong>
+                    <strong>{typeof score === 'number' ? score : '·'}</strong>
                   </span>
                   <span className="rr-history-item__cats muted">
                     {top.length === 0

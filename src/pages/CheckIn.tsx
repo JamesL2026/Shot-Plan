@@ -201,7 +201,7 @@ export function CheckIn() {
           disabled={!canContinueSymptoms}
           onClick={handleSymptomsContinue}
         >
-          Get my session
+          Get my practice plan
         </Button>
       </div>
     </section>

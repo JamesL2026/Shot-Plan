@@ -38,6 +38,8 @@ export interface AssessmentTestDef {
   hitDetail: string
   logPrompt: string
   club: string
+  target: string
+  scoreGuide: string
   shotCount: number
   maxPoints: number
   resultPrompt: string
@@ -49,8 +51,8 @@ export interface AssessmentTestDef {
 
 const FULL_SWING_OPTIONS: ResultOption[] = [
   { result: 'good', label: 'Good', score: 2 },
-  { result: 'playable-miss', label: 'Playable Miss', score: 1 },
-  { result: 'major-miss', label: 'Major Miss', score: 0 },
+  { result: 'playable-miss', label: 'In play', score: 1 },
+  { result: 'major-miss', label: 'Trouble', score: 0 },
 ]
 
 const DRIVER_MISS: MissOption[] = [
@@ -105,51 +107,62 @@ export const ASSESSMENT_TESTS: AssessmentTestDef[] = [
   {
     id: 'driver-control',
     title: 'Driver Control',
-    instruction: 'Hit 3 drives toward your chosen target.',
+    instruction:
+      'Grab your driver. Pick one fairway or target. Hit 3 balls at it, same target each time.',
     hitHeadline: 'Hit 3 drives',
-    hitDetail: 'Pick one target or fairway corridor.',
+    hitDetail: 'Pocket your phone. Hit all 3. Then come back and log them.',
     logPrompt: 'How did your 3 drives go?',
     club: 'Driver',
+    target: 'One fairway or flag',
+    scoreGuide:
+      "Good = you'd play it. In play = not great, still okay. Trouble = reload or penalty.",
     shotCount: QUICK_BASELINE_SHOTS_PER_TEST,
     maxPoints: QUICK_BASELINE_MAX_POINTS,
     resultPrompt: 'How was it?',
     resultOptions: FULL_SWING_OPTIONS,
-    missPrompt: 'What happened?',
+    missPrompt: 'What kind of miss? Optional.',
     missOptions: DRIVER_MISS,
   },
   {
     id: 'iron-control',
     title: 'Iron Control',
-    instruction: 'Choose a mid-iron and hit 3 shots toward one target.',
+    instruction:
+      'Grab a mid iron (7, 8, or 9). Pick one target. Hit 3 shots at that same target.',
     hitHeadline: 'Hit 3 iron shots',
-    hitDetail: 'Hit all three toward the same target.',
+    hitDetail: 'Pocket your phone. Hit all 3. Then come back and log them.',
     logPrompt: 'How did your 3 iron shots go?',
-    club: 'Mid-iron',
+    club: 'Mid iron (7, 8, or 9)',
+    target: 'One flag or landing spot',
+    scoreGuide:
+      "Good = you'd play it. In play = not great, still okay. Trouble = reload or penalty.",
     shotCount: QUICK_BASELINE_SHOTS_PER_TEST,
     maxPoints: QUICK_BASELINE_MAX_POINTS,
     resultPrompt: 'How was it?',
     resultOptions: FULL_SWING_OPTIONS,
-    missPrompt: 'What happened?',
+    missPrompt: 'What kind of miss? Optional.',
     missOptions: IRON_MISS,
   },
   {
     id: 'wedge-control',
     title: 'Wedge Control',
     instruction:
-      'Use one wedge. Hit 3 shots to one target — about 75 yards, or whatever target you have.',
+      'Grab one wedge. Pick a target about 75 yards out, or the closest thing you have. Hit 3 shots to that same target.',
     hitHeadline: 'Hit 3 wedge shots',
-    hitDetail: 'Use one wedge and one target. About 75 yards if you have it.',
+    hitDetail: 'Pocket your phone. Hit all 3. Then come back and log them.',
     logPrompt: 'How did your 3 wedge shots go?',
-    club: '56° wedge',
+    club: 'One wedge',
+    target: 'About 75 yards, one target',
+    scoreGuide:
+      'Close = near the target. A little off = short, long, or wide. Way off = nowhere near.',
     shotCount: QUICK_BASELINE_SHOTS_PER_TEST,
     maxPoints: QUICK_BASELINE_MAX_POINTS,
     resultPrompt: 'How was it?',
     resultOptions: [
-      { result: 'target-zone', label: 'Target Zone', score: 2 },
-      { result: 'slight-miss', label: 'Slight Miss', score: 1 },
-      { result: 'big-miss', label: 'Big Miss', score: 0 },
+      { result: 'target-zone', label: 'Close', score: 2 },
+      { result: 'slight-miss', label: 'A little off', score: 1 },
+      { result: 'big-miss', label: 'Way off', score: 0 },
     ],
-    missPrompt: 'What happened?',
+    missPrompt: 'What kind of miss? Optional.',
     missOptions: WEDGE_MISS,
     suggestedDistanceYards: 75,
   },
@@ -157,28 +170,33 @@ export const ASSESSMENT_TESTS: AssessmentTestDef[] = [
     id: 'lag-putting',
     title: 'Lag Putting',
     instruction:
-      'Start from roughly 30 feet and hit 3 putts toward the hole.',
+      'On a green or a flat patch, drop 3 balls about 30 feet from a hole (or a tee). Hit all 3 toward it.',
     hitHeadline: 'Hit 3 lag putts',
-    hitDetail: 'Hit all 3 putts before recording the results.',
-    logPrompt: 'How did your 3 lag putts finish?',
+    hitDetail: 'From about 30 feet. Hit all 3, then log how close they finished.',
+    logPrompt: 'How close did each putt finish?',
     club: 'Putter',
+    target: 'About 30 feet to a hole',
+    scoreGuide: 'Tap how far each ball finished from the hole.',
     shotCount: QUICK_BASELINE_SHOTS_PER_TEST,
     maxPoints: QUICK_BASELINE_MAX_POINTS,
     resultPrompt: 'Where did it finish?',
     resultOptions: [
       { result: 'inside-3', label: 'Inside 3 ft', score: 2 },
-      { result: 'three-to-six', label: '3–6 ft', score: 1 },
+      { result: 'three-to-six', label: '3-6 ft', score: 1 },
       { result: 'more-than-6', label: '6+ ft', score: 0 },
     ],
   },
   {
     id: 'short-putting',
     title: 'Short Putting',
-    instruction: 'Place 3 balls about 4 feet from the hole.',
+    instruction:
+      "Place 3 balls about 4 feet from a hole. Hit each one. Made or missed, that's it.",
     hitHeadline: 'Hit 3 short putts',
-    hitDetail: 'Hit all three putts first.',
-    logPrompt: 'How did your 3 short putts go?',
+    hitDetail: 'From about 4 feet. Hit all 3, then log made or missed.',
+    logPrompt: 'Did each putt go in?',
     club: 'Putter',
+    target: 'About 4 feet',
+    scoreGuide: 'Made or missed. No maybes.',
     shotCount: QUICK_BASELINE_SHOTS_PER_TEST,
     maxPoints: QUICK_BASELINE_MAX_POINTS,
     resultPrompt: 'Did it go in?',

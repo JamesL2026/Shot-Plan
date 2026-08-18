@@ -66,7 +66,7 @@ export const SHORT_GAME_SUBS: {
 ]
 
 export const PUTTING_SUBS: { value: PuttingSubcategory; label: string }[] = [
-  { value: 'three-putt', label: 'Three-Putt' },
+  { value: 'three-putt', label: 'Three putt' },
   { value: 'short-miss', label: 'Short Miss' },
   { value: 'poor-speed', label: 'Poor Speed' },
   { value: 'poor-read', label: 'Poor Read' },
@@ -211,7 +211,7 @@ export function countBySubcategory(mistakes: Mistake[]): SubcategoryCount[] {
 export function buildInsight(holes: HoleReview[]): string {
   const mistakes = allMistakes(holes)
   if (mistakes.length === 0) {
-    return 'You logged a clean card — nothing stood out as a mistake today.'
+    return 'You logged a clean card. Nothing stood out as a mistake today.'
   }
 
   const categories = countByCategory(mistakes)

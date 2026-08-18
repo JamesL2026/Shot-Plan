@@ -40,9 +40,17 @@ const AssessmentPage = lazy(() =>
     default: module.AssessmentPage,
   })),
 )
-const RoundReviewPage = lazy(() =>
-  import('./pages/RoundReview').then((module) => ({
-    default: module.RoundReviewPage,
+const PlayPage = lazy(() =>
+  import('./pages/Play').then((module) => ({ default: module.PlayPage })),
+)
+const PracticePage = lazy(() =>
+  import('./pages/Practice').then((module) => ({
+    default: module.PracticePage,
+  })),
+)
+const ProgressPage = lazy(() =>
+  import('./pages/Progress').then((module) => ({
+    default: module.ProgressPage,
   })),
 )
 
@@ -128,13 +136,30 @@ export default function App() {
             }
           />
           <Route
-            path="round"
+            path="play"
             element={
               <Suspense fallback={<PageFallback />}>
-                <RoundReviewPage />
+                <PlayPage />
               </Suspense>
             }
           />
+          <Route
+            path="practice"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <PracticePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="progress"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ProgressPage />
+              </Suspense>
+            }
+          />
+          <Route path="round" element={<Navigate to="/play" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

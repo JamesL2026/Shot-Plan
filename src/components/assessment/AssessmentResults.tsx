@@ -81,7 +81,7 @@ export function AssessmentResults({
       <p className="assess-overall-label">Quick Baseline</p>
       <p className="assess-overall">{result.overallScore}</p>
       <p className="assess-disclaimer">
-        A 15-shot snapshot. Not a handicap.
+        A 15 shot snapshot. Not a handicap.
       </p>
 
       <div className="assess-skills" aria-label="Five skill scores">
@@ -99,13 +99,13 @@ export function AssessmentResults({
         <article className="assess-highlight">
           <p className="assess-highlight__label">Strongest today</p>
           <p className="assess-highlight__value">
-            {result.strongest.label} — {result.strongest.score}
+            {result.strongest.label} {result.strongest.score}
           </p>
         </article>
         <article className="assess-highlight assess-highlight--opportunity">
           <p className="assess-highlight__label">Biggest opportunity today</p>
           <p className="assess-highlight__value">
-            {result.biggestOpportunity.label} — {result.biggestOpportunity.score}
+            {result.biggestOpportunity.label} {result.biggestOpportunity.score}
           </p>
         </article>
         {result.mostCommonMiss ? (
@@ -164,7 +164,7 @@ export function AssessmentResults({
           })}
         </div>
         {accuracy && feedback?.wouldChangePractice ? (
-          <p className="assess-survey__thanks">Thanks — that helps.</p>
+          <p className="assess-survey__thanks">Thanks. That helps.</p>
         ) : null}
       </div>
 

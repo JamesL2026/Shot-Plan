@@ -41,6 +41,7 @@ export function AssessmentLogSet({
       <AssessProgress current={testNumber} total={totalTests} />
       <p className="assess-test-name">{def.title}</p>
       <h1>{def.logPrompt}</h1>
+      <p className="muted assess-hint">{def.scoreGuide}</p>
 
       <div className="assess-log-list">
         {entries.map((entry, index) => (
@@ -48,6 +49,7 @@ export function AssessmentLogSet({
             key={index}
             shotNumber={index + 1}
             options={def.resultOptions}
+            missPrompt={def.missPrompt}
             missOptions={def.missOptions}
             entry={entry}
             onSelectResult={(option) => onSelectResult(index, option)}
@@ -74,6 +76,7 @@ export function AssessmentLogSet({
 function ShotLogRow({
   shotNumber,
   options,
+  missPrompt,
   missOptions,
   entry,
   onSelectResult,
@@ -81,6 +84,7 @@ function ShotLogRow({
 }: {
   shotNumber: number
   options: ResultOption[]
+  missPrompt?: string
   missOptions?: MissOption[]
   entry: LogEntry | null
   onSelectResult: (option: ResultOption) => void
@@ -124,6 +128,11 @@ function ShotLogRow({
           role="group"
           aria-label={`Shot ${shotNumber} miss detail, optional`}
         >
+          {missPrompt ? (
+            <p className="assess-log-shot__label assess-log-shot__label--miss">
+              {missPrompt}
+            </p>
+          ) : null}
           {missOptions.map((option) => {
             const selected = entry?.missType === option.value
             return (

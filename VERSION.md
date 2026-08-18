@@ -1,129 +1,108 @@
-# ShotPlan — Version 1
+# ShotPlan — Version Record
 
 | Field | Value |
 |-------|-------|
 | **Project** | ShotPlan |
-| **Version** | 1.0 |
-| **Status** | Preserved milestone (`v1.0` tag recommended) |
+| **Current milestone** | 2.0 — Quick Baseline |
+| **Status** | Ready to tag as `v2.0` |
 | **Live app** | https://shot-plan-pi.vercel.app |
-| **Repository** | Continue Version 2 in this same repo |
+| **Repository** | Continue in this same repo — no duplicate apps or folders |
 
-Version 1 is preserved through **Git tags**, not duplicate folders or separate apps.
+Previous versions are preserved through **Git tags and history**, not copies of the project.
 
----
-
-## Purpose
-
-Version 1 attempted to solve a simple post-round problem:
-
-> After a bad round, golfers waste range time because they do not know what to practice next.
-
-ShotPlan V1 turns a quick check-in into a calm, coach-led practice session — focused drills, one swing thought, and a Round Ready wrap-up — without video analysis or accounts.
+| Tag | Product |
+|-----|---------|
+| `v1.0` | Practice Coach *(already tagged)* |
+| `v2.0` | Quick Baseline *(tag after this freeze)* |
+| `v3.0` | Round Review *(not built yet)* |
 
 ---
 
-## Target User
+## Version 1 — Practice Coach
 
-- Mid-handicap and developing golfers who practice alone
-- Players who leave the course frustrated and want a clear next step
-- Beginners who need guidance, and serious amateurs who want structure without a full lesson
-- Mobile users at the range (PWA / phone-first)
+**Hypothesis:** Golfers struggle to know what to practice after a bad round.
 
----
+**Product:** The golfer selected a problem such as slice, hook, fat shots, thin shots, chipping, or putting. ShotPlan generated a guided practice session with drills, coaching cues, illustrations, challenges, and a coach-style flow: Check In → Coach Brief → Challenges → Round Ready.
 
-## Core Features
+**What this experiment showed:** Drills alone were not a strong enough value proposition. Many golfers already know their common misses. The bigger problem may not be finding another drill.
 
-- **Check-in** — pick up to two miss patterns (slice, hook, fat, thin, chipping, putting)
-- **Club focus** — optional driver / irons / wedge context where relevant
-- **Coach brief** — today’s focus, priority (what to ignore), estimated time, swing thought
-- **Guided practice** — one challenge at a time with setup, diagram, real-setup photo, Coach Says
-- **Coach transitions** — short human encouragement between challenges
-- **Round Ready / Coach’s Wrap-Up** — focus, challenges completed, biggest win, reflection
-- **Follow-up** — quick “did you try it / did it help” after a session
-- **Practice Library** — browse drills by miss
-- **Practice Journal** — reopen past on-device sessions
-- **Drill diagrams + photos** — setup clarity without video
-- **PWA** — installable, mobile-first shell
-- **Beta feedback** — in-app Help Improve sheet
-- **Feedback inbox** — admin-only `/inbox` for reviewing submissions
-- **Portfolio case study** — `/case-study` documenting product journey (placeholders for research)
+V1 remains in the product (Check In, library, journal) and is recoverable at tag `v1.0`.
 
 ---
 
-## Known Limitations
+## Version 2 — Quick Baseline
 
-- Local-first only — no accounts; journal lives on one device
-- Symptom check-in may oversimplify golfers who think in patterns across rounds
-- Practice prescriptions help structure the range; they do not guarantee on-course transfer
-- Pre-practice checks are limited (e.g. grip for hook)
-- Feedback and inbox depend on Vercel Blob + admin secret configuration
-- No round logging, scorecards, or shot tracking in V1
-- No personalized model beyond curated drills and session seed variation
+**Hypothesis:** A short assessment could help golfers objectively identify which part of their game deserves practice.
+
+**Product:** A 15-shot Quick Baseline across five categories — Driver Control, Iron Control, Wedge Control, Lag Putting, Short Putting. The golfer received a ShotPlan Profile with strongest area and biggest opportunity. Feedback from the profile and Help Improve lands in the inbox.
+
+**What this experiment showed:** The assessment worked technically, but information gain was limited. If a golfer hits three poor iron shots, they often already know their irons were poor. Measurement without a sufficiently new or actionable insight may not create enough value.
 
 ---
 
-## Lessons Learned
+## Version 3 — Round Review
 
-(Summarized for product direction — fill with specifics as research is pasted into the case study.)
+**Status:** Next experiment. Not implemented.
 
-1. **Shipping a focused MVP beats waiting for a perfect coach AI.**
-2. **Tone matters** — golfers respond better to a calm coach voice than to manual-style instructions.
-3. **Clarity of setup** (diagrams, photos, short steps) reduces abandonment at the range.
-4. **Assumptions need validation** — “golfers don’t know what to practice” is only part of the story; many already know their miss and struggle with patterns, decisions, and transfer.
-5. **In-app feedback loops** are essential for a beta; portfolio-quality research should sit next to the product.
+**Hypothesis:** Golfers may get more value from quickly capturing meaningful mistakes during real rounds and recognizing what repeatedly affects scoring.
 
----
+**Product principle to test later:** Track mistakes, not every shot.
 
-## Future Direction
-
-Version 2 and beyond will evolve **inside this repository**:
-
-| Version | Direction |
-|---------|-----------|
-| **V1** | Practice prescriptions (this milestone) |
-| **V2** | Round review — capture what happened, not only what to drill |
-| **V3** | Pattern recognition across sessions and rounds |
-| **V4** | Personalized improvement engine |
-
-See `CHANGELOG.md`, `case-study.md`, and the in-app page at `/case-study`.
+Do not treat this hypothesis as validated.
 
 ---
 
-## Preserve this release with Git
+## Product Experiments
 
-Do **not** duplicate the project. Tag this commit so V1 remains recoverable forever.
+ShotPlan is developed through hypothesis-driven iterations. Each version is an experiment that generated information for the next decision — not a failed product.
+
+### Experiment 1 — Practice Coach
+
+| | |
+|---|---|
+| **Problem Hypothesis** | After a bad round, golfers waste range time because they do not know what to practice next. |
+| **Product Experiment** | Check-in on a miss → guided coaching session with drills, cues, and Round Ready. |
+| **User Feedback** | Early qualitative research suggested many golfers already know their obvious misses. Drill discovery alone did not feel like a new enough product. |
+| **What I Learned** | Structure and coaching tone help, but “here is another drill” is a weak value proposition if the golfer already knows the miss. |
+| **Next Decision** | Test whether a short, objective snapshot of the game would show *which skill* deserves practice. |
+
+### Experiment 2 — Quick Baseline
+
+| | |
+|---|---|
+| **Problem Hypothesis** | Golfers need an objective read on which part of their game is actually the opportunity. |
+| **Product Experiment** | 15-shot Quick Baseline and a ShotPlan Profile (strongest / biggest opportunity). |
+| **User Feedback** | The flow can be completed, but a category score often restates what the golfer just felt over those three shots. |
+| **What I Learned** | Lightweight measurement can organize performance, yet identifying “irons were poor today” may not be new or actionable enough. |
+| **Next Decision** | Test Round Review: capture meaningful mistakes from real rounds and look for what repeats — without building shot-by-shot tracking. |
+
+### Experiment 3 — Round Review *(planned)*
+
+| | |
+|---|---|
+| **Problem Hypothesis** | Golfers get more value from seeing what repeatedly affected scoring than from more drills or isolated skill scores. |
+| **Product Experiment** | Not built yet. Intended principle: track mistakes, not every shot. |
+| **User Feedback** | — |
+| **What I Learned** | — |
+| **Next Decision** | Build and test only after V2 is tagged. |
+
+---
+
+## Known Limitations (V2)
+
+- Local-first sessions and baselines (one device unless the golfer uses the same browser)
+- Quick Baseline is a 15-shot snapshot, not a handicap or launch-monitor profile
+- V1 practice loop and V2 assessment both live in the app; they are not yet one connected improvement system
+- Round logging, mistake patterns, and accounts are out of scope for V2
+- Community quotes on the case study stay as placeholders until real notes are pasted
+
+---
+
+## Recovering previous versions
 
 ```bash
-# Stage everything for the V1 release
-git add .
-
-# Create the release commit
-git commit -m "Release: ShotPlan V1"
-
-# Tag this exact commit as Version 1.0
-git tag v1.0
-
-# Push the commit to GitHub
-git push
-
-# Push the tag so V1 is recoverable remotely
-git push --tags
+git checkout v1.0    # Practice Coach freeze
+git checkout v2.0    # Quick Baseline freeze (after the tag exists)
 ```
 
-### What each command does
-
-| Command | Purpose |
-|---------|---------|
-| `git add .` | Stages all current changes for commit. |
-| `git commit -m "Release: ShotPlan V1"` | Records the V1 milestone with a clear message. |
-| `git tag v1.0` | Labels this commit as Version 1.0 for easy checkout later. |
-| `git push` | Publishes the commit to the remote (`origin`). |
-| `git push --tags` | Publishes the `v1.0` tag so others (and future you) can restore V1. |
-
-### Restore Version 1 later
-
-```bash
-git checkout v1.0
-```
-
-Then continue Version 2 on `main` as usual.
+Continue later work on a branch such as `v3-round-review`. Do not duplicate the repository.

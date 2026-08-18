@@ -32,7 +32,7 @@ export function RoundReplay({
       <p className="rr-kicker">Round Replay</p>
       <p className="rr-overall-label">Today&apos;s score</p>
       <p className="rr-overall">{score}</p>
-      <p className="muted rr-hint">Mistakes logged — not strokes lost.</p>
+      <p className="muted rr-hint">Mistakes logged, not strokes lost.</p>
 
       {counts.length === 0 ? (
         <p className="rr-empty">No mistakes logged this round.</p>

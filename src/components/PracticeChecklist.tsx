@@ -58,7 +58,7 @@ export function PracticeComplete({
     <div className="practice-complete-stack animate-in">
       <Card className="round-ready" padding="lg">
         <p className="round-ready__kicker">Round Ready</p>
-        <h2 className="round-ready__title">Coach&apos;s Wrap-Up</h2>
+        <h2 className="round-ready__title">Coach&apos;s Wrap Up</h2>
 
         <dl className="round-ready__meta">
           <div>
@@ -125,7 +125,7 @@ export function PracticeComplete({
         <div className="practice-complete__actions">
           {showFollowUp && onFollowUp && (
             <Button variant="primary" block onClick={onFollowUp}>
-              Quick follow-up
+              Quick follow up
             </Button>
           )}
           <Button

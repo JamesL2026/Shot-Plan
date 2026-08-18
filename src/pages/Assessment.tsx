@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { AssessmentBrief } from '../components/assessment/AssessmentBrief'
 import { AssessmentIntro } from '../components/assessment/AssessmentIntro'
 import { AssessmentLogSet } from '../components/assessment/AssessmentLogSet'
@@ -45,25 +45,13 @@ function resumePhase(draft: AssessmentDraft): Phase {
 
 export function AssessmentPage() {
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
   const [latest, setLatest] = useState(() => getLatestAssessment())
   const [draft, setDraft] = useState<AssessmentDraft | null>(() => {
-    const existing = getAssessmentDraft()
-    if (existing) return existing
-    if (new URLSearchParams(window.location.search).get('start') === '1') {
-      const next: AssessmentDraft = {
-        assessment: createEmptyAssessment(),
-        testIndex: 0,
-      }
-      saveAssessmentDraft(next)
-      return next
-    }
-    return null
+    return getAssessmentDraft()
   })
   const [phase, setPhase] = useState<Phase>(() => {
     const existing = getAssessmentDraft()
     if (existing) return resumePhase(existing)
-    if (searchParams.get('start') === '1') return 'hit'
     if (getLatestAssessment()?.result) return 'results'
     return 'intro'
   })
@@ -198,6 +186,7 @@ export function AssessmentPage() {
           testNumber={testIndex + 1}
           totalTests={ASSESSMENT_TESTS.length}
           def={def}
+          isFirst={testIndex === 0}
           onHitAll={handleHitAll}
         />
       ) : null}

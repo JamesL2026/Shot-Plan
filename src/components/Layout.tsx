@@ -1,5 +1,6 @@
 import { Link, Outlet } from 'react-router-dom'
 import { FeedbackProvider, useFeedback } from './FeedbackContext'
+import { NavBar } from './NavBar'
 
 function LayoutChrome() {
   const { openFeedback } = useFeedback()
@@ -22,6 +23,7 @@ function LayoutChrome() {
       <main className="app-main">
         <Outlet />
       </main>
+      <NavBar />
     </div>
   )
 }

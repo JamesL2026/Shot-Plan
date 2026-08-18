@@ -20,7 +20,7 @@ export function RoundStart({
       <p className="rr-kicker">ShotPlan</p>
       <h1>Round Review</h1>
       <p className="rr-lead">
-        Track the mistakes that mattered — without tracking every shot.
+        Track the mistakes that mattered, without tracking every shot.
       </p>
       <p className="muted rr-hint">No GPS. No course setup. Phone stays in your pocket.</p>
 

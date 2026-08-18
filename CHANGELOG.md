@@ -1,61 +1,63 @@
 # Changelog
 
-All notable milestones for ShotPlan are documented here.
+All notable ShotPlan milestones are documented here.
 
-The format is inspired by [Keep a Changelog](https://keepachangelog.com/), and this project uses [Semantic Versioning](https://semver.org/).
+The format is inspired by [Keep a Changelog](https://keepachangelog.com/). This project uses [Semantic Versioning](https://semver.org/) for tagged product experiments.
+
+Each version is an experiment that produced information for the next decision.
 
 ---
 
-## [1.0.0] — ShotPlan Version 1
+### v1.0 — Practice Coach
 
-**Status:** Preserved product milestone  
-**Theme:** Calm, coach-led practice prescriptions after a bad round
+**Status:** Preserved (`v1.0` tag)  
+**Date:** 2026-08 (tag `v1.0` on `907fb5e`)
 
-### Features
+Built:
 
-- Symptom check-in (up to two misses) with optional club focus
-- Coach brief: focus, today’s priority, estimated time, swing thought
-- Guided single-challenge practice flow with coach intros and Coach Says cues
-- Alignment diagrams and real-setup photos for drills
-- Coach transitions between challenges
-- Round Ready wrap-up with reflection and confidence-oriented closers
-- Post-session follow-up prompts
-- Practice Library filtered by miss pattern
-- Practice Journal (on-device session history)
-- Installable PWA (Vite + Workbox)
-- In-app beta feedback (“Help Improve”) with optional Vercel Blob storage
-- Admin feedback inbox at `/inbox`
-- Portfolio case study page at `/case-study` (research placeholders)
+- Practice prescriptions from a miss check-in
+- Guided coaching sessions (brief, challenges, Round Ready)
+- Golf drill library and on-device practice journal
+- Coach-style challenges, diagrams, and real-setup notes
+- Beta Help Improve feedback and admin inbox
 
-### Bug Fixes
+Learned:
 
-- Diagram labels and notes positioned to avoid clipping
-- View badges moved outside SVG artwork
-- Success / readiness copy clarified with countable practice goals
-- Real-setup captions styled as coach asides (not duplicate bullet lists)
-- Production SPA routing via Vercel rewrites for client-side paths
+- Golfers often already understand their obvious misses.
+- Drill discovery alone may not solve the deeper improvement problem.
 
-### Known Limitations
+---
 
-- No user accounts or cross-device sync
-- No round logging or multi-round pattern engine
-- Prescription quality depends on curated drill content, not learned personalization
-- On-course transfer is not measured in V1
-- Community research quotes on the case study are placeholders until filled by the author
+### v2.0 — Quick Baseline
 
-### Roadmap
+**Status:** Current product milestone (tag `v2.0` after this freeze)  
+**Theme:** A 15-shot snapshot of five skills
 
-| Version | Focus |
-|---------|--------|
-| **1.x** | Practice prescriptions (current) |
-| **2.0** | Round review |
-| **3.0** | Pattern recognition |
-| **4.0** | Personalized improvement engine |
+Built:
 
-Details: `VERSION.md`, `case-study.md`, in-app `/case-study`.
+- 15-shot Quick Baseline (hit 3, log 3, move on)
+- Five skill categories: Driver, Iron, Wedge, Lag Putting, Short Putting
+- ShotPlan Profile with strongest area and biggest opportunity
+- Assessment history on-device, plus two-tap profile feedback in the inbox
+- Clearer range instructions so the test does not appear without setup
+- V1 practice coach remains available in the same app
+
+Learned:
+
+- A lightweight assessment can structure performance data, but simply identifying the category that performed poorly may not provide enough new information.
+
+---
+
+### v3.0 — Round Review
+
+**Status:** Next experiment — not implemented
+
+**Hypothesis:** Golfers may value identifying recurring mistakes and patterns across actual rounds more than receiving additional drills or isolated skill scores.
+
+This hypothesis has **not** been validated yet. Do not treat Round Review as shipped.
 
 ---
 
 ## Unreleased
 
-Work toward Version 2 will continue on `main` after the `v1.0` tag.
+Round Review development should start only after `v2.0` is committed and tagged, on a branch such as `v3-round-review`.

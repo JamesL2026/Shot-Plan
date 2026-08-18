@@ -27,6 +27,34 @@ const CUES: { field: keyof TalkFields; pattern: RegExp }[] = [
   },
 ]
 
+const JUNK_SNIPPETS = [
+  /thanks for watching/gi,
+  /please subscribe/gi,
+  /like and subscribe/gi,
+  /see you (?:in the )?next (?:one|video|time)/gi,
+  /don'?t forget to subscribe/gi,
+]
+
+export function stripJunkPhrases(text: string) {
+  let out = text
+  for (const pattern of JUNK_SNIPPETS) {
+    out = out.replace(pattern, ' ')
+  }
+  return out.replace(/\s+/g, ' ').trim()
+}
+
+/** True when speech-to-text likely picked up TV, YouTube, or noise—not you. */
+export function isLikelyJunkTranscript(text: string) {
+  const cleaned = stripJunkPhrases(text)
+  if (!cleaned) return true
+  const words = cleaned.split(/\s+/).filter(Boolean)
+  if (words.length === 0) return true
+  const longWords = words.filter(
+    (word) => word.replace(/[^a-z]/gi, '').length >= 4,
+  )
+  return longWords.length === 0 && words.length <= 8
+}
+
 export function emptyTalkFields(): TalkFields {
   return {
     workingOn: '',

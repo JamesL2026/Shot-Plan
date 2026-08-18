@@ -7,7 +7,7 @@ import {
   startVoiceCapture,
   type VoiceSession,
 } from '../lib/speech'
-import { emptyTalkFields, parseTalkTranscript } from '../lib/talkParse'
+import { emptyTalkFields, isLikelyJunkTranscript, parseTalkTranscript, stripJunkPhrases } from '../lib/talkParse'
 import type { TalkFields } from '../types/memory'
 
 const LISTEN_MS = 60_000
@@ -63,14 +63,20 @@ export function TalkToShotPlan({
     setStarting(false)
     setLevel(0)
     window.setTimeout(() => {
-      const text = (finalsRef.current || displayRef.current).trim()
-      if (text) {
-        if (!finalsRef.current) finalsRef.current = text
+      const raw = (finalsRef.current || displayRef.current).trim()
+      const text = stripJunkPhrases(raw)
+      if (text && !isLikelyJunkTranscript(raw)) {
+        finalsRef.current = text
+        onTranscript(text)
         void readBack(text)
         return
       }
+      onTranscript('')
+      onFields(emptyTalkFields())
       setError(
-        'Nothing was captured. Allow the microphone if asked, then talk for a few seconds.',
+        raw && isLikelyJunkTranscript(raw)
+          ? 'That did not sound like you. Pause any video, hold the phone closer, and try again—or type below.'
+          : 'Nothing was captured. Allow the microphone if asked, then talk for a few seconds.',
       )
     }, 250)
   }

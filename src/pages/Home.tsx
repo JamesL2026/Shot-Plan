@@ -1,115 +1,249 @@
-import { useState } from 'react'
-import { BookOpen, Clock3, Gauge, Target } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BetaWelcomeModal } from '../components/BetaWelcomeModal'
 import { useFeedback } from '../components/FeedbackContext'
-import { HomeHero } from '../components/HomeHero'
+import { ConfirmSheet } from '../components/ConfirmSheet'
 import { Button } from '../components/ui/Button'
-import { Card } from '../components/ui/Card'
+import { formatShortDate } from '../data/memory'
 import {
-  getAssessmentDraft,
-  getLatestAssessment,
-} from '../lib/assessmentStorage'
+  buildFocusInsight,
+  countAreaInRounds,
+  nextWorkLine,
+  roundNotices,
+  todayPlan,
+  workedAdjustments,
+} from '../lib/memoryInsights'
+import { memoryStore } from '../lib/memoryStorage'
+import { track } from '../lib/track'
+import type { SavedRound } from '../types/memory'
+
+const EARLIER = [
+  {
+    to: '/check-in',
+    title: 'After a rough round',
+    desc: 'Pick what went wrong. Get a short practice plan.',
+  },
+  {
+    to: '/assessment',
+    title: 'Test your game',
+    desc: '15 shots at the range. See what’s strong and what needs work.',
+  },
+  {
+    to: '/library',
+    title: 'Practice library',
+    desc: 'Browse drills by miss. Fat shots, slices, putting, and more.',
+  },
+  {
+    to: '/sessions',
+    title: 'Practice journal',
+    desc: 'Past coaching sessions saved on this phone.',
+  },
+  {
+    to: '/case-study',
+    title: 'How ShotPlan evolved',
+    desc: 'The earlier versions, and what each one taught us.',
+  },
+]
+
+function FocusCard({
+  kicker,
+  title,
+  why,
+  lastLine,
+  workedLine,
+  notices,
+  playTo,
+  playLabel,
+  practiceLabel,
+  showView,
+}: {
+  kicker: string
+  title: string
+  why: string
+  lastLine?: string
+  workedLine?: string
+  notices?: string[]
+  playTo: string
+  playLabel: string
+  practiceLabel: string
+  showView?: boolean
+}) {
+  return (
+    <div className="sp-focus-card">
+      <p className="rr-kicker">{kicker}</p>
+      <p className="sp-focus-card__title">{title}</p>
+      <p className="muted">{why}</p>
+      {lastLine ? <p>{lastLine}</p> : null}
+      {workedLine ? <p className="muted">{workedLine}</p> : null}
+      {notices && notices.length > 0 ? (
+        <ul className="rr-counts">
+          {notices.map((notice) => (
+            <li className="rr-count" key={notice}>
+              {notice}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <div className="sp-focus-card__actions">
+        <Button to="/practice" variant="primary" block>
+          {practiceLabel}
+        </Button>
+        <Button to={playTo} variant="secondary" block>
+          {playLabel}
+        </Button>
+        {showView ? (
+          <Button to="/progress" variant="secondary" block>
+            History
+          </Button>
+        ) : null}
+      </div>
+    </div>
+  )
+}
 
 export function Home() {
   const { openFeedback } = useFeedback()
-  const [betaOpen, setBetaOpen] = useState(false)
-  const [latestScore] = useState(
-    () => getLatestAssessment()?.result?.overallScore,
+  const [, setTick] = useState(0)
+  const [pending, setPending] = useState<
+    { kind: 'round'; round: SavedRound } | { kind: 'draft' } | null
+  >(null)
+
+  const focus = memoryStore.getActiveFocus()
+  const rounds = memoryStore.getRounds()
+  const lastRound = rounds[0]
+  const lastPractice = memoryStore.getPracticeSessions(focus?.id)[0]
+  const draft = memoryStore.getRoundDraft()
+  const seen = focus ? countAreaInRounds(rounds, focus.area) : null
+  const notices = lastRound ? roundNotices(lastRound) : []
+  const insights = memoryStore.getFocuses().map((item) =>
+    buildFocusInsight(
+      item,
+      rounds,
+      memoryStore.getPracticeSessions(item.id),
+      memoryStore.getCourseObservations(item.id),
+    ),
   )
-  const [hasDraft] = useState(() => Boolean(getAssessmentDraft()))
-  const assessCta = hasDraft
-    ? 'Continue'
-    : typeof latestScore === 'number'
-      ? 'View Profile'
-      : 'Start'
-  const assessTo = hasDraft || typeof latestScore === 'number'
-    ? '/assessment'
-    : '/assessment?start=1'
+  const lastWorked = focus
+    ? workedAdjustments(memoryStore.getAdjustments(focus.id))[0]
+    : undefined
+  const plan = todayPlan({
+    focus,
+    lastRound,
+    lastPractice,
+    seen: seen ?? undefined,
+    nextWork:
+      nextWorkLine(
+        focus ? insights.filter((item) => item.focusId === focus.id) : insights,
+      ) || nextWorkLine(insights),
+    workedLine: lastWorked
+      ? `Last time this worked: ${lastWorked.whatITried}`
+      : undefined,
+  })
+
+  useEffect(() => {
+    track('plan_viewed')
+  }, [])
+
+  function refresh() {
+    setTick((value) => value + 1)
+  }
+
+  function confirmDelete() {
+    if (!pending) return
+    if (pending.kind === 'round') memoryStore.deleteRound(pending.round.id)
+    else memoryStore.clearRoundDraft()
+    setPending(null)
+    refresh()
+  }
 
   return (
     <section className="page home animate-in">
-      <aside className="beta-strip" aria-label="Early beta">
-        <span className="beta-strip__badge">Early Beta</span>
-        <button
-          type="button"
-          className="beta-strip__link"
-          onClick={() => setBetaOpen(true)}
-        >
-          Built with golfers · Learn more
-        </button>
-      </aside>
-
-      <HomeHero />
-
       <div className="home-intro">
-        <p className="home-intro__brand">ShotPlan</p>
-        <h1>Your practice coach</h1>
-        <p className="home-intro__lead">
-          Check in. Get a focused session. No video.
-        </p>
-        <p className="home-intro__path muted" aria-hidden="true">
-          Check in → Practice → Round Ready
-        </p>
+        <h1>Golf memory</h1>
+        <p className="home-intro__lead">Don't start over every round.</p>
       </div>
 
-      <nav className="home-actions" aria-label="Main actions">
-        <div className="home-assess">
-          <p className="home-assess__kicker">Test Your Game</p>
-          {typeof latestScore === 'number' ? (
-            <p className="home-assess__score">
-              Latest: {latestScore}
+      {focus ? (
+        <FocusCard
+          kicker={plan.kicker}
+          title={plan.title}
+          why={plan.why}
+          lastLine={plan.lastLine}
+          workedLine={plan.workedLine}
+          playTo="/play"
+          playLabel={draft ? 'Continue round' : 'Play a round'}
+          practiceLabel="Practice"
+          showView
+        />
+      ) : (
+        <FocusCard
+          kicker={plan.kicker}
+          title={plan.title}
+          why={plan.why}
+          notices={notices}
+          playTo="/play"
+          playLabel={draft ? 'Continue round' : 'Play a round'}
+          practiceLabel="Start a focus"
+        />
+      )}
+
+      {draft || rounds.length > 0 || lastPractice ? (
+        <div className="sp-recent">
+          <p className="rr-kicker">Recent</p>
+          {draft ? (
+            <div className="sp-recent-row">
+              <p>
+                Unfinished round
+                {draft.moments.length ? ` · ${draft.moments.length} saved` : ''}
+              </p>
+              <button
+                type="button"
+                className="sp-recent-delete"
+                onClick={() => setPending({ kind: 'draft' })}
+              >
+                Discard
+              </button>
+            </div>
+          ) : null}
+          {rounds.slice(0, 8).map((round) => (
+            <div className="sp-recent-row" key={round.id}>
+              <p>
+                {formatShortDate(round.completedAt ?? round.createdAt)}
+                {round.moments.length
+                  ? ` · ${round.moments.length} saved`
+                  : ''}
+              </p>
+              <button
+                type="button"
+                className="sp-recent-delete"
+                onClick={() => setPending({ kind: 'round', round })}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+          {lastPractice ? (
+            <p>
+              Last practice: {formatShortDate(lastPractice.date)}
+              {lastPractice.result ? ` · ${lastPractice.result}` : ''}
             </p>
-          ) : (
-            <p className="home-assess__copy">15 shots. Find what to practice.</p>
-          )}
-          <Button to={assessTo} variant="primary" block className="home-primary">
-            <span className="home-primary__inner">
-              <Gauge size={22} strokeWidth={2.25} aria-hidden="true" />
-              <span>
-                <span className="home-primary__title">{assessCta}</span>
-                <span className="home-primary__desc">15 shots</span>
-              </span>
-            </span>
-          </Button>
+          ) : null}
         </div>
+      ) : null}
 
-        <Button to="/check-in" variant="secondary" block className="home-primary home-primary--practice">
-          <span className="home-primary__inner">
-            <Target size={22} strokeWidth={2.25} aria-hidden="true" />
-            <span>
-              <span className="home-primary__title">Check In</span>
-                <span className="home-primary__desc">Today&apos;s session</span>
-            </span>
-          </span>
-        </Button>
-
-        <div className="home-secondary">
-          <Link to="/library" className="home-secondary-card">
-            <Card padding="md" className="home-secondary-card__surface">
-              <BookOpen size={20} strokeWidth={2} aria-hidden="true" />
-              <span>
-                <span className="home-secondary-card__title">Practice Library</span>
-                <span className="home-secondary-card__desc muted">
-                  Browse by miss
-                </span>
-              </span>
-            </Card>
-          </Link>
-
-          <Link to="/sessions" className="home-secondary-card">
-            <Card padding="md" className="home-secondary-card__surface">
-              <Clock3 size={20} strokeWidth={2} aria-hidden="true" />
-              <span>
-                <span className="home-secondary-card__title">Practice Journal</span>
-                <span className="home-secondary-card__desc muted">
-                  Your past sessions
-                </span>
-              </span>
-            </Card>
-          </Link>
-        </div>
-      </nav>
+      <div className="home-tools">
+        <h2 className="home-tools__title">Earlier experiments</h2>
+        <p className="muted home-tools__lead">Still here. Not the main loop.</p>
+        <ul className="home-tools__list">
+          {EARLIER.map((item) => (
+            <li key={item.to}>
+              <Link to={item.to} className="home-tool">
+                <span className="home-tool__title">{item.title}</span>
+                <span className="home-tool__desc">{item.desc}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <p className="home-feedback-nudge">
         <button
@@ -119,19 +253,28 @@ export function Home() {
         >
           Help Improve
         </button>
-        {' · two taps anytime'}
+        {' · two taps'}
       </p>
 
-      <p className="home-case-link">
-        <Link to="/case-study">Product case study</Link>
-        <span className="muted"> · Version 1 story</span>
-      </p>
-
-      <BetaWelcomeModal
-        open={betaOpen}
-        onClose={() => setBetaOpen(false)}
-        onHelpImprove={() => openFeedback()}
-      />
+      {pending ? (
+        <ConfirmSheet
+          title={
+            pending.kind === 'draft'
+              ? 'Discard this round?'
+              : 'Delete this round?'
+          }
+          body={
+            pending.kind === 'draft'
+              ? 'The shots you already saved in this unfinished round will be gone.'
+              : 'This round and what you saved in it will be removed from this phone. This cannot be undone.'
+          }
+          confirmLabel={
+            pending.kind === 'draft' ? 'Discard round' : 'Delete round'
+          }
+          onConfirm={confirmDelete}
+          onCancel={() => setPending(null)}
+        />
+      ) : null}
     </section>
   )
 }

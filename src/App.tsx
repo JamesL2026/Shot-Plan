@@ -40,6 +40,19 @@ const AssessmentPage = lazy(() =>
     default: module.AssessmentPage,
   })),
 )
+const PlayPage = lazy(() =>
+  import('./pages/Play').then((module) => ({ default: module.PlayPage })),
+)
+const PracticePage = lazy(() =>
+  import('./pages/Practice').then((module) => ({
+    default: module.PracticePage,
+  })),
+)
+const ProgressPage = lazy(() =>
+  import('./pages/Progress').then((module) => ({
+    default: module.ProgressPage,
+  })),
+)
 
 function PageFallback() {
   return <div className="page-fallback" aria-hidden="true" />
@@ -122,6 +135,31 @@ export default function App() {
               </Suspense>
             }
           />
+          <Route
+            path="play"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <PlayPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="practice"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <PracticePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="progress"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ProgressPage />
+              </Suspense>
+            }
+          />
+          <Route path="round" element={<Navigate to="/play" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

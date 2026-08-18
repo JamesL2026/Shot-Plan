@@ -1,5 +1,7 @@
 import type {
+  CourseObservationResult,
   DecisionSubcategory,
+  ExperimentHelp,
   FocusArea,
   GoodSubcategory,
   MentalSubcategory,
@@ -142,6 +144,41 @@ export const SUCCESS_FOR_TEST: Record<PracticeTestType, string> = {
 }
 
 export const DEFAULT_ATTEMPTS = 5
+
+export const EXPERIMENT_HELP: { value: ExperimentHelp; label: string }[] = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'somewhat', label: 'Somewhat' },
+  { value: 'no', label: 'No' },
+  { value: 'not-sure', label: 'Not sure' },
+]
+
+export function attemptOptions(area: FocusArea): string[] {
+  if (area === 'decision-routine') return ['Committed', 'Second-guessed']
+  if (area === 'mental-reset') return ['Reset completed', 'Reset skipped']
+  return ATTEMPT_OPTIONS[TEST_FOR_AREA[area]]
+}
+
+export function successForArea(area: FocusArea): string {
+  if (area === 'decision-routine') return 'Committed'
+  if (area === 'mental-reset') return 'Reset completed'
+  return SUCCESS_FOR_TEST[TEST_FOR_AREA[area]]
+}
+
+export function helpToTransfer(help?: ExperimentHelp): TransferFeel | undefined {
+  if (help === 'yes') return 'clearly-better'
+  if (help === 'somewhat') return 'somewhat-better'
+  if (help === 'no') return 'no-change'
+  if (help === 'not-sure') return 'not-enough'
+  return undefined
+}
+
+export function helpToCourse(
+  help?: ExperimentHelp,
+): CourseObservationResult | undefined {
+  if (help === 'yes' || help === 'somewhat') return 'worked'
+  if (help === 'no') return 'showed-up'
+  return undefined
+}
 
 export function practiceResultLine(
   successCount: number,

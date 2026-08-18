@@ -140,7 +140,9 @@ export function PracticeComplete({
 
       <Card className="session-pulse" padding="lg">
         <p className="session-pulse__title">Help Improve</p>
-        <p className="session-pulse__body muted">Two taps. That&apos;s it.</p>
+        <p className="session-pulse__body muted">
+          Two quick questions. More is optional.
+        </p>
         <button
           type="button"
           className="session-pulse__link"

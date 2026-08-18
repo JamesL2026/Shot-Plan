@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { trackEvent } from '../../lib/track'
 import {
   micErrorMessage,
   speechSupported,
@@ -9,9 +10,14 @@ import {
 interface VoiceNoteButtonProps {
   value: string
   onChange: (value: string) => void
+  label?: string
 }
 
-export function VoiceNoteButton({ value, onChange }: VoiceNoteButtonProps) {
+export function VoiceNoteButton({
+  value,
+  onChange,
+  label = 'Speak',
+}: VoiceNoteButtonProps) {
   const [listening, setListening] = useState(false)
   const [error, setError] = useState('')
   const sessionRef = useRef<VoiceSession | null>(null)
@@ -42,6 +48,7 @@ export function VoiceNoteButton({ value, onChange }: VoiceNoteButtonProps) {
     setError('')
     baseRef.current = value.trim()
     setListening(true)
+    trackEvent('voice_started')
     try {
       sessionRef.current = await startVoiceCapture({
         onError: (message) => {
@@ -71,7 +78,7 @@ export function VoiceNoteButton({ value, onChange }: VoiceNoteButtonProps) {
         onClick={() => void toggle()}
         aria-pressed={listening}
       >
-        {listening ? 'Stop' : 'Speak'}
+        {listening ? 'Stop' : label}
       </button>
       {error ? <p className="sp-talk__error">{error}</p> : null}
     </>

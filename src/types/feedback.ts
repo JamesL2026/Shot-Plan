@@ -43,7 +43,34 @@ export type UseAgainIntent = 'definitely' | 'probably' | 'maybe' | 'probably-not
 
 export type RecommendIntent = 'yes' | 'maybe' | 'no'
 
+export type RemindedAnswer = 'yes' | 'not-yet' | 'no'
+
+export type MostUsefulPart =
+  | 'what-to-practice'
+  | 'remembering-tried'
+  | 'what-worked'
+  | 'practice-to-round'
+  | 'saving-from-round'
+  | 'history-patterns'
+  | 'something-else'
+
+export type MostWorkPart =
+  | 'logging-round'
+  | 'practice-tracking'
+  | 'debriefing'
+  | 'typing-notes'
+  | 'nothing'
+  | 'something-else'
+
 export type FeedbackKind = 'help-improve' | 'quick-baseline'
+
+export interface FeedbackUsage {
+  completedPractice: boolean
+  completedRound: boolean
+  roundCount: number
+  practiceCount: number
+  voiceUsed: boolean
+}
 
 export type ProfileAccuracyAnswer = 'accurate' | 'mostly' | 'inaccurate'
 
@@ -60,6 +87,10 @@ export interface FeedbackAnswers {
   improvementIdea?: string
   useAgain?: UseAgainIntent
   recommend?: RecommendIntent
+  remindedOfForgotten?: RemindedAnswer
+  mostUseful?: MostUsefulPart
+  mostWork?: MostWorkPart
+  oneChange?: string
   profileAccuracy?: ProfileAccuracyAnswer
   wouldChangePractice?: PracticeChangeAnswer
   assessmentId?: string
@@ -75,6 +106,8 @@ export interface FeedbackSubmission {
   source: 'shotplan-web'
   /** Path where the user opened feedback. */
   openedFrom: string
+  /** Silent local usage. Not asked. No personal data. */
+  usage?: FeedbackUsage
   answers: FeedbackAnswers
 }
 

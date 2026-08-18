@@ -80,6 +80,8 @@ export type TransferFeel =
   | 'worse'
   | 'not-enough'
 
+export type ExperimentHelp = 'yes' | 'somewhat' | 'no' | 'not-sure'
+
 export type PatternLabel =
   | 'one-off'
   | 'watching'
@@ -111,6 +113,7 @@ export interface Round {
   wrapUp?: boolean
   stoodOut?: StoodOut
   remember?: string
+  focusHelped?: ExperimentHelp
   watchNextArea?: FocusArea
   watchNextTitle?: string
   watchNextMomentId?: string
@@ -152,6 +155,13 @@ export interface PracticeSession {
   notes?: string
   watchNext?: string
   transcript?: string
+  whatWasTried?: string
+  baselineResult?: string
+  baselineSuccessCount?: number
+  baselineAttemptCount?: number
+  testResult?: string
+  transferResult?: string
+  experimentHelped?: ExperimentHelp
 }
 
 export interface Adjustment {

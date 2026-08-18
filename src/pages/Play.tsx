@@ -4,18 +4,17 @@ import { MomentChooser } from '../components/play/MomentChooser'
 import { MomentList } from '../components/play/MomentList'
 import { RoundMemory } from '../components/play/RoundMemory'
 import { Button } from '../components/ui/Button'
-import { areaLabel } from '../data/moments'
+import { helpToCourse, helpToTransfer } from '../data/moments'
 import { newId, nowIso, storage } from '../lib/memoryStorage'
-import { lastRoundNotices } from '../lib/patterns'
+import { workingAdjustments } from '../lib/patterns'
 import { trackEvent } from '../lib/track'
 import { emptyDebriefFields, type DebriefFields } from '../types/debrief'
 import type {
-  CourseObservationResult,
+  ExperimentHelp,
   Focus,
   FocusArea,
   Moment,
   Round,
-  TransferFeel,
 } from '../types/memory'
 
 type Phase = 'idle' | 'live' | 'memory'
@@ -66,8 +65,7 @@ export function PlayPage() {
   const [focus, setFocus] = useState<Focus | undefined>(() =>
     storage.getActiveFocus(),
   )
-  const [courseTap, setCourseTap] = useState<CourseObservationResult | null>(null)
-  const [transfer, setTransfer] = useState<TransferFeel | undefined>()
+  const [helped, setHelped] = useState<ExperimentHelp | undefined>()
   const [fields, setFields] = useState<DebriefFields>(() => ({
     ...emptyDebriefFields(),
     remember: storage.getRoundDraft()?.remember ?? '',
@@ -75,8 +73,6 @@ export function PlayPage() {
   const [transcript, setTranscript] = useState(
     () => storage.getRoundDraft()?.transcript ?? '',
   )
-  const lastRound = storage.getRounds()[0]
-  const notices = lastRound ? lastRoundNotices(lastRound) : []
 
   function persist(next: Round) {
     storage.saveRound(next)
@@ -86,8 +82,7 @@ export function PlayPage() {
   function startRound(holesPlayed: 9 | 18) {
     const next = emptyRound(holesPlayed)
     persist(next)
-    setCourseTap(null)
-    setTransfer(undefined)
+    setHelped(undefined)
     setFields(emptyDebriefFields())
     setTranscript('')
     setFocus(storage.getActiveFocus())
@@ -119,6 +114,7 @@ export function PlayPage() {
     if (!round) return
     persist({ ...round, wrapUp: true })
     setPhase('memory')
+    trackEvent('debrief_started')
   }
 
   function selectMoment(id: string, area: FocusArea, title: string) {
@@ -172,6 +168,7 @@ export function PlayPage() {
       ...round,
       remember: remember || undefined,
       transcript: transcript.trim() || undefined,
+      focusHelped: helped,
       status: 'completed',
       completedAt: nowIso(),
     }
@@ -179,25 +176,20 @@ export function PlayPage() {
     const active = storage.getActiveFocus()
     const talkWorked = Boolean(fields.worked.trim()) && !fields.didNotWork.trim()
     const talkMissed = Boolean(fields.didNotWork.trim()) && !fields.worked.trim()
-    if (active && (courseTap || transfer || talkWorked || talkMissed)) {
-      const result =
-        courseTap ??
-        (transfer === 'clearly-better' || transfer === 'somewhat-better'
-          ? 'worked'
-          : transfer
-            ? 'showed-up'
-            : talkWorked
-              ? 'worked'
-              : 'showed-up')
+    const courseResult =
+      helpToCourse(helped) ??
+      (talkWorked ? 'worked' : talkMissed ? 'showed-up' : undefined)
+    const transferFeel = helpToTransfer(helped)
+    if (active && courseResult) {
       storage.saveCourseObservation({
         id: newId(),
         roundId: completed.id,
         focusId: active.id,
-        result,
+        result: courseResult,
         createdAt: nowIso(),
-        ...(transfer ? { transferFeel: transfer } : {}),
+        ...(transferFeel ? { transferFeel } : {}),
       })
-      if (result === 'worked' && storage.markAdjustmentWorked(active.id)) {
+      if (courseResult === 'worked' && storage.markAdjustmentWorked(active.id)) {
         trackEvent('adjustment_marked_worked')
       }
       trackEvent('course_observation_logged')
@@ -212,10 +204,14 @@ export function PlayPage() {
         createdAt: nowIso(),
         whatITried: tried,
         source: 'round',
-        ...(talkWorked ? { workedAt: nowIso() } : {}),
+        ...(talkWorked || helped === 'yes' || helped === 'somewhat'
+          ? { workedAt: nowIso() }
+          : {}),
       })
+      trackEvent('adjustment_created')
     }
     trackEvent('round_completed')
+    trackEvent('round_debrief_saved')
     trackEvent('debrief_saved')
     setRound(null)
     storage.clearRoundDraft()
@@ -230,12 +226,12 @@ export function PlayPage() {
           round={round}
           activeFocus={focus}
           selectedMomentId={round.watchNextMomentId}
-          transfer={transfer}
+          helped={helped}
           fields={fields}
           transcript={transcript}
           onSelectMoment={selectMoment}
           onRemove={removeMoment}
-          onTransfer={setTransfer}
+          onHelped={setHelped}
           onFields={(next) => {
             setFields(next)
             persist({
@@ -264,12 +260,13 @@ export function PlayPage() {
         </p>
         <h1>Remember what mattered</h1>
         <p className="muted">
-          Tap when something stands out. Hole is optional. You do not log every
-          shot.
+          {round.holesPlayed === 9
+            ? '9 holes. Can what you practiced survive a real round?'
+            : 'Tap when something stands out. You do not log every shot.'}
         </p>
         <p className="sp-play__count">
           {round.moments.length === 0
-            ? 'Nothing saved yet'
+            ? 'Zero moments is fine'
             : `${round.moments.length} saved`}
         </p>
         <MomentList moments={round.moments} onRemove={removeMoment} />
@@ -278,26 +275,7 @@ export function PlayPage() {
           <div className="sp-watch">
             <p className="sp-watch__label">Watching today</p>
             <p className="sp-watch__title">{focus.title}</p>
-            <p className="muted">Just notice it. No need to track every time.</p>
-            <div className="rr-cats">
-              <button
-                type="button"
-                className={
-                  courseTap === 'showed-up' ? 'rr-cat rr-cat--on' : 'rr-cat'
-                }
-                onClick={() => setCourseTap('showed-up')}
-              >
-                Showed up
-              </button>
-              <button
-                type="button"
-                className={courseTap === 'worked' ? 'rr-cat rr-cat--on' : 'rr-cat'}
-                onClick={() => setCourseTap('worked')}
-              >
-                Seemed better
-              </button>
-            </div>
-            <p className="muted rr-hint">Optional. Skip it.</p>
+            <p className="muted">Notice it. Do not track every time. Phone away.</p>
           </div>
         ) : null}
 
@@ -324,48 +302,35 @@ export function PlayPage() {
     )
   }
 
+  const carryTried = focus
+    ? workingAdjustments(storage.getAdjustments(focus.id))[0]?.whatITried ||
+      storage.getPracticeSessions(focus.id)[0]?.whatWasTried
+    : undefined
+
   return (
     <section className="page rr-page">
       <p className="rr-kicker">Play</p>
-      {lastRound && notices.length > 0 ? (
-        <>
-          <h1>Last time you played</h1>
-          <ul className="rr-counts">
-            {notices.map((line) => (
-              <li key={line} className="rr-count">
-                {line}
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : (
-        <h1>Don’t track every shot</h1>
-      )}
+      <h1>Don't track every shot</h1>
+      <p className="muted">
+        One or two moments is plenty. Zero is valid. Talk after the round.
+      </p>
 
       {focus ? (
         <div className="sp-watch">
           <p className="sp-watch__label">Carry forward</p>
           <p className="sp-watch__title">{focus.title}</p>
+          {carryTried ? <p>Testing: {carryTried}</p> : null}
+          <p className="muted">See whether it holds up on the course.</p>
           <p className="muted">
-            {focus.reason ?? 'Just pay attention to it today.'}
-          </p>
-          <p className="muted">
-            No need to change the swing. No need to fix it mid round.
+            9 holes is a first-class transfer test. 18 holes is a longer one. Do
+            not fix it mid round.
           </p>
         </div>
-      ) : lastRound ? (
-        <p className="muted">
-          After this round you can choose one thing to carry forward.
-        </p>
       ) : (
         <p className="rr-lead">
           When something matters, tap once. Then put the phone away.
         </p>
       )}
-
-      {focus ? (
-        <p className="muted">Watching: {areaLabel(focus.area)}</p>
-      ) : null}
 
       <div className="rr-actions">
         {storage.getRoundDraft() ? (
@@ -387,9 +352,11 @@ export function PlayPage() {
             >
               9 holes
             </Button>
+            <p className="muted">Transfer test. Can the practice hold up?</p>
             <Button variant="secondary" block onClick={() => startRound(18)}>
               18 holes
             </Button>
+            <p className="muted">Longer transfer test.</p>
           </>
         )}
       </div>

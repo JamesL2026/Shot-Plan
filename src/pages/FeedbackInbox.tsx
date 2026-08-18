@@ -8,8 +8,11 @@ import {
   feedbackDayLabel,
   feedbackKindLabel,
   fetchFeedbackInbox,
+  mostUsefulLabel,
+  mostWorkLabel,
   practiceChangeLabel,
   profileAccuracyLabel,
+  remindedLabel,
   useAgainLabel,
   usefulnessLabel,
 } from '../lib/feedback'
@@ -214,6 +217,34 @@ export function FeedbackInbox() {
                 </button>
               </div>
               <dl className="feedback-inbox__answers">
+                <div>
+                  <dt>Route</dt>
+                  <dd>{item.openedFrom}</dd>
+                </div>
+                {item.usage ? (
+                  <>
+                    <div>
+                      <dt>Completed practice</dt>
+                      <dd>{item.usage.completedPractice ? 'Yes' : 'No'}</dd>
+                    </div>
+                    <div>
+                      <dt>Completed round</dt>
+                      <dd>{item.usage.completedRound ? 'Yes' : 'No'}</dd>
+                    </div>
+                    <div>
+                      <dt>Saved rounds</dt>
+                      <dd>{item.usage.roundCount}</dd>
+                    </div>
+                    <div>
+                      <dt>Saved practices</dt>
+                      <dd>{item.usage.practiceCount}</dd>
+                    </div>
+                    <div>
+                      <dt>Voice used</dt>
+                      <dd>{item.usage.voiceUsed ? 'Yes' : 'No'}</dd>
+                    </div>
+                  </>
+                ) : null}
                 {item.answers.profileAccuracy && (
                   <div>
                     <dt>Feel right?</dt>
@@ -252,7 +283,7 @@ export function FeedbackInbox() {
                 )}
                 {item.answers.planUsefulness && (
                   <div>
-                    <dt>Plan usefulness</dt>
+                    <dt>Helped decide</dt>
                     <dd>{usefulnessLabel(item.answers.planUsefulness)}</dd>
                   </div>
                 )}
@@ -266,6 +297,24 @@ export function FeedbackInbox() {
                   <div>
                     <dt>Use again</dt>
                     <dd>{useAgainLabel(item.answers.useAgain)}</dd>
+                  </div>
+                )}
+                {item.answers.remindedOfForgotten && (
+                  <div>
+                    <dt>Reminded you</dt>
+                    <dd>{remindedLabel(item.answers.remindedOfForgotten)}</dd>
+                  </div>
+                )}
+                {item.answers.mostUseful && (
+                  <div>
+                    <dt>Most useful</dt>
+                    <dd>{mostUsefulLabel(item.answers.mostUseful)}</dd>
+                  </div>
+                )}
+                {item.answers.mostWork && (
+                  <div>
+                    <dt>Most work</dt>
+                    <dd>{mostWorkLabel(item.answers.mostWork)}</dd>
                   </div>
                 )}
                 {item.answers.frustration && (
@@ -282,8 +331,14 @@ export function FeedbackInbox() {
                 )}
                 {item.answers.improvementIdea && (
                   <div>
-                    <dt>Idea</dt>
+                    <dt>Wish it did differently</dt>
                     <dd>{item.answers.improvementIdea}</dd>
+                  </div>
+                )}
+                {item.answers.oneChange && (
+                  <div>
+                    <dt>Change one thing</dt>
+                    <dd>{item.answers.oneChange}</dd>
                   </div>
                 )}
               </dl>

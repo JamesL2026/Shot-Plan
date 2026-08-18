@@ -11,6 +11,18 @@ interface FeedbackAnswers {
   improvementIdea?: string
   useAgain?: string
   recommend?: string
+  remindedOfForgotten?: string
+  mostUseful?: string
+  mostWork?: string
+  oneChange?: string
+}
+
+interface FeedbackUsage {
+  completedPractice?: boolean
+  completedRound?: boolean
+  roundCount?: number
+  practiceCount?: number
+  voiceUsed?: boolean
 }
 
 interface FeedbackSubmission {
@@ -18,6 +30,7 @@ interface FeedbackSubmission {
   createdAt: string
   source: 'shotplan-web'
   openedFrom: string
+  usage?: FeedbackUsage
   answers: FeedbackAnswers
 }
 

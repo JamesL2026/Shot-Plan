@@ -186,6 +186,21 @@ export const storage = {
     }
   },
 
+  deletePracticeSession(id: string): void {
+    writeJson(
+      KEYS.sessions,
+      storage.getPracticeSessions().filter((item) => item.id !== id),
+    )
+    writeJson(
+      KEYS.attempts,
+      storage.getAttempts().filter((item) => item.practiceSessionId !== id),
+    )
+    writeJson(
+      KEYS.swings,
+      storage.getSwingCheckpoints().filter((item) => item.practiceSessionId !== id),
+    )
+  },
+
   deleteFocus(id: string): void {
     const sessionIds = new Set(
       storage.getPracticeSessions(id).map((item) => item.id),

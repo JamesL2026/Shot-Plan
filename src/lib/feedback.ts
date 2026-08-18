@@ -1,4 +1,9 @@
-import type { FeedbackAnswers, FeedbackSubmission } from '../types/feedback'
+import type {
+  FeedbackAnswers,
+  FeedbackSubmission,
+  FeedbackUsage,
+} from '../types/feedback'
+import { storage } from './memoryStorage'
 
 const FEEDBACK_KEY = 'shotplan:feedback'
 
@@ -8,6 +13,7 @@ const FEEDBACK_KEY = 'shotplan:feedback'
 export async function submitFeedback(input: {
   answers: FeedbackAnswers
   openedFrom: string
+  usage?: FeedbackUsage
   id?: string
   createdAt?: string
 }): Promise<FeedbackSubmission> {
@@ -16,6 +22,7 @@ export async function submitFeedback(input: {
     createdAt: input.createdAt ?? new Date().toISOString(),
     source: 'shotplan-web',
     openedFrom: input.openedFrom,
+    usage: input.usage,
     answers: input.answers,
   }
 
@@ -138,10 +145,26 @@ export function practiceChangeLabel(value?: string): string {
   return value ?? ''
 }
 
+export function collectFeedbackUsage(): FeedbackUsage {
+  const rounds = storage.getRounds()
+  const sessions = storage.getPracticeSessions()
+  const draft = storage.getRoundDraft()
+  return {
+    completedPractice: sessions.length > 0,
+    completedRound: rounds.length > 0,
+    roundCount: rounds.length,
+    practiceCount: sessions.length,
+    voiceUsed:
+      rounds.some((round) => Boolean(round.transcript?.trim())) ||
+      sessions.some((session) => Boolean(session.transcript?.trim())) ||
+      Boolean(draft?.transcript?.trim()),
+  }
+}
+
 export function usefulnessLabel(value?: number): string {
   if (value === 5) return 'Yes'
   if (value === 4) return 'Very helpful'
-  if (value === 3) return 'Sort of'
+  if (value === 3) return 'A little'
   if (value === 2) return 'Slightly'
   if (value === 1) return 'No'
   return value != null ? `${value} / 5` : ''
@@ -152,6 +175,53 @@ export function useAgainLabel(value?: string): string {
   if (value === 'maybe') return 'Maybe'
   if (value === 'probably-not') return 'No'
   return value ?? ''
+}
+
+export function remindedLabel(value?: string): string {
+  if (value === 'yes') return 'Yes'
+  if (value === 'not-yet') return 'Not yet'
+  if (value === 'no') return 'No'
+  return value ?? ''
+}
+
+export function mostUsefulLabel(value?: string): string {
+  switch (value) {
+    case 'what-to-practice':
+      return 'Knowing what to practice'
+    case 'remembering-tried':
+      return 'Remembering what I tried'
+    case 'what-worked':
+      return 'Seeing what worked before'
+    case 'practice-to-round':
+      return 'Connecting practice to a round'
+    case 'saving-from-round':
+      return 'Saving things from a round'
+    case 'history-patterns':
+      return 'History / patterns'
+    case 'something-else':
+      return 'Something else'
+    default:
+      return value ?? ''
+  }
+}
+
+export function mostWorkLabel(value?: string): string {
+  switch (value) {
+    case 'logging-round':
+      return 'Logging during a round'
+    case 'practice-tracking':
+      return 'Practice tracking'
+    case 'debriefing':
+      return 'Debriefing'
+    case 'typing-notes':
+      return 'Typing notes'
+    case 'nothing':
+      return 'Nothing'
+    case 'something-else':
+      return 'Something else'
+    default:
+      return value ?? ''
+  }
 }
 
 export { FEEDBACK_KEY }

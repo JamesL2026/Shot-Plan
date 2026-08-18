@@ -113,31 +113,32 @@ export function roundsWithArea(
 }
 
 export function patternFromCount(seen: number, total: number): PatternLabel {
-  if (total <= 0 || seen <= 0) return 'unclear'
-  if (seen <= PATTERN.oneOff) return 'one-off'
-  if (seen <= PATTERN.watching) return 'watching'
-  if (seen <= PATTERN.startingToRepeat) return 'starting-to-repeat'
-  return 'recurring'
+  if (total <= 1 || seen <= 0) return 'unclear'
+  if (seen === 1) return 'one-off'
+  if (seen === 2) return 'watching'
+  if (seen >= 3 && total >= 4) return 'recurring'
+  if (seen >= 3) return 'starting-to-repeat'
+  return 'watching'
 }
 
 export function patternCopy(label: PatternLabel): string {
   switch (label) {
     case 'one-off':
-      return 'Showing up today.'
+      return 'Appeared once. Not enough evidence to call it a pattern.'
     case 'watching':
-      return 'Worth watching.'
+      return 'Worth watching. Not enough evidence yet.'
     case 'starting-to-repeat':
-      return 'Starting to repeat.'
+      return 'Starting to repeat. Still worth testing, not a diagnosis.'
     case 'recurring':
-      return 'Recurring pattern.'
+      return 'Keeps showing up in recent sessions.'
     case 'improving':
-      return 'Practice is improving.'
+      return 'Reported improvement in practice.'
     case 'not-transferring':
-      return 'Your practice result is improving, but the change has not clearly transferred to your rounds.'
+      return 'Reported improvement in practice. Course transfer not confirmed.'
     case 'working':
-      return 'This is showing promising improvement.'
+      return 'Appears to be holding up.'
     default:
-      return 'Not enough evidence.'
+      return 'Not enough evidence yet.'
   }
 }
 
@@ -150,13 +151,13 @@ export function patternBadge(label: PatternLabel): string {
     case 'starting-to-repeat':
       return 'Starting to repeat'
     case 'recurring':
-      return 'Recurring'
+      return 'Keeps showing up'
     case 'improving':
-      return 'Improving'
+      return 'Reported improvement'
     case 'not-transferring':
-      return 'Not transferring yet'
+      return 'Transfer not confirmed'
     case 'working':
-      return 'Promising'
+      return 'Holding up'
     default:
       return 'Not enough evidence'
   }
@@ -183,10 +184,12 @@ function courseImproving(observations: CourseObservation[]): boolean {
 }
 
 export function showingLine(seen: number, total: number): string {
-  if (total <= 0) return 'No rounds saved yet.'
-  if (seen <= 0) return 'Has not shown up in recent rounds.'
-  if (total === 1) return "You've noticed this in your last round."
-  return `You've noticed this in ${seen} of your last ${total} rounds.`
+  if (total <= 1) return 'Not enough history yet. Start with a baseline.'
+  if (seen <= 0) return 'Has not shown up in recent rounds. Not enough evidence.'
+  if (seen === 1) {
+    return `Appeared in 1 of your last ${total} rounds. Not enough evidence.`
+  }
+  return `Appeared in ${seen} of your last ${total} rounds.`
 }
 
 export function buildInsight(
@@ -202,7 +205,18 @@ export function buildInsight(
   const courseStill = observations.some((item) => item.result === 'showed-up')
 
   let statusLine = showingLine(seen, total)
-  if (practiceUp && observations.length > 0 && !courseUp && courseStill) {
+  const workedCount = observations.filter((item) => item.result === 'worked').length
+  const showedCount = observations.filter((item) => item.result === 'showed-up').length
+  if (practiceUp && workedCount >= 3 && showedCount === 0) {
+    pattern = 'working'
+    statusLine = 'Consistent improvement. Still user-reported, not a diagnosis.'
+  } else if (practiceUp && workedCount >= 2 && workedCount > showedCount) {
+    pattern = 'working'
+    statusLine = patternCopy('working')
+  } else if (practiceUp && workedCount === 1) {
+    pattern = 'not-transferring'
+    statusLine = patternCopy('not-transferring')
+  } else if (practiceUp && observations.length > 0 && !courseUp && courseStill) {
     pattern = 'not-transferring'
     statusLine = patternCopy('not-transferring')
   } else if (practiceUp && courseUp) {
@@ -218,27 +232,34 @@ export function buildInsight(
   const practiceLine =
     sessions.length === 0
       ? 'No practice yet.'
-      : `Practice: ${sessions
-          .slice(0, 3)
-          .map((item) =>
-            typeof item.successCount === 'number' &&
-            typeof item.attemptCount === 'number'
-              ? `${item.successCount}/${item.attemptCount}`
-              : (item.result ?? ''),
-          )
+      : sessions
+          .slice(0, 2)
+          .map((item) => {
+            const tried = item.whatWasTried?.trim()
+            const score =
+              typeof item.successCount === 'number' &&
+              typeof item.attemptCount === 'number'
+                ? `${item.successCount}/${item.attemptCount}`
+                : (item.result ?? '')
+            return [tried ? `Tried ${tried}` : null, score]
+              .filter(Boolean)
+              .join('. ')
+          })
           .filter(Boolean)
-          .join(' → ')}`
+          .join(' ')
 
   const showed = observations.filter((item) => item.result === 'showed-up').length
   const worked = observations.filter((item) => item.result === 'worked').length
   const courseLine =
     observations.length === 0
-      ? ''
-      : worked > showed
-        ? 'Course: better in recent rounds'
-        : showed > 0
-          ? 'Course: still appearing'
-          : 'Course: seemed better'
+      ? 'Course transfer not confirmed.'
+      : worked === 1 && showed === 0
+        ? 'Course transfer not confirmed.'
+        : worked >= 2 && worked > showed
+          ? 'Appears to be holding up on the course.'
+          : showed > 0
+            ? 'Still appearing in rounds.'
+            : 'Course transfer not confirmed.'
 
   return {
     focusId: focus.id,
@@ -347,11 +368,13 @@ export function successLabel(testType: PracticeSession['testType']): string {
   return SUCCESS_FOR_TEST[testType]
 }
 
-export function workOnNext(insights: ProgressInsight[]): string | undefined {
+export function topInsight(insights: ProgressInsight[]): ProgressInsight | undefined {
   const rank: PatternLabel[] = [
     'recurring',
     'starting-to-repeat',
     'not-transferring',
+    'working',
+    'improving',
     'watching',
     'one-off',
   ]
@@ -364,60 +387,168 @@ export function workOnNext(insights: ProgressInsight[]): string | undefined {
       bestRank = index
     }
   }
+  return best
+}
+
+export function workOnNext(insights: ProgressInsight[]): string | undefined {
+  const best = topInsight(insights)
   if (!best) return undefined
   return `Work on next: ${best.title}. ${best.statusLine}`
+}
+
+export function hasPlanEvidence(
+  sessions: PracticeSession[],
+  rounds: Round[],
+): boolean {
+  return (
+    sessions.length > 0 ||
+    rounds.some(
+      (item) => item.status === 'completed' && item.moments.length > 0,
+    )
+  )
+}
+
+export function suggestedFocus(
+  focuses: Focus[],
+  insights: ProgressInsight[],
+  lastPractice?: PracticeSession,
+): Focus | undefined {
+  const best = topInsight(insights)
+  const strong =
+    best &&
+    (best.pattern === 'recurring' ||
+      best.pattern === 'starting-to-repeat' ||
+      best.pattern === 'not-transferring' ||
+      best.pattern === 'improving' ||
+      best.pattern === 'working')
+  if (strong && best) {
+    return (
+      focuses.find((item) => item.id === best.focusId) ??
+      focuses.find((item) => item.area === best.area)
+    )
+  }
+  if (lastPractice) {
+    return focuses.find((item) => item.id === lastPractice.focusId)
+  }
+  if (best && best.pattern !== 'one-off' && best.pattern !== 'unclear') {
+    return (
+      focuses.find((item) => item.id === best.focusId) ??
+      focuses.find((item) => item.area === best.area)
+    )
+  }
+  return undefined
 }
 
 export function workingAdjustments(adjustments: Adjustment[]) {
   return adjustments.filter((item) => Boolean(item.workedAt))
 }
 
+export function topMissLabel(rounds: Round[], area: FocusArea): string | undefined {
+  const counts = new Map<string, number>()
+  for (const round of rounds.filter((item) => item.status === 'completed').slice(0, PATTERN.window)) {
+    for (const moment of round.moments) {
+      if (!momentMatchesArea(moment, area)) continue
+      const label = subLabel(moment.type, moment.subcategory)
+      counts.set(label, (counts.get(label) ?? 0) + 1)
+    }
+  }
+  let best: string | undefined
+  let bestCount = 0
+  for (const [label, count] of counts) {
+    if (count > bestCount) {
+      best = label
+      bestCount = count
+    }
+  }
+  return bestCount >= 2 ? best : undefined
+}
+
+export function evidenceWhy(
+  focus: Focus,
+  rounds: Round[],
+  sessions: PracticeSession[],
+): string {
+  const { seen, total } = roundsWithArea(rounds, focus.area)
+  if (total <= 1 && sessions.length <= 1) {
+    return 'Not enough history yet. Start with a baseline.'
+  }
+  const miss = topMissLabel(rounds, focus.area)
+  const subject = miss ? `${miss} ${focus.title.toLowerCase()}` : focus.title
+  if (seen >= 2 && total >= 3) {
+    return `${subject} appeared in ${seen} of your last ${total} rounds.`
+  }
+  if (sessions.length >= 2 && seen < 2) {
+    return `Practiced ${sessions.length} times. Not enough course evidence yet.`
+  }
+  return showingLine(seen, total)
+}
+
+export function todayTestLine(input: {
+  tried?: string
+  enoughHistory: boolean
+}): string {
+  if (!input.enoughHistory) {
+    return 'Not enough history yet. Start with a baseline.'
+  }
+  if (input.tried) {
+    return 'Retest it and see whether it holds up under more normal shots.'
+  }
+  return 'Test this in practice, then see whether it holds up on the course.'
+}
+
 export function buildTodayPlan(input: {
   focus?: Focus
   lastRound?: Round | null
   lastPractice?: PracticeSession
+  sessions?: PracticeSession[]
+  rounds?: Round[]
   seen?: { seen: number; total: number } | null
   nextWork?: string
   workedLine?: string
+  tried?: string
 }): {
   kicker: string
   title: string
   why: string
   lastLine?: string
   workedLine?: string
+  todayTest?: string
+  enoughHistory: boolean
 } {
   if (!input.focus) {
     return {
       kicker: "Today's Shot Plan",
-      title: "Start saving the things you don't want to forget.",
-      why: 'Play a round or start a focus. This becomes what you work on next.',
+      title: 'Choose what to practice',
+      why: 'There is no default. Pick a focus, save a session or a round, and this card will update.',
+      todayTest: 'Not enough history yet. Start with a baseline.',
+      enoughHistory: false,
     }
   }
-  const why =
-    input.nextWork ||
-    (input.seen
-      ? showingLine(input.seen.seen, input.seen.total)
-      : 'Just getting started.')
-  const practiceAt = input.lastPractice?.date
-    ? new Date(input.lastPractice.date).getTime()
-    : 0
-  const roundAt = input.lastRound
-    ? new Date(input.lastRound.completedAt ?? input.lastRound.createdAt).getTime()
-    : 0
-  const newestNote =
-    practiceAt >= roundAt
-      ? input.lastPractice?.notes?.trim() || input.lastRound?.remember?.trim()
-      : input.lastRound?.remember?.trim() || input.lastPractice?.notes?.trim()
-  const lastLine =
-    newestNote ||
-    input.focus.reason ||
-    'Just pay attention to it today.'
+  const enough =
+    (input.seen?.total ?? 0) > 1 || (input.sessions?.length ?? 0) > 1
+  const why = input.focus
+    ? evidenceWhy(input.focus, input.rounds ?? [], input.sessions ?? [])
+    : 'Not enough evidence yet.'
+  const tried =
+    input.tried?.trim() ||
+    input.lastPractice?.whatWasTried?.trim() ||
+    undefined
+  const lastLine = enough
+    ? input.lastPractice?.notes?.trim() ||
+      input.lastRound?.remember?.trim() ||
+      input.focus.reason?.trim() ||
+      undefined
+    : undefined
   return {
     kicker: "Today's Shot Plan",
     title: input.focus.title,
     why,
     lastLine,
-    workedLine: input.workedLine,
+    workedLine: enough ? input.workedLine : undefined,
+    todayTest: enough
+      ? todayTestLine({ tried, enoughHistory: true })
+      : undefined,
+    enoughHistory: enough,
   }
 }
 

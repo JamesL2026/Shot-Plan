@@ -10,7 +10,8 @@ import {
   startVoiceCapture,
   type VoiceSession,
 } from '../../lib/voiceCapture'
-import { emptyDebriefFields, type DebriefFields } from '../../types/debrief'
+import { trackEvent } from '../../lib/track'
+import { type DebriefFields } from '../../types/debrief'
 import { Button } from '../ui/Button'
 
 const MAX_MS = 60_000
@@ -20,6 +21,7 @@ interface TalkToShotPlanProps {
   fields: DebriefFields
   onTranscript: (value: string) => void
   onFields: (value: DebriefFields) => void
+  hideFields?: boolean
 }
 
 export function TalkToShotPlan({
@@ -27,6 +29,7 @@ export function TalkToShotPlan({
   fields,
   onTranscript,
   onFields,
+  hideFields = false,
 }: TalkToShotPlanProps) {
   const [listening, setListening] = useState(false)
   const [starting, setStarting] = useState(false)
@@ -37,7 +40,10 @@ export function TalkToShotPlan({
   const finalsRef = useRef('')
   const displayRef = useRef('')
   const timerRef = useRef<number | null>(null)
+  const fieldsRef = useRef(fields)
   const supported = speechSupported()
+
+  fieldsRef.current = fields
 
   useEffect(() => {
     return () => {
@@ -50,7 +56,15 @@ export function TalkToShotPlan({
     setBusy(true)
     try {
       const parsed = await parseDebrief(text)
-      onFields(parsed)
+      const current = fieldsRef.current
+      onFields({
+        workingOn: parsed.workingOn || current.workingOn,
+        tried: parsed.tried || current.tried,
+        worked: parsed.worked || current.worked,
+        didNotWork: parsed.didNotWork || current.didNotWork,
+        remember: parsed.remember || current.remember,
+      })
+      trackEvent('voice_saved')
     } finally {
       setBusy(false)
     }
@@ -76,10 +90,9 @@ export function TalkToShotPlan({
         return
       }
       onTranscript('')
-      onFields(emptyDebriefFields())
       setError(
         raw && isLikelyJunkTranscript(raw)
-          ? 'That did not sound like you. Pause any video, hold the phone closer, and try again. Or type below.'
+          ? 'That did not sound like you. Pause any video, hold the phone closer, and try again. Or type above.'
           : 'Nothing was captured. Allow the microphone if asked, then talk for a few seconds.',
       )
     }, 250)
@@ -91,7 +104,7 @@ export function TalkToShotPlan({
     finalsRef.current = ''
     displayRef.current = ''
     onTranscript('')
-    onFields(emptyDebriefFields())
+    trackEvent('voice_started')
     setStarting(true)
     setListening(true)
     setLevel(0)
@@ -149,7 +162,7 @@ export function TalkToShotPlan({
           className="ready-cta__btn"
           onClick={() => (listening ? stop() : void start())}
         >
-          {listening ? 'Stop' : 'Talk to Shot Plan'}
+          {listening ? 'Stop' : 'Talk to ShotPlan'}
         </Button>
       ) : (
         <p className="muted">
@@ -193,28 +206,28 @@ export function TalkToShotPlan({
         </>
       ) : null}
 
-      {hasAnyField || transcript ? (
+      {!hideFields && (hasAnyField || transcript) ? (
         <div className="sp-confirm">
-          <p className="rr-kicker">Check this</p>
+          <p className="rr-kicker">What I heard</p>
           <p className="muted">
             ShotPlan only fills a line when the words are obvious. Blank means it
-            was not sure.
+            was not sure. Edit before you save.
           </p>
           <Field
             id="talk-working"
-            label="Working on"
+            label="Focus"
             value={fields.workingOn}
             onChange={(value) => updateField('workingOn', value)}
           />
           <Field
             id="talk-tried"
-            label="What I tried"
+            label="What you tried"
             value={fields.tried}
             onChange={(value) => updateField('tried', value)}
           />
           <Field
             id="talk-worked"
-            label="What worked"
+            label="Reported result"
             value={fields.worked}
             onChange={(value) => updateField('worked', value)}
           />
@@ -226,7 +239,7 @@ export function TalkToShotPlan({
           />
           <Field
             id="talk-remember"
-            label="Remember"
+            label="Watch next"
             value={fields.remember}
             onChange={(value) => updateField('remember', value)}
           />

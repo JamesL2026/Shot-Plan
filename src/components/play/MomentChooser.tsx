@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 import { MOMENT_TYPES, SUBS_BY_TYPE } from '../../data/moments'
 import type { MomentSubcategory, MomentType } from '../../types/memory'
 import { VoiceNoteButton } from '../capture/VoiceNoteButton'
+import { Button } from '../ui/Button'
 
 const HOLES = Array.from({ length: 18 }, (_, index) => index + 1)
 
@@ -129,6 +130,52 @@ export function MomentChooser({
             </div>
           ) : (
             <>
+              {noteOpen ? (
+                <div className="sp-plan-block">
+                  <p className="sp-subhead">What do you want to remember?</p>
+                  <div className="sp-note-row">
+                    <label className="rr-note-label" htmlFor="moment-note">
+                      Type
+                    </label>
+                    <VoiceNoteButton
+                      value={note}
+                      onChange={setNote}
+                      label="Talk to ShotPlan"
+                    />
+                  </div>
+                  <textarea
+                    id="moment-note"
+                    className="rr-note"
+                    value={note}
+                    onChange={(event) => setNote(event.target.value)}
+                    placeholder="Optional"
+                  />
+                  <button
+                    type="button"
+                    className="rr-text-link"
+                    onClick={() => {
+                      setNote('')
+                      setNoteOpen(false)
+                    }}
+                  >
+                    Skip
+                  </button>
+                </div>
+              ) : (
+                <div className="sp-add-note">
+                  <p className="muted">
+                    Optional. Add anything you want to remember about this
+                    moment.
+                  </p>
+                  <Button
+                    variant="secondary"
+                    block
+                    onClick={() => setNoteOpen(true)}
+                  >
+                    Add a note
+                  </Button>
+                </div>
+              )}
               <div className="rr-cats">
                 {SUBS_BY_TYPE[type].map((item) => (
                   <button
@@ -141,30 +188,6 @@ export function MomentChooser({
                   </button>
                 ))}
               </div>
-              <button
-                type="button"
-                className="rr-text-link"
-                onClick={() => setNoteOpen((value) => !value)}
-              >
-                {noteOpen ? 'Hide note' : 'Add note'}
-              </button>
-              {noteOpen ? (
-                <>
-                  <div className="sp-note-row">
-                    <label className="rr-note-label" htmlFor="moment-note">
-                      Note
-                    </label>
-                    <VoiceNoteButton value={note} onChange={setNote} />
-                  </div>
-                  <textarea
-                    id="moment-note"
-                    className="rr-note"
-                    value={note}
-                    onChange={(event) => setNote(event.target.value)}
-                    placeholder="Optional. One line."
-                  />
-                </>
-              ) : null}
               <button
                 type="button"
                 className="rr-text-link"

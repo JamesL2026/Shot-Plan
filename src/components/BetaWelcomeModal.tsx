@@ -67,7 +67,7 @@ export function BetaWelcomeModal({
         </p>
         <h2 id={titleId}>ShotPlan beta</h2>
         <div className="beta-welcome__body muted">
-          <p>Early build. Two taps in Help Improve shape what we make next.</p>
+          <p>Early build. Two quick questions in Help Improve shape what we make next.</p>
         </div>
 
         <div className="beta-welcome__actions">

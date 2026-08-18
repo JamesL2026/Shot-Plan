@@ -18,6 +18,7 @@ type ButtonAsButton = BaseProps &
 
 interface ButtonAsLink extends BaseProps {
   to: string
+  onClick?: () => void
 }
 
 function classes({
@@ -40,7 +41,7 @@ export function Button(props: ButtonAsButton | ButtonAsLink) {
 
   if ('to' in props) {
     return (
-      <Link to={props.to} className={classNames}>
+      <Link to={props.to} className={classNames} onClick={props.onClick}>
         {props.children}
       </Link>
     )

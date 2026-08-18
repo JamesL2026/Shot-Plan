@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { TalkToShotPlan } from '../capture/TalkToShotPlan'
 import { Button } from '../ui/Button'
-import { STOOD_OUT, TRANSFER_FEEL, areaLabel } from '../../data/moments'
+import { HelpButtons } from '../ui/HelpButtons'
+import { STOOD_OUT } from '../../data/moments'
 import { focusFromMoment } from '../../lib/patterns'
 import type { DebriefFields } from '../../types/debrief'
 import type {
+  ExperimentHelp,
   Focus,
   FocusArea,
   Round,
   StoodOut,
-  TransferFeel,
 } from '../../types/memory'
 import { MomentList } from './MomentList'
 
@@ -17,12 +18,12 @@ interface RoundMemoryProps {
   round: Round
   activeFocus?: Focus
   selectedMomentId?: string
-  transfer?: TransferFeel
+  helped?: ExperimentHelp
   fields: DebriefFields
   transcript: string
   onSelectMoment: (id: string, area: FocusArea, title: string) => void
   onRemove: (id: string) => void
-  onTransfer: (value: TransferFeel) => void
+  onHelped: (value: ExperimentHelp) => void
   onFields: (value: DebriefFields) => void
   onTranscript: (value: string) => void
   onStoodOut: (value: StoodOut) => void
@@ -34,39 +35,36 @@ export function RoundMemory({
   round,
   activeFocus,
   selectedMomentId,
-  transfer,
+  helped,
   fields,
   transcript,
   onSelectMoment,
   onRemove,
-  onTransfer,
+  onHelped,
   onFields,
   onTranscript,
   onStoodOut,
   onSkipWatch,
   onDone,
 }: RoundMemoryProps) {
-  const [typeOpen, setTypeOpen] = useState(false)
+  const [showDetails, setShowDetails] = useState(false)
   const selected = round.moments.find((item) => item.id === selectedMomentId)
   const carry = selected ? focusFromMoment(selected) : null
-
-  function applyTalk(next: DebriefFields) {
-    onFields(next)
-  }
+  const holes = round.holesPlayed === 9 ? '9 holes' : round.holesPlayed === 18 ? '18 holes' : 'Round'
 
   return (
     <section className="rr-replay animate-in">
       <p className="rr-kicker">Your round memory</p>
       <h1>
         {round.moments.length === 0
-          ? 'Nothing saved'
+          ? 'Zero moments. That is fine.'
           : round.moments.length === 1
             ? '1 thing you saved'
             : `${round.moments.length} things you saved`}
       </h1>
       <p className="muted">
-        These are the moments. Tap one to watch next round. Remove a tap if it
-        was a mistake.
+        {holes}. A round is a transfer test, not a scorecard. You do not need to
+        log shots.
       </p>
 
       {round.moments.length > 0 ? (
@@ -81,45 +79,56 @@ export function RoundMemory({
           onRemove={onRemove}
         />
       ) : (
-        <p className="muted">That’s okay. You can still save the round.</p>
+        <p className="muted">Save the round anyway. Talk if you want.</p>
       )}
 
-      {carry ? (
+      {activeFocus ? (
         <div className="sp-watch">
-          <p className="sp-watch__label">Next round</p>
-          <p className="sp-watch__title">{carry.title}</p>
-          <p className="muted">Just pay attention to it. No need to fix it mid round.</p>
+          <p className="sp-watch__label">Today's focus</p>
+          <p className="sp-watch__title">{activeFocus.title}</p>
+          {activeFocus.reason ? (
+            <p className="muted">{activeFocus.reason}</p>
+          ) : null}
         </div>
-      ) : (
-        <p className="muted">Nothing carried forward yet.</p>
-      )}
+      ) : carry ? (
+        <div className="sp-watch">
+          <p className="sp-watch__label">Carry forward</p>
+          <p className="sp-watch__title">{carry.title}</p>
+        </div>
+      ) : null}
 
-      <button type="button" className="rr-text-link" onClick={onSkipWatch}>
-        Don’t carry anything
-      </button>
-
-      <h2 className="sp-subhead">Talk through it</h2>
-      <p className="muted">
-        One take. Then check the card. Type if you would rather.
-      </p>
-
+      <h2 className="sp-subhead">Talk to ShotPlan</h2>
       <TalkToShotPlan
         transcript={transcript}
         fields={fields}
         onTranscript={onTranscript}
-        onFields={applyTalk}
+        onFields={onFields}
       />
 
-      <button
-        type="button"
-        className="rr-text-link"
-        onClick={() => setTypeOpen((value) => !value)}
-      >
-        {typeOpen ? 'Hide typed fields' : 'Type instead'}
-      </button>
+      {activeFocus ? (
+        <HelpButtons
+          prompt="Did today's focus hold up?"
+          value={helped}
+          onChange={onHelped}
+        />
+      ) : null}
 
-      {typeOpen ? (
-        <>
+      <label className="rr-note-label" htmlFor="round-remember">
+        What should we remember? (optional)
+      </label>
+      <textarea
+        id="round-remember"
+        className="rr-note"
+        value={fields.remember}
+        onChange={(event) =>
+          onFields({ ...fields, remember: event.target.value })
+        }
+        placeholder="Optional"
+      />
+
+      {showDetails ? (
+        <div className="sp-talk-prompts">
+          <p className="rr-kicker">Add details</p>
           <p className="rr-prompt">What stood out?</p>
           <div className="rr-cats rr-cats--stack">
             {STOOD_OUT.map((item) => (
@@ -135,41 +144,19 @@ export function RoundMemory({
               </button>
             ))}
           </div>
-
-          {activeFocus ? (
-            <>
-              <p className="rr-prompt">How did {areaLabel(activeFocus.area)} feel?</p>
-              <div className="rr-cats rr-cats--stack">
-                {TRANSFER_FEEL.map((item) => (
-                  <button
-                    key={item.value}
-                    type="button"
-                    className={
-                      transfer === item.value ? 'rr-cat rr-cat--on' : 'rr-cat'
-                    }
-                    onClick={() => onTransfer(item.value)}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </>
-          ) : null}
-
-          <label className="rr-note-label" htmlFor="round-remember">
-            What should you remember?
-          </label>
-          <textarea
-            id="round-remember"
-            className="rr-note"
-            value={fields.remember}
-            onChange={(event) =>
-              onFields({ ...fields, remember: event.target.value })
-            }
-            placeholder="One thing to work on next."
-          />
-        </>
+          <button type="button" className="rr-text-link" onClick={onSkipWatch}>
+            Don't carry a new focus
+          </button>
+        </div>
       ) : null}
+
+      <button
+        type="button"
+        className="rr-text-link"
+        onClick={() => setShowDetails((value) => !value)}
+      >
+        {showDetails ? 'Hide details' : 'Add details'}
+      </button>
 
       <div className="rr-actions">
         <Button variant="primary" block className="ready-cta__btn" onClick={onDone}>
